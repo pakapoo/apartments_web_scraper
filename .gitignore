@@ -1,3 +1,12 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# Editor directories and files
 .DS_Store
+
+# Project output
 /data
+
+# ChromeDriver
 /chromedriver-mac-arm64
