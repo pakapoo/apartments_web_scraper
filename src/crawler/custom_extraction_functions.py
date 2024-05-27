@@ -32,7 +32,7 @@ def neighborhood(soup, selector):
 def built_units_stories(soup, selector):
     unitsstories_soup = soup.select_one(selector)
     if unitsstories_soup:
-        content = unitsstories_soup.get_text()
+        content = unitsstories_soup.get_text("|", strip=True)
         built_regex = re.compile(r'(Built in)(\s+)(\d+)')
         built_match = built_regex.search(content)
         built = int(built_match.group(3)) if built_match else 0
