@@ -29,7 +29,7 @@ UNIT_AVAIL_SELECTOR = "div.availableColumn.column span:nth-child(1)"
 
 POOL_SIZE = os.cpu_count()
 
-def get_property_urls(url, output_path):
+def get_property_urls(search_URL, property_urls_file):
     """
     Fetches property URLs from the given search URL and stores them in the specified file.
 
@@ -38,13 +38,14 @@ def get_property_urls(url, output_path):
     property_urls_file (str): The file to store the fetched property URLs.
     """
     headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36', "Upgrade-Insecure-Requests": "1","DNT": "1","Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7","Accept-Language": "zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7","Accept-Encoding": "gzip, deflate, br, zstd"}
-    response = requests.get(url, headers=headers)
+    response = requests.get(search_URL, headers=headers)
     soup = BeautifulSoup(response.text, 'html.parser')
     all_links = []
 
     # Get number of pages for this search URL
     try:
         pages = soup.select_one("p.searchResults > span").text.split(' ')[-1]
+        print("Total pages: ", pages)
         # testing
         pages = 2
     except AttributeError:
@@ -53,17 +54,18 @@ def get_property_urls(url, output_path):
     # Loop through all pages and scrape the property links
     for page in range(1, int(pages)+1):
         print("processing page: ", page)
-        response = requests.get(url+'/'+str(page), headers=headers)
+        response = requests.get(search_URL+'/'+str(page), headers=headers)
         soup = BeautifulSoup(response.text, 'html.parser')
         links = soup.select("a.property-link")
         unique_links = list(set(link['href'] for link in links))
         all_links.extend(unique_links)
     # Save all links to json file
-    with open(output_path, 'wb') as f:
+    with open(property_urls_file, 'wb') as f:
         f.write(str(all_links).encode('utf-8'))
-    print("{} urls are scraped.".format(len(all_links)))
+    print("")
+    print("Total urls: ", str(len(all_links)))
 
-def get_property_html(urls_file, html_store_path):
+def get_property_html(property_urls_file, property_html_path):
     """
     Fetches the HTML of the properties whose URLs are stored in the specified file and stores the HTML in the specified directory.
 
@@ -72,15 +74,19 @@ def get_property_html(urls_file, html_store_path):
     property_html_path (str): The directory to store the fetched HTML.
     """
     headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36', "Upgrade-Insecure-Requests": "1","DNT": "1","Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7","Accept-Language": "zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7","Accept-Encoding": "gzip, deflate, br, zstd"}
-    with open(urls_file, 'rb') as f:
+    with open(property_urls_file, 'rb') as f:
         urls = eval(f.read().decode('utf-8'))
-        for url in urls:
+        for count, url in enumerate(urls):
             response = requests.get(url, headers=headers)
             soup = BeautifulSoup(response.text, 'html.parser')
-            with open(os.path.join(html_store_path, url.split('/')[-3]+'.html'), 'wb') as f:
+            with open(os.path.join(property_html_path, url.split('/')[-3]+'.html'), 'wb') as f:
                 f.write(soup.prettify().encode('utf-8'))
+                if count == (len(urls)-1):
+                    print("All {} urls are processed!".format(count + 1)) 
+                elif (count+1) % 10 == 0 and count != 0:
+                    print("{} urls processed".format(count + 1))
 
-def test_property_html(urls_file, html_store_path):
+def test_property_html(property_urls_file, property_html_path):
     """
     Tests the fetched HTML of the properties whose URLs are stored in the specified file.
 
@@ -88,32 +94,31 @@ def test_property_html(urls_file, html_store_path):
     property_urls_file (str): The file containing the property URLs.
     property_html_path (str): The directory containing the fetched HTML.
     """
-    for _, _, files in os.walk(html_store_path):
-        with open(urls_file, 'rb') as f:
+    for _, _, files in os.walk(property_html_path):
+        with open(property_urls_file, 'rb') as f:
             urls = eval(f.read().decode('utf-8'))
             urls_not_scraped = set([url.split('/')[-3] for url in urls]) - set([file.split('.')[-2] for file in files])
             if urls_not_scraped:
-                print("The following url are not scraped: {}.".format(urls_not_scraped))
-                print("This may due to removal of the property or the website has changed.")
+                print("VALIDATION >>> The following url are not scraped: {}.".format(urls_not_scraped), "This may due to removal of the property or the website has changed.")
             else:
-                print("All urls are scraped successfully.")
+                print("VALIDATION >>> All urls are scraped successfully.")
 
-def extract_property_info(html_store_path, file, info_store_path, cols):
+def extract_property_info(property_html_path, file, property_info_path, columns):
     """
     Extract property information from the HTML files stored in the given path.
 
     Parameters:
-    html_store_path (str): The path where the HTML files are stored.
+    property_html_path (str): The path where the HTML files are stored.
     file (str): The name of the HTML file to process.
-    info_store_path (str): The path where the extracted information should be stored.
-    cols (list): The columns for the DataFrame that will store the extracted information.
+    property_info_path (str): The path where the extracted information should be stored.
+    columns (list): The columns for the DataFrame that will store the extracted information.
 
     Returns:
     df (DataFrame): A DataFrame containing the extracted information.
     """
-    df = pd.DataFrame(columns=cols)
-    soup = BeautifulSoup(open(os.path.join(html_store_path, file), 'rb'), 'html.parser')
-    mtime = os.stat(os.path.join(html_store_path, file)).st_mtime
+    df = pd.DataFrame(columns=columns)
+    soup = BeautifulSoup(open(os.path.join(property_html_path, file), 'rb'), 'html.parser')
+    mtime = os.stat(os.path.join(property_html_path, file)).st_mtime
     dttm = datetime.fromtimestamp(mtime).strftime('%Y-%m-%d %H:%M:%S')
 
     # extract property info
@@ -155,16 +160,16 @@ def extract_property_info(html_store_path, file, info_store_path, cols):
                                     unit_price, 
                                     unit_sqft, 
                                     unit_avail,
-                                    dttm]], columns=cols)
+                                    dttm]], columns=columns)
             df = pd.concat([df, curr_unit], ignore_index=True)
 
     # save to json and csv
     if not df.empty:
         df = df.drop_duplicates()
-        df.to_json(os.path.join(info_store_path, "json", file.split('.')[-2]+".json"), orient='records', lines=True)
-        df.to_csv(os.path.join(info_store_path, "csv", file.split('.')[-2]+".csv"), index=False)
+        df.to_json(os.path.join(property_info_path, "json", file.split('.')[-2]+".json"), orient='records', lines=True)
+        df.to_csv(os.path.join(property_info_path, "csv", file.split('.')[-2]+".csv"), index=False)
 
-def compile_and_export_results(info_store_path, result_file):
+def compile_and_export_results(property_info_path, result_file):
     """
     Compiles and exports the extracted property information.
 
@@ -174,14 +179,14 @@ def compile_and_export_results(info_store_path, result_file):
     """
     pass
 
-def cleanup_dir(path):
+def cleanup_dir(directory_path):
     """
     Cleans up the specified directory by removing all files in it.
 
     Parameters:
     directory_path (str): The path to the directory to clean up.
     """
-    for root, _, files in os.walk(path):
+    for root, _, files in os.walk(directory_path):
         for file in files:
             try:
                 os.remove(os.path.join(root, file))
