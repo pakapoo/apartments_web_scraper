@@ -6,6 +6,7 @@ import pandas as pd
 import time
 import multiprocessing as mp
 import custom_extraction_functions
+import db_functions
 
 PAGE_NUMBER_SELECTOR = "p.searchResults > span"
 LINKS_SELECTOR = "a.property-link"
@@ -26,7 +27,8 @@ UNIT_SELECTOR = "li.unitContainer.js-unitContainer"
 UNIT_BEDS_SELECTOR = "span.detailsTextWrapper > span:nth-child(1)"
 UNIT_BATHS_SELECTOR = "span.detailsTextWrapper > span:nth-child(2)"
 UNIT_NO_SELECTOR = "div.unitColumn.column span:nth-child(2)"
-UNIT_PRICE_SELECTOR = "div.pricingColumn.column span:nth-child(2)"
+UNIT_PRICE_SELECTOR1 = "div.pricingColumn.column span:nth-child(2)"
+UNIT_PRICE_SELECTOR2 = "div.pricingColumn.column div.rent-estimate-button.js-view-rent-estimate > span"
 UNIT_SQFT_SELECTOR = "div.sqftColumn.column span:nth-child(2)"
 UNIT_AVAIL_SELECTOR = "div.availableColumn.column span:nth-child(1)"
 
@@ -49,7 +51,7 @@ class Property:
      
 class Unit(Property):
     def __init__(self, id, name, tel, address, city, state, zip, neighborhood, built, units, stories, management, unit_no, unit_beds, unit_baths, unit_price, unit_sqft, unit_avail):
-        super().__init__(self, id, name, tel, address, city, state, zip, neighborhood, built, units, stories, management)
+        Property.__init__(self, id, name, tel, address, city, state, zip, neighborhood, built, units, stories, management)
         self.unit_no = unit_no
         self.unit_beds = unit_beds
         self.unit_baths = unit_baths
@@ -57,9 +59,6 @@ class Unit(Property):
         self.unit_sqft = unit_sqft
         self.unit_avail = unit_avail
     
-    def __dict__(self):
-        return {'id': self.id, 'name': self.name, 'tel': self.tel, 'address': self.address, 'city': self.city, 'state': self.state, 'zip': self.zip, 'neighborhood': self.neighborhood, 'built': self.built, 'units': self.units, 'stories': self.stories, 'management': self.management, 'unit_no': self.unit_no, 'unit_beds': self.unit_beds, 'unit_baths': self.unit_baths, 'unit_price': self.unit_price, 'unit_sqft': self.unit_sqft, 'unit_avail': self.unit_avail}
-
 def get_property_urls(search_URL):
     """
     Fetches property URLs from the given search URL and stores them in a list.
@@ -77,8 +76,9 @@ def get_property_urls(search_URL):
 
     # Get number of pages for this search URL
     try:
-        pages = soup.select_one(PAGE_NUMBER_SELECTOR).text.split(' ')[-1]
+        pages = soup.select_one(PAGE_NUMBER_SELECTOR).get_text().split(' ')[-1]
         print("Total pages: ", pages)
+        pages = 1
     except AttributeError:
         print("No pages information found.")
         pages = 1
@@ -147,7 +147,7 @@ def extract_property_info(soup, unit_list):
         unit_info = plan.select(UNIT_SELECTOR)
         for unit in unit_info:
             unit_no = custom_extraction_functions.unit_no(unit, UNIT_NO_SELECTOR)
-            unit_price = custom_extraction_functions.unit_price(unit, UNIT_PRICE_SELECTOR)
+            unit_price = custom_extraction_functions.unit_price(unit, UNIT_PRICE_SELECTOR1, UNIT_PRICE_SELECTOR2)
             unit_sqft = custom_extraction_functions.unit_sqft(unit, UNIT_SQFT_SELECTOR)
             unit_avail = custom_extraction_functions.unit_avail(unit, UNIT_AVAIL_SELECTOR)
             unit_data = Unit(id, name, tel, address, city, state, zip, neighborhood, built, units, stories, management, unit_no, unit_beds, unit_baths, unit_price, unit_sqft, unit_avail)
@@ -188,6 +188,7 @@ def main():
         df = df.drop_duplicates()
         df.to_json(os.path.join(result_path, "result.json"), orient='records', lines=True)
         df.to_csv(os.path.join(result_path, "result.csv"), index=False)
+        db_functions.dump_df_to_db(df)
 
     print("Execution time: ", time.time()-start_time)
 

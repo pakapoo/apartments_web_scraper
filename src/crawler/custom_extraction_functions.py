@@ -38,7 +38,7 @@ def state(soup, selector):
 
 def zip(soup, selector):
     zip_soup = soup.select_one(selector)
-    return zip_soup.get_text(strip=True) if zip_soup else None
+    return str(zip_soup.get_text(strip=True)) if zip_soup else None
 
 def neighborhood(soup, selector):
     neighborhood_soup = soup.select_one(selector)
@@ -50,15 +50,15 @@ def built_units_stories(soup, selector):
         content = unitsstories_soup.get_text("|", strip=True)
         built_regex = re.compile(r'(Built in)(\s+)(\d+)')
         built_match = built_regex.search(content)
-        built = int(built_match.group(3)) if built_match else 0
+        built = int(built_match.group(3)) if built_match else None
         units_regex = re.compile(r'(\d+)(\s+)(units)')
         units_match = units_regex.search(content)
-        units = int(units_match.group(1)) if units_match else 0
+        units = int(units_match.group(1)) if units_match else None
         stories_regex = re.compile(r'(\d+)(\s+)(stories)')
         stories_match = stories_regex.search(content)
-        stories = int(stories_match.group(1)) if stories_match else 0
+        stories = int(stories_match.group(1)) if stories_match else None
     else:
-        built, units, stories = 0, 0, 0
+        built, units, stories = None, None, None
     return built, units, stories
 
 
@@ -91,23 +91,25 @@ def baths(soup, selector):
         baths = baths_soup.get_text(strip=True)
         baths_regex = re.compile(r'(\d+)(\s+)(bath)')
         baths_match = baths_regex.search(baths)
-        baths = int(baths_match.group(1)) if baths_match else 0
+        baths = int(baths_match.group(1)) if baths_match else None
     else:
-        baths = 0
+        baths = None
     return baths
 
 def unit_no(soup, selector):
     unit_no_soup = soup.select_one(selector)
-    return unit_no_soup.get_text(strip=True) if unit_no_soup else None
+    return str(unit_no_soup.get_text(strip=True)) if unit_no_soup else None
 
-def unit_price(soup, selector):
-    unit_price_soup = soup.select_one(selector)
-    if unit_price_soup:
-        try:
-            unit_price_tmp = int(unit_price_soup.get_text(strip=True).replace('$', '').replace(',', ''))
-        except:
-            unit_price_tmp = None
-    return unit_price_tmp if unit_price_soup else None
+def unit_price(soup, selector1, selector2):
+    unit_price_soup1 = soup.select_one(selector1)
+    unit_price_soup2 = soup.select_one(selector2)
+    if unit_price_soup1:
+        unit_price_tmp = int(unit_price_soup1.get_text(strip=True).replace('$', '').replace(',', ''))
+    elif unit_price_soup2:
+        unit_price_tmp = int(unit_price_soup2.get_text(strip=True).replace('$', '').replace(',', ''))
+    else:
+        unit_price_tmp = None
+    return unit_price_tmp
 
 def unit_sqft(soup, selector):
     unit_sqft_soup = soup.select_one(selector)

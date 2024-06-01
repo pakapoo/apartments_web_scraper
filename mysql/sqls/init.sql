@@ -15,11 +15,11 @@ CREATE TABLE IF NOT EXISTS unit (
     units INT,
     stories INT,
     management VARCHAR(255),
-    unit_no INT NOT NULL,
+    unit_no VARCHAR(255) NOT NULL,
     unit_beds INT,
     unit_baths INT,
     unit_price DECIMAL(10, 2),
     unit_sqft FLOAT,
-    unit_avail VARCHAR(255),
-    PRIMARY KEY (id, unit_no)
+    unit_avail DATE,
+    PRIMARY KEY (id, unit_no, unit_beds, unit_baths, unit_price, unit_sqft, unit_avail)
 );
