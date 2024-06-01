@@ -1,5 +1,20 @@
 import re
 from datetime import datetime
+import os
+
+def cleanup_dir(directory_path):
+    """
+    Cleans up the specified directory by removing all files in it.
+
+    Parameters:
+    directory_path (str): The path to the directory to clean up.
+    """
+    for root, _, files in os.walk(directory_path):
+        for file in files:
+            try:
+                os.remove(os.path.join(root, file))
+            except OSError as e:
+                print(f"Error: {e.filename} - {e.strerror}.")
 
 def name(soup, selector):
     name_soup = soup.select_one(selector)

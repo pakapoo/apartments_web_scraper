@@ -4,7 +4,6 @@ Web scraper for apartments.com
 TODO:
 <python>
 scroll and scrape
-compile all files
 README.md and illustration
 <python good to have>
 distributed web scraping
