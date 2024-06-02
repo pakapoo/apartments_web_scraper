@@ -4,6 +4,7 @@ CREATE DATABASE IF NOT EXISTS apartment_db;
 USE apartment_db;
 CREATE TABLE IF NOT EXISTS unit (
     id VARCHAR(255) NOT NULL,
+    url VARCHAR(255),
     name VARCHAR(255),
     tel VARCHAR(255),
     address VARCHAR(255),

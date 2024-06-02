@@ -67,7 +67,7 @@ def management(soup, selector):
     if management_soup:
         try:
             management_soup = re.split(r'\/|\.', management_soup['src'])[-2]
-            management = ' '.join(management_soup.replace('-', ' ').split(' ')[:-2])
+            management = ' '.join(management_soup.replace('-', ' ').split(' ')[:-1])
         except:
             management = None
     else:

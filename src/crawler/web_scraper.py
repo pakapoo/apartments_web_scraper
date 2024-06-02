@@ -34,9 +34,15 @@ UNIT_AVAIL_SELECTOR = "div.availableColumn.column span:nth-child(1)"
 
 POOL_SIZE = os.cpu_count()
 
+DB_USER = "root"
+DB_PASSWORD = "admpw"
+DB_HOST = "localhost"
+DB_NAME = "apartment_db"
+
 class Property:
-    def __init__(self, id, name, tel, address, city, state, zip, neighborhood, built, units, stories, management):
+    def __init__(self, id, url, name, tel, address, city, state, zip, neighborhood, built, units, stories, management):
         self.id = id
+        self.url = url
         self.name = name
         self.tel = tel
         self.address = address
@@ -50,8 +56,8 @@ class Property:
         self.management = management
      
 class Unit(Property):
-    def __init__(self, id, name, tel, address, city, state, zip, neighborhood, built, units, stories, management, unit_no, unit_beds, unit_baths, unit_price, unit_sqft, unit_avail):
-        Property.__init__(self, id, name, tel, address, city, state, zip, neighborhood, built, units, stories, management)
+    def __init__(self, id, url, name, tel, address, city, state, zip, neighborhood, built, units, stories, management, unit_no, unit_beds, unit_baths, unit_price, unit_sqft, unit_avail):
+        Property.__init__(self, id, url, name, tel, address, city, state, zip, neighborhood, built, units, stories, management)
         self.unit_no = unit_no
         self.unit_beds = unit_beds
         self.unit_baths = unit_baths
@@ -129,6 +135,7 @@ def extract_property_info(soup, unit_list):
     """
     # extract property info
     id = soup[0].split('/')[-2]
+    url = soup[0].strip()
     name = custom_extraction_functions.name(soup[1], NAME_SELECTOR)
     tel = custom_extraction_functions.tel(soup[1], TEL_SELECTOR)
     address = custom_extraction_functions.address(soup[1], ADDRESS_SELECTOR)
@@ -150,7 +157,7 @@ def extract_property_info(soup, unit_list):
             unit_price = custom_extraction_functions.unit_price(unit, UNIT_PRICE_SELECTOR1, UNIT_PRICE_SELECTOR2)
             unit_sqft = custom_extraction_functions.unit_sqft(unit, UNIT_SQFT_SELECTOR)
             unit_avail = custom_extraction_functions.unit_avail(unit, UNIT_AVAIL_SELECTOR)
-            unit_data = Unit(id, name, tel, address, city, state, zip, neighborhood, built, units, stories, management, unit_no, unit_beds, unit_baths, unit_price, unit_sqft, unit_avail)
+            unit_data = Unit(id, url, name, tel, address, city, state, zip, neighborhood, built, units, stories, management, unit_no, unit_beds, unit_baths, unit_price, unit_sqft, unit_avail)
             unit_list.append(vars(unit_data))
             
 def main():
@@ -188,9 +195,10 @@ def main():
         df = df.drop_duplicates()
         df.to_json(os.path.join(result_path, "result.json"), orient='records', lines=True)
         df.to_csv(os.path.join(result_path, "result.csv"), index=False)
-        db_functions.dump_df_to_db(df)
+        db_functions.dump_df_to_db(df, DB_USER, DB_PASSWORD, DB_HOST, DB_NAME)
 
     print("Execution time: ", time.time()-start_time)
 
 if __name__ == '__main__':
     main()
+    # db_functions.test_db_dump()
