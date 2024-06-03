@@ -2,6 +2,7 @@ from sqlalchemy import create_engine
 import mysql.connector
 import pandas as pd
 import os
+import json
 
 DB_USER = "root"
 DB_PASSWORD = "admpw"
@@ -23,10 +24,28 @@ def regerate_table_schema(table, DB_USER, DB_PASSWORD, DB_HOST, DB_NAME):
     cursor.close()
     conn.close()
 
-def test_db_dump():
-    # Set paths    
+def get_data(table, DB_USER, DB_PASSWORD, DB_HOST, DB_NAME):
+    conn = mysql.connector.connect(user=DB_USER, password=DB_PASSWORD, host=DB_HOST, database=DB_NAME)
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM " + table)
+    data = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return json.dumps(data, default=str)
+
+
+
+def test():
+    # Set paths
     current_dir = os.path.dirname(os.path.abspath(__file__))
     base_dir = os.path.abspath(os.path.join(current_dir, '../../'))
     result_path = os.path.join(base_dir, 'data/result/')
-    df = pd.read_csv(os.path.join(result_path, "result.csv"))
-    dump_df_to_db(df, DB_USER, DB_PASSWORD, DB_HOST, DB_NAME)
+
+    data = get_data('unit', DB_USER, DB_PASSWORD, DB_HOST, DB_NAME)
+    # default=str handles Decimal and datatime columns that are not serializable
+    print(json.dumps(data, default=str))
+    # df = pd.read_csv(os.path.join(result_path, "result.csv"))
+    # dump_df_to_db(df, DB_USER, DB_PASSWORD, DB_HOST, DB_NAME)
+
+if __name__ == '__main__':
+    test() 

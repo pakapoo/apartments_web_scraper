@@ -84,7 +84,7 @@ def get_property_urls(search_URL):
     try:
         pages = soup.select_one(PAGE_NUMBER_SELECTOR).get_text().split(' ')[-1]
         print("Total pages: ", pages)
-        pages = 1
+        # pages = 1
     except AttributeError:
         print("No pages information found.")
         pages = 1
@@ -195,6 +195,7 @@ def main():
         df = df.drop_duplicates()
         df.to_json(os.path.join(result_path, "result.json"), orient='records', lines=True)
         df.to_csv(os.path.join(result_path, "result.csv"), index=False)
+        db_functions.regerate_table_schema('unit', DB_USER, DB_PASSWORD, DB_HOST, DB_NAME)
         db_functions.dump_df_to_db(df, DB_USER, DB_PASSWORD, DB_HOST, DB_NAME)
 
     print("Execution time: ", time.time()-start_time)
