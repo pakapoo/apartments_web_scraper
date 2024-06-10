@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+    <script type="text/javascript" src="static/renderDBdata.js"></script>
+    <table id="table">
+        <thead>
+            <tr>
+                <th data-column="name" data-type="string" data-order="desc">name</th>
+                <!-- <th data-column="tel" data-type="string" data-order="desc">tel</th> -->
+                <th data-column="address" data-type="string" data-order="desc">address</th>
+                <th data-column="city" data-type="string" data-order="desc">city</th>
+                <th data-column="state" data-type="string" data-order="desc">state</th>
+                <th data-column="zip" data-type="numeric" data-order="desc">zip</th>
+                <th data-column="neighborhood" data-type="string" data-order="desc">neighborhood</th>
+                <th data-column="built" data-type="numeric" data-order="desc">built</th>
+                <th data-column="units" data-type="numeric" data-order="desc">units</th>
+                <th data-column="stories" data-type="numeric" data-order="desc">stories</th>
+                <!-- <th data-column="management" data-type="string" data-order="desc">management</th> -->
+                <th data-column="unit_no" data-type="string" data-order="desc">unit_no</th>
+                <th data-column="unit_beds" data-type="numeric" data-order="desc">unit_beds</th>
+                <th data-column="unit_baths" data-type="numeric" data-order="desc">unit_baths</th>
+                <th data-column="unit_price" data-type="numeric" data-order="desc">unit_price &#9660</th>
+                <th data-column="unit_sqft" data-type="numeric" data-order="desc">unit_sqft</th>
+                <th data-column="unit_avail" data-type="date" data-order="desc">unit_avail</th>
+            </tr>
+        </thead>
+        <tbody id="tableData">
+        </tbody>
+    </table>
+    <script>
+        var data = JSON.parse('{{ data | tojson | safe }}');
+        buildTable(data);
+        addSortingEventListenerToTable();
+    </script>
+</body>
+</body>
+</html>
