@@ -4,17 +4,12 @@ import pandas as pd
 import os
 import json
 
-DB_USER = "root"
-DB_PASSWORD = "admpw"
-DB_HOST = "localhost"
-DB_NAME = "apartment_db"
-
 def dump_df_to_db(df, DB_USER, DB_PASSWORD, DB_HOST, DB_NAME):
     engine = create_engine("mysql+mysqlconnector://" + DB_USER + ":" + DB_PASSWORD + "@" + DB_HOST + "/" + DB_NAME)
     df.to_sql('unit', con=engine, if_exists='append', index=False)
 
-def regerate_table_schema(table, DB_USER, DB_PASSWORD, DB_HOST, DB_NAME):
-    init_script_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../mysql/sqls/init.sql"))
+def regenerate_table_schema(table, DB_USER, DB_PASSWORD, DB_HOST, DB_NAME):
+    init_script_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../backend/sqls/init.sql"))
     drop_command = "DROP TABLE IF EXISTS " + table + ";"
     create_command = open(init_script_path, "r").read()
     conn = mysql.connector.connect(user=DB_USER, password=DB_PASSWORD, host=DB_HOST, database=DB_NAME)
@@ -35,7 +30,7 @@ def get_data(table, DB_USER, DB_PASSWORD, DB_HOST, DB_NAME):
 
 
 
-def test():
+def test(DB_USER, DB_PASSWORD, DB_HOST, DB_NAME):
     # Set paths
     current_dir = os.path.dirname(os.path.abspath(__file__))
     base_dir = os.path.abspath(os.path.join(current_dir, '../../'))
