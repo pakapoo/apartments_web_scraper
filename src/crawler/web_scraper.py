@@ -1,4 +1,5 @@
 import os
+import argparse
 import configparser
 import requests
 from bs4 import BeautifulSoup
@@ -173,6 +174,11 @@ def main():
     search_URL = config['user_config']['search_URL']
     chromedriver = config['user_config']['chromedriver_dir']
 
+    parser = argparse.ArgumentParser(description='Web scraper for apartment listings')
+    parser.add_argument('-N', '--no_dump_db', action='store_true', help='Do not dump data to database')
+    args = parser.parse_args()
+    print("Do not dump data to database: ", args.no_dump_db)
+
     # STEP1: Get property URLs
     all_links = get_property_urls(search_URL)
 
@@ -195,11 +201,11 @@ def main():
         df.to_json(os.path.join(result_path, "result.json"), orient='records', lines=True)
         df.to_csv(os.path.join(result_path, "result.csv"), index=False)
         # re-create table and dump the new data
-        db_functions.regenerate_table_schema('unit', DB_USER, DB_PASSWORD, DB_HOST, DB_NAME)
-        db_functions.dump_df_to_db(df, DB_USER, DB_PASSWORD, DB_HOST, DB_NAME)
+        if not args.no_dump_db:
+            db_functions.regenerate_table_schema('unit', DB_USER, DB_PASSWORD, DB_HOST, DB_NAME)
+            db_functions.dump_df_to_db(df, DB_USER, DB_PASSWORD, DB_HOST, DB_NAME)
 
     print("Execution time: ", time.time()-start_time)
 
 if __name__ == '__main__':
     main()
-    # db_functions.test_db_dump()

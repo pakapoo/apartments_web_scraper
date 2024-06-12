@@ -10,16 +10,21 @@ Apartments.com is a widely used online platform for apartment listings, allowing
 * Web: Flask, Javascript, CSS
 * Database: MySQL (docker)
 
-### Instructions for Using the Web Crawler Only
-
+### Instructions for Using the Web Scraper Only
+1. Modify the search_URL parameter in `./config/config.ini` to search for your targeted area
+2. Run the web scraper Python script
+```bash
+python ./src/crawler/web_scraper.py --no_dump_db
+```
+3. The result will be compiled as csv and json files under `./data/result`
 
 ### Instructions for Configuring the Full-Stack Project
-**Build and Run MySQL Image on Localhost**
+1. Build and Run MySQL Image on Localhost
 ```bash
 docker build -t mysql-apartments:1.0 -f ./mysql/DockerfileDB ./mysql
 docker run -d --name=mysqldb -p 3306:3306 mysql-apartments:1.0
 ```
-**Enter interactive mode**
+2. Enter interactive mode to make SQL statement to the MySQL database in the Docker container
 ```bash
 docker exec -it mysqldb sh
 mysql -h 127.0.0.1 -u root -p
