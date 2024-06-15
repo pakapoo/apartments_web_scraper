@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="../static/mystyle.css">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -7,27 +8,85 @@
     <title>Madison Housing Data</title>
 </head>
 <body>
+    <header>
+        <h2 class="title-group" style="margin-top: 20px;">Madison Housing Data</h2>
+        <h5 class="title-group">find the best units in Madison according to your budget and conditions</h5>
+    </header>
     <script type="text/javascript" src="static/renderDBdata.js"></script>
+    <div>
+        <select class="searchbar-top" id="bedNum" name="bedNum" onchange="tableFilterBedBath()">
+            <option value="X"> --- Select number of Bedrooms --- </option>
+            <option value="0">Studio</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5+">5+</option>           
+        </select>
+
+        <select class="searchbar-top" style="margin-right: 18vw;" id="bathNum" name="bathNum" onchange="tableFilterBedBath()">
+            <option value="X"> --- Select number of Bathrooms --- </option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3+">3+</option>
+        </select>
+
+        <form class="searchbar-top" id="searchForm" method="get" onsubmit="tableFilterRent(); return false;">
+            <select id="minRent" name="minRent" onchange="resetOption('minRent')">
+                <option value="X"> --- Select minimum --- </option>
+                <option value=500>$500</option>
+                <option value=750>$750</option>
+                <option value=1000>$1000</option>
+                <option value=1250>$1250</option> 
+                <option value=1500>$1500</option>
+                <option value=1750>$1750</option>
+                <option value=2000>$2000</option>
+                <option value=2250>$2250</option>
+                <option value=2500>$2500</option>
+                <option value=2750>$2750</option>
+                <option value=3000>$3000</option>
+            </select>        
+            -
+            <select id="maxRent" name="maxRent" onchange="resetOption('maxRent')">
+                <option value="X"> --- Select maximum --- </option>
+                <option value=500>$500</option>
+                <option value=750>$750</option>
+                <option value=1000>$1000</option>
+                <option value=1250>$1250</option> 
+                <option value=1500>$1500</option>
+                <option value=1750>$1750</option>
+                <option value=2000>$2000</option>
+                <option value=2250>$2250</option>
+                <option value=2500>$2500</option>
+                <option value=2750>$2750</option>
+                <option value=3000>$3000</option>
+            </select>
+            <input type="submit" value="Filter by Rent" style="margin-left: 1vw">
+        </form>    
+        <button id="filter-clear-button" onclick="clearFilterInput()" style="display:inline-block; float:right; margin-top: 10px">Clear</button> 
+    </div>
+    <div id="rowcount" style="margin-top: 10px; margin-bottom: 10px;"></div>
     <table id="table">
         <thead>
             <tr>
-                <th data-column="name" data-type="string" data-order="desc">name</th>
-                <!-- <th data-column="tel" data-type="string" data-order="desc">tel</th> -->
-                <th data-column="address" data-type="string" data-order="desc">address</th>
-                <th data-column="city" data-type="string" data-order="desc">city</th>
-                <th data-column="state" data-type="string" data-order="desc">state</th>
-                <th data-column="zip" data-type="numeric" data-order="desc">zip</th>
-                <th data-column="neighborhood" data-type="string" data-order="desc">neighborhood</th>
-                <th data-column="built" data-type="numeric" data-order="desc">built</th>
-                <th data-column="units" data-type="numeric" data-order="desc">units</th>
-                <th data-column="stories" data-type="numeric" data-order="desc">stories</th>
+                <th data-column="fav" style="width: 6vw;"><button data-type="string" data-order="desc">Fav</button></th>
+                <th data-column="name" style="width: 20vw;"><button data-type="string" data-order="desc">Name</button></th>
+                <!--th data-column="tel" data-type="string" data-order="desc">tel</th-->
+                <th data-column="address" style="width: 20vw;"><button data-type="string" data-order="desc">Address</button></th>
+                <!-- th data-column="city" data-type="string" data-order="desc">City</th-->
+                <!--th data-column="state" data-type="string" data-order="desc">State</th-->
+                <!--th data-column="zip" data-type="numeric" data-order="desc">Zip</th-->
+                <!--th data-column="neighborhood" data-type="string" data-order="desc">Neighborhood</th-->
+                <th data-column="built" style="width: 7vw;"><button data-type="numeric" data-order="desc">Built</button></th>
+                <th data-column="units" style="width: 7vw;"><button data-type="numeric" data-order="desc">Units</button></th>
+                <th data-column="stories" style="width: 8vw;"><button data-type="numeric" data-order="desc">Stories</button></th>
                 <!-- <th data-column="management" data-type="string" data-order="desc">management</th> -->
-                <th data-column="unit_no" data-type="string" data-order="desc">unit_no</th>
-                <th data-column="unit_beds" data-type="numeric" data-order="desc">unit_beds</th>
-                <th data-column="unit_baths" data-type="numeric" data-order="desc">unit_baths</th>
-                <th data-column="unit_price" data-type="numeric" data-order="desc">unit_price &#9660</th>
-                <th data-column="unit_sqft" data-type="numeric" data-order="desc">unit_sqft</th>
-                <th data-column="unit_avail" data-type="date" data-order="desc">unit_avail</th>
+                <th data-column="unit_no" style="width: 7vw;"><button data-type="string" data-order="desc">Unit_no</button></th>
+                <th data-column="unit_beds" style="width: 6vw;"><button data-type="numeric" data-order="desc">Bed</button></th>
+                <th data-column="unit_baths" style="width: 7vw;"><button data-type="numeric" data-order="desc">Bath</button></th>
+                <th data-column="unit_price" style="width: 8vw;"><button data-type="numeric" data-order="desc">Rent</button></th>
+                <th data-column="unit_sqft" style="width: 7vw;"><button data-type="numeric" data-order="desc">sqft</button></th>
+                <th data-column="unit_avail" style="width: 10vw;"><button data-type="date" data-order="desc">Availability</button></th>
             </tr>
         </thead>
         <tbody id="tableData">
@@ -37,6 +96,7 @@
         var data = JSON.parse('{{ data | tojson | safe }}');
         buildTable(data);
         addSortingEventListenerToTable();
+        sortTable(10);
     </script>
 </body>
 </body>

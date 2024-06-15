@@ -8,42 +8,40 @@ Apartments.com is a popular online platform for apartment listings, enabling use
 ### Sample Output
 You may find the sample output as csv and json format in `./data/result` folder.
 
-## Instructions
-### Prerequisites
-* Update the search_URL parameter in the config file `./config/config.ini` to the search URL of apartments.com website.
-### Execution
-If you only want to run the web scraper: 
-1. Run the web scraper Python script.
-```bash
-python ./src/crawler/web_scraper.py --no_dump_db
-```
-2. The result will be compiled as csv and json files under `./data/result`.
-<br><br>
-
-If you want to build the entire full stack project:
-1. Build and run MySQL image on localhost.
-```bash
-docker build -t mysql-apartments:1.0 -f ./mysql/DockerfileDB ./mysql
-docker run -d --name=mysqldb -p 3306:3306 mysql-apartments:1.0
-```
-2. (optional) Enter interactive mode to make SQL statement to the MySQL database in the Docker container.
-```bash
-docker exec -it mysqldb sh
-mysql -h 127.0.0.1 -u root -p
-```
-3. Run the webscraper Python script
-```bash
-python ./src/crawler/web_scraper.py
-```
-4. See the result with the following url: `http://127.0.0.1:5000/`. You may **search** or **sort** by column to find your desired housing.
-
-## Tech Stack
+### Tech Stack
 * Web Scraper: **Python** beautifulsoup
 * Web Backend: **Flask**
 * Web Frontend: **Javascript**, **CSS**
 * Database: **MySQL** deployed with **Docker**
 
-## TODO
+## Setup
+Update the search_URL parameter in the config file `./config/config.ini`, pointing to your desired apartments.com search URL.
+
+If you only want to run the web scraper, run the following command in your terminal. The result will be compiled as csv and json files under `./data/result`.
+```bash
+python ./src/crawler/web_scraper.py --no_dump_db
+```
+
+If you want to build the full stack project, follow the below steps:
+1. Build and run MySQL image on localhost.
+```bash
+docker build -t mysql-apartments:1.0 -f ./mysql/DockerfileDB ./mysql
+docker run -d --name=mysqldb -p 3306:3306 mysql-apartments:1.0
+```
+2. Run the webscraper Python script
+```bash
+python ./src/crawler/web_scraper.py
+```
+3. See the result with the following url: `http://127.0.0.1:5000/`. You may **search** or **sort** by column to find your desired housing.
+
+### Useful Tips
+You may enter interactive mode to execute SQL commands in the Docker container.
+```bash
+docker exec -it mysqldb sh
+mysql -h 127.0.0.1 -u root -p
+```
+
+## Future Release
 Please submit a pull request (PR) if you find any bugs or have ideas to improve the project. Here are some features and enhan
 
 ### Features

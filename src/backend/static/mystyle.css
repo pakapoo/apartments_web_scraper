@@ -1,0 +1,82 @@
+.title-group {
+    color: black;
+    margin-left: 30px;
+}
+
+.searchbar-top {
+    display: inline-block;
+    margin-top: 10px;
+}
+
+.search-select {
+    margin-right: 30px;
+}
+
+div {
+    margin-left: 30px;
+    margin-right: 30px;
+    box-sizing: border-box;
+}
+
+#table {
+    border: 1px solid black;
+    border-collapse: collapse;
+    box-sizing: border-box;
+    margin-left: 30px;
+    margin-right: 30px;
+}
+
+#table th button {
+    padding: 4px;
+    margin: 1px;
+    font-size: 100%;
+    font-weight: bold;
+    background: transparent;
+    border: none;
+    color: white;
+    display: inline;
+    right: 0;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    outline: none;
+    cursor: pointer;
+}
+
+.fav-icon {
+    padding: 4px;
+    margin: 1px;
+    font-size: 100%;
+    font-weight: bold;
+    background: transparent;
+    border: none;
+    display: inline;
+    right: 0;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    outline: none !important;
+    cursor: pointer;
+  }
+
+td, th{
+    border: 1px solid rgb(194, 194, 194);
+    padding: 10px;
+}
+
+thead {
+    background-color: #1f6ca3;
+    color: white;
+}
+
+a:hover {
+    color: #f9d923;
+  }
+
+a:visited {
+    color: blueviolet;
+}
