@@ -1,12 +1,13 @@
 # Apartments.com web scraper
-The tool allows user to scrape data from Apartments.com with **Python (beautifulsoup)** and export data to **MySQL** database. The database is deployed with a customized **Dockerfile**. It then displays data on a webpage developed with **Flask**, **Javascript**, and **CSS**. Users can search, filter, and sort data based on factors such as price, location, number of bedrooms/bathrooms to find the units that meet their needs.
+The tool allows user to scrape data from Apartments.com with **Python (beautifulsoup)** and export data to **MySQL** database deployed with **Docker**. It then displays data on a webpage developed with **Flask**, **Javascript**, and **CSS**. <p>
+Users can search, filter, and sort data based on factors such as price, location, number of bedrooms/bathrooms to find the units that meet their needs.
 
 ### What is Special
-* Unit-level granularity: Each unit within a apartment is presented as a row of data, allowing user to search for ideal unit directly in tabular format, instead of clicking into each apartment.
-* Short processing time: The script is designed with **multiprocessing** that speed up html parsing for each apartment.
+* Unit-level granularity: Scrapes unit-level data, allowing user to search for ideal unit directly.
+* Short processing time: Utilizes **multiprocessing** technique that speeds up html parsing.
 
 ### Sample Output
-You may find unit data compiled altogether as csv and json files under `./data/result`.
+You may find data scraped from the searched URL compiled altogether as csv and json files under `./data/result`.
 
 ## Quickstart
 1. Update the search_URL parameter in `./config/config.ini`, pointing to your desired apartments.com search URL.
@@ -38,7 +39,7 @@ mysql -h 127.0.0.1 -u root -p
 ```
 
 ## Future Release
-The ultimate goal is to build a real-time App that pushes notification when there are new units that fit ones need. Please submit a pull request (PR) if you find any bug or have ideas to improve the project. Here are some features and enhancement that I plan to add:
+The ultimate goal is to build a real-time App that pushes notification to Line/Whatsapp when there are new units that fit ones need. Here are some features and enhancement that I plan to add:
 * Scheduling with Airflow: Automate the web scraping process.
 * Data Visualization with Redash: Visualize housing data for better insights.
 * Dockerization: Dockerize the web crawler, web application, Airflow, and dashboard.
@@ -47,4 +48,4 @@ The ultimate goal is to build a real-time App that pushes notification when ther
 * Google Maps API: Calculate the distance from a targeted location.
 * Notification Service: Integrate with messaging apps like Line, Whatsapp to receive instant notifications about ideal housing options.
 
-Feel free to contribute to the project or reach out if you have any suggestions or feedback!
+Feel free to contribute to the project with a pull request (PR) or reach out if you have any suggestions or feedback!

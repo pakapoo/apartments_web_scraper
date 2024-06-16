@@ -172,7 +172,6 @@ def main():
     config_path = os.path.join(base_dir, 'config/config.ini')
     config.read(config_path)
     search_URL = config['user_config']['search_URL']
-    chromedriver = config['user_config']['chromedriver_dir']
 
     parser = argparse.ArgumentParser(description='Web scraper for apartment listings')
     parser.add_argument('-N', '--no_dump_db', action='store_true', help='Do not dump data to database')
