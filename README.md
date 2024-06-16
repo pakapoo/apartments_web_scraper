@@ -1,3 +1,5 @@
+
+https://github.com/pakapoo/apartments_web_scraper/assets/45991312/48761817-5116-423b-a7ac-127e874a55e3
 # Apartments.com web scraper
 The tool allows user to scrape data from Apartments.com with **Python (beautifulsoup)** and export data to **MySQL** database deployed with **Docker**. It then displays data on a webpage developed with **Flask**, **Javascript**, and **CSS**. <p>
 Users can search, filter, and sort data based on factors such as price, location, number of bedrooms/bathrooms to find the units that meet their needs.
@@ -5,6 +7,11 @@ Users can search, filter, and sort data based on factors such as price, location
 ### What is Special
 * Unit-level granularity: Scrapes unit-level data, allowing user to search for ideal unit directly.
 * Short processing time: Utilizes **multiprocessing** technique that speeds up html parsing.
+
+
+https://github.com/pakapoo/apartments_web_scraper/assets/45991312/5f9af489-51f5-4978-869c-25cfe101d698
+
+
 
 ### Sample Output
 You may find data scraped from the searched URL compiled altogether as csv and json files under `./data/result`.
