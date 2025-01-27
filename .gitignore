@@ -14,3 +14,7 @@ bk/
 
 # Project tracking documentation
 *.docx
+
+# Google Cloud testing
+venv/
+google_functions/

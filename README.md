@@ -40,12 +40,23 @@ mysql -h 127.0.0.1 -u root -p
 
 ## Future Release
 The ultimate goal is to build a real-time App that pushes notification to Line/Whatsapp when there are new units that fit ones need. Here are some features and enhancement that I plan to add:
-* Scheduling with Airflow: Automate the web scraping process.
-* Data Visualization with Redash: Visualize housing data for better insights.
-* Dockerization: Dockerize the web crawler, web application, Airflow, and dashboard.
-* Docker Compose: Create a Docker Compose file for easy configuration.
-* Cloud Deployment: Deploy the application on a cloud platform for accessibility and scalability.
-* Google Maps API: Calculate the distance from a targeted location.
-* Notification Service: Integrate with messaging apps like Line, Whatsapp to receive instant notifications about ideal housing options.
+### Infrustracture
+* Dockerization: Containerize the web crawler, MySQL, Flask web application, Airflow, and Redash dashboard to Google Cloud Run
+    * Make sure the web crawler can store data to MySQL database
+    * Make sure data persist even the MySQL database is down
+    * Make sure Flask container can connect and use data from MySQL container
+* Scheduling: set up Google Cloud Composer or Airflow for time trigger the crawler
+* Extract and load to datawarehouse: move data from MySQL to Bigquery with Google Cloud Functions (event trigger)
+* Docker Compose: Create a Docker Compose file for local deployment
+* Terraform: Create terraform scripts for cloud deployment
+### Analytics
+* Data Visualization with Redash: Visualize housing data for better insights
+* Spark/dbt: Perform the analytics engineering in Bigquery
+    * Google Maps API: Calculate the distance from a targeted location
+### Good to have
+* Scrape data from different sources
+* Enable user to scrape multiple districts
+* Distributed scraping to avoid anti-scraping
+* Notification Service: Integrate with apps like Line, Whatsapp to receive instant notifications about ideal housing options
 
 Feel free to contribute to the project with a pull request (PR) or reach out if you have any suggestions or feedback!

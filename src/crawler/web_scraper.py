@@ -6,6 +6,10 @@ from bs4 import BeautifulSoup
 import pandas as pd
 import time
 import multiprocessing as mp
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
+
 import custom_extraction_functions
 import db_functions
 
@@ -40,6 +44,7 @@ DB_PASSWORD = "admpw"
 DB_HOST = "localhost"
 DB_NAME = "apartment_db"
 
+
 class Property:
     def __init__(self, id, url, name, tel, address, city, state, zip, neighborhood, built, units, stories, management):
         self.id = id
@@ -66,7 +71,7 @@ class Unit(Property):
         self.unit_sqft = unit_sqft
         self.unit_avail = unit_avail
     
-def get_property_urls(search_URL):
+def get_property_urls(search_URL, cookies):
     """
     Fetches property URLs from the given search URL and stores them in a list.
 
@@ -76,7 +81,16 @@ def get_property_urls(search_URL):
     Returns:
     all_links (list): A list of property URLs.
     """
-    headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36', "Upgrade-Insecure-Requests": "1","DNT": "1","Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7","Accept-Language": "zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7","Accept-Encoding": "gzip, deflate, br, zstd"}
+    headers = {
+                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',\
+                "Upgrade-Insecure-Requests": "1",\
+                "DNT": "1",\
+                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",\
+                "Accept-Encoding": "gzip, deflate, br, zstd",\
+                "accept-language": "zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7",\
+                "cookie": f"{cookies}"
+                }
+
     response = requests.get(search_URL, headers=headers)
     soup = BeautifulSoup(response.text, 'html.parser')
     all_links = []
@@ -99,7 +113,7 @@ def get_property_urls(search_URL):
     print("Total properties: ", len(all_links))
     return all_links
 
-def get_property_html(all_links):
+def get_property_html(all_links, cookies):
     """
     Get the HTML for each property URL as soup object, and store them in a list.
 
@@ -110,7 +124,15 @@ def get_property_html(all_links):
     soup_list (list): A list of soup objects.
     """
     soup_list = []
-    headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36', "Upgrade-Insecure-Requests": "1","DNT": "1","Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7","Accept-Language": "zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7","Accept-Encoding": "gzip, deflate, br, zstd"}
+    headers = {
+                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',\
+                "Upgrade-Insecure-Requests": "1",\
+                "DNT": "1",\
+                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",\
+                "Accept-Encoding": "gzip, deflate, br, zstd",\
+                "accept-language": "zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7",\
+                "cookie": f"{cookies}"
+                }
     for count, url in enumerate(all_links):
         response = requests.get(url, headers=headers)
         soup = BeautifulSoup(response.text, 'html.parser')
@@ -166,6 +188,7 @@ def main():
     current_dir = os.path.dirname(os.path.abspath(__file__))
     base_dir = os.path.abspath(os.path.join(current_dir, '../../'))
     result_path = os.path.join(base_dir, 'data/result/')
+    chromedriver_path = os.path.join(base_dir, 'chromedriver-mac-arm64/chromedriver')
 
     # Read config file
     config = configparser.ConfigParser()
@@ -173,18 +196,31 @@ def main():
     config.read(config_path)
     search_URL = config['user_config']['search_URL']
 
+    # generate the required 'cookie' parameter of headers with selenium
+    chrome_options = Options()
+    chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--no-sandbox") 
+    service = Service(chromedriver_path)
+    driver = webdriver.Chrome(service=service, options=chrome_options)
+    driver.get(search_URL)
+    time.sleep(5)
+    cookies = driver.get_cookies()
+
     parser = argparse.ArgumentParser(description='Web scraper for apartment listings')
     parser.add_argument('-N', '--no_dump_db', action='store_true', help='Do not dump data to database')
     args = parser.parse_args()
     print("Do not dump data to database: ", args.no_dump_db)
 
     # STEP1: Get property URLs
-    all_links = get_property_urls(search_URL)
+    print("step 1: get property URLs")
+    all_links = get_property_urls(search_URL, cookies)
 
     # STEP2: Get property HTML
-    soup_list = get_property_html(all_links)
+    print("step 2: get property html")
+    soup_list = get_property_html(all_links, cookies)
 
     # STEP3: Extract property information
+    print("step 3: extract property information")
     pool = mp.Pool(POOL_SIZE)
     manager = mp.Manager()
     unit_list = manager.list()
@@ -194,6 +230,7 @@ def main():
     pool.join()
     
     # STEP4: Save the extracted information (list of dictionaries) to json and csv files
+    print("step 4: save extracted information")
     df = pd.DataFrame(unit_list[:])
     if not df.empty:
         df = df.drop_duplicates()
