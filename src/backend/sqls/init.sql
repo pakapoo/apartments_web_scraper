@@ -1,4 +1,9 @@
 USE mysql;
+
+CREATE USER IF NOT EXISTS 'airflow'@'%' IDENTIFIED BY 'airflowpw';
+GRANT ALL PRIVILEGES ON apartment_db.* TO 'airflow'@'%';
+FLUSH PRIVILEGES;
+
 CREATE DATABASE IF NOT EXISTS apartment_db;
 
 USE apartment_db;

@@ -4,7 +4,7 @@ import db_functions
 
 DB_USER = "root"
 DB_PASSWORD = "admpw"
-DB_HOST = "localhost"
+DB_HOST = "mysql"
 DB_NAME = "apartment_db"
 
 views = Blueprint('views', __name__)

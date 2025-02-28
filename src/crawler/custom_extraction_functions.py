@@ -78,7 +78,7 @@ def beds(soup, selector):
     beds_soup = soup.select_one(selector)
     if beds_soup:
         beds = beds_soup.get_text(strip=True)
-        beds_regex = re.compile(r'(\d+)(\s+)(bed)')
+        beds_regex = re.compile(r'(\d+)(\s+)(Bed)')
         beds_match = beds_regex.search(beds)
         beds = int(beds_match.group(1)) if beds_match else 0
     else:
@@ -89,11 +89,11 @@ def baths(soup, selector):
     baths_soup = soup.select_one(selector)
     if baths_soup:
         baths = baths_soup.get_text(strip=True)
-        baths_regex = re.compile(r'(\d+)(\s+)(bath)')
+        baths_regex = re.compile(r'(\d+)(\s+)(Bath)')
         baths_match = baths_regex.search(baths)
         baths = int(baths_match.group(1)) if baths_match else None
     else:
-        baths = None
+        baths = 0
     return baths
 
 def unit_no(soup, selector):
