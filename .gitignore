@@ -8,6 +8,7 @@ __pycache__/
 # Project output and backups
 /data
 bk/
+logs/
 
 # ChromeDriver
 /chromedriver-mac-arm64
