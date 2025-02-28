@@ -5,10 +5,11 @@ __pycache__/
 # Editor directories and files
 .DS_Store
 
-# Project output and backups
+# Project logs, output and backups
 /data
 bk/
 logs/
+mysql-db-volume/
 
 # ChromeDriver
 /chromedriver-mac-arm64

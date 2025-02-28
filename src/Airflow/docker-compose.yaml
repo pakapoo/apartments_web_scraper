@@ -16,7 +16,7 @@
 # under the License.
 #
 
-# Basic Airflow cluster configuration for CeleryExecutor with Redis and MySQL.
+# Basic Airflow cluster configuration for CeleryExecutor with Redis and PostgreSQL.
 #
 # WARNING: This configuration is for local development. Do not use it in a production deployment.
 #
@@ -46,53 +46,52 @@ x-airflow-common:
   # In order to add custom dependencies or upgrade provider packages you can use your extended image.
   # Comment the image line, place your Dockerfile in the directory where you placed the docker-compose.yaml
   # and uncomment the "build" line below, Then run `docker-compose build` to build the images.
-  # image: ${AIRFLOW_IMAGE_NAME:-apache/airflow:2.5.1}
-  image: airflow-base
+  image: ${AIRFLOW_IMAGE_NAME:-apache/airflow:2.5.1}
   # build: .
   environment:
     &airflow-common-env
     AIRFLOW__CORE__EXECUTOR: CeleryExecutor
-    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: mysql+mysqldb://airflow:airflowpw@mysql/apartment_db
+    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
     # For backward compatibility, with Airflow <2.3
-    AIRFLOW__CORE__SQL_ALCHEMY_CONN: mysql+mysqldb://airflow:airflowpw@mysql/apartment_db
-    AIRFLOW__CELERY__RESULT_BACKEND: db+mysql://airflow:airflowpw@mysql/apartment_db
+    AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+    AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://airflow:airflow@postgres/airflow
     AIRFLOW__CELERY__BROKER_URL: redis://:@redis:6379/0
     AIRFLOW__CORE__FERNET_KEY: ''
     AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
     AIRFLOW__CORE__LOAD_EXAMPLES: 'true'
     AIRFLOW__API__AUTH_BACKENDS: 'airflow.api.auth.backend.basic_auth,airflow.api.auth.backend.session'
     _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:-}
+    AIRFLOW_CONN_MYSQL_DEFAULT: mysql://airflow:airflowpw@mysql/apartment_db
   volumes:
     - ${AIRFLOW_PROJ_DIR:-.}/dags:/opt/airflow/dags
     - ${AIRFLOW_PROJ_DIR:-.}/logs:/opt/airflow/logs
     - ${AIRFLOW_PROJ_DIR:-.}/plugins:/opt/airflow/plugins
+  networks:
+    - shared-network
   user: "${AIRFLOW_UID:-50000}:0"
   depends_on:
     &airflow-common-depends-on
     redis:
       condition: service_healthy
-    mysql:
+    postgres:
       condition: service_healthy
 
 services:
-  mysql:
-    image: mysql:latest
+  postgres:
+    image: postgres:13
     environment:
-      MYSQL_ROOT_PASSWORD: admpw
-      MYSQL_USER: sqluser
-      MYSQL_PASSWORD: userpw
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
     volumes:
-      - mysql-db-volume:/var/lib/mysql  # Persistent storage for MySQL data
-      - ./src/backend/sqls/init.sql:/docker-entrypoint-initdb.d/init.sql  # Copy init.sql for initialization
+      - postgres-db-volume:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-padmpw"]
+      test: ["CMD", "pg_isready", "-U", "airflow"]
       interval: 5s
       retries: 5
     restart: always
-    ports:
-      - "3306:3306"
-    #networks:
-    #  - custom_network
+    networks:
+      - shared-network
 
   redis:
     image: redis:latest
@@ -104,21 +103,11 @@ services:
       timeout: 30s
       retries: 50
     restart: always
-
-  flask-app:
-    image: flask-custom:1.0
-    ports:
-      - "5001:5000"
-    environment:
-      - FLASK_ENV=development
-    volumes:
-      - ./src/backend:/app  # Mount the current directory to /app in the container
-    #networks:
-    #  - custom_network
+    networks:
+      - shared-network
 
   airflow-webserver:
     <<: *airflow-common
-    # command: /bin/bash -c "pip install mysql-connector-python && webserver"
     command: webserver
     ports:
       - 8080:8080
@@ -136,7 +125,6 @@ services:
   airflow-scheduler:
     <<: *airflow-common
     command: scheduler
-    # command: /bin/bash -c "sudo apt-get update && sudo apt-get install -y default-libmysqlclient-dev gcc && sudo -u airflow pip install mysqlclient && sudo -u airflow pip install apache-airflow-providers-microsoft-azure azure.servicebus && scheduler"
     healthcheck:
       test: ["CMD-SHELL", 'airflow jobs check --job-type SchedulerJob --hostname "$${HOSTNAME}"']
       interval: 10s
@@ -151,7 +139,6 @@ services:
   airflow-worker:
     <<: *airflow-common
     command: celery worker
-    # command: /bin/bash -c "sudo apt-get update && sudo apt-get install -y default-libmysqlclient-dev gcc && sudo -u airflow pip install mysqlclient && sudo -u airflow pip install apache-airflow-providers-microsoft-azure azure.servicebus && celery worker"
     healthcheck:
       test:
         - "CMD-SHELL"
@@ -172,7 +159,6 @@ services:
 
   airflow-triggerer:
     <<: *airflow-common
-    # command: /bin/bash -c "sudo apt-get update && sudo apt-get install -y default-libmysqlclient-dev gcc && sudo -u airflow pip install mysqlclient && sudo -u airflow pip install apache-airflow-providers-microsoft-azure azure.servicebus && triggerer"
     command: triggerer
     healthcheck:
       test: ["CMD-SHELL", 'airflow jobs check --job-type TriggererJob --hostname "$${HOSTNAME}"']
@@ -192,7 +178,6 @@ services:
     command:
       - -c
       - |
-        sudo apt-get update && sudo apt-get install -y default-libmysqlclient-dev gcc && sudo -u airflow pip install mysqlclient && sudo -u airflow pip install apache-airflow-providers-microsoft-azure azure.servicebus
         function ver() {
           printf "%04d%04d%04d%04d" $${1//./ }
         }
@@ -260,7 +245,6 @@ services:
       _AIRFLOW_WWW_USER_USERNAME: ${_AIRFLOW_WWW_USER_USERNAME:-airflow}
       _AIRFLOW_WWW_USER_PASSWORD: ${_AIRFLOW_WWW_USER_PASSWORD:-airflow}
       _PIP_ADDITIONAL_REQUIREMENTS: ''
-      # _PIP_ADDITIONAL_REQUIREMENTS: 'apache-airflow-providers-microsoft-azure azure-servicebus'
     user: "0:0"
     volumes:
       - ${AIRFLOW_PROJ_DIR:-.}:/sources
@@ -300,8 +284,8 @@ services:
         condition: service_completed_successfully
 
 volumes:
-  mysql-db-volume:
+  postgres-db-volume:
 
 networks:
-  custom_network:
-    driver: bridge
+  shared-network:
+    external: true
