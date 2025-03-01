@@ -9,11 +9,6 @@ Users can search, filter, and sort data based on factors such as price, location
 
 https://github.com/pakapoo/apartments_web_scraper/assets/45991312/5f9af489-51f5-4978-869c-25cfe101d698
 
-
-
-### Sample Output
-You may find data scraped from the searched URL compiled altogether as csv and json files under `./data/result`.
-
 ## Quickstart
 1. Update the search_URL parameter in `./config/config.ini`, pointing to your desired apartments.com search URL.
 2. Download chromedriver and update the path in `./config/config.ini`.
@@ -45,8 +40,6 @@ docker-compose -f ./src/Airflow/docker-compose.yaml down
 docker-compose -f ./src/backend/docker-compose.yaml up -d
 docker-compose -f ./src/Airflow/docker-compose.yaml up -d
 ```
-
-### Useful Tips
 You may enter interactive mode to execute SQL commands in the Docker container.
 ```bash
 docker exec -it apartments_web_scraper-mysql-1 sh
@@ -54,7 +47,7 @@ mysql -h 127.0.0.1 -u root -p
 ```
 
 ## Future Release
-The ultimate goal is to build a real-time App that pushes notification to Line/Whatsapp when there are new units that fit ones need. Here are some features and enhancement that I plan to add:
+The goal is to build a real-time App that pushes notification to Line/Whatsapp when there are new units that fit ones need. Here are some features and enhancement that I plan to add:
 ### Infrustracture
 * Dockerization: Containerize the web crawler, MySQL, Flask web application, Airflow, and Redash dashboard to Google Cloud Run
     * Make sure the web crawler can store data to MySQL database
