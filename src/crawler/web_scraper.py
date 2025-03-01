@@ -74,17 +74,18 @@ class Unit(Property):
 
 @utils.time_stats
 def init_config():
-    # Set paths    
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    base_dir = os.path.abspath(os.path.join(current_dir, '../../'))
-    result_path = os.path.join(base_dir, 'data/result/')
-    chromedriver_path = os.path.join(base_dir, 'chromedriver-mac-arm64/chromedriver')
-
     # Read config file
     config = configparser.ConfigParser()
     config_path = os.path.join(base_dir, 'config/config.ini')
     config.read(config_path)
     search_URL = config['user_config']['search_URL']
+
+    # Set paths    
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    base_dir = os.path.abspath(os.path.join(current_dir, '../../'))
+    result_path = os.path.join(base_dir, config['path']['tmp_output_folder'])
+    os.makedirs(result_path, exist_ok=True)
+    chromedriver_path = os.path.join(base_dir, config['path']['chromedriver_path'])
 
     # generate the required 'cookie' parameter of headers with selenium
     chrome_options = Options()

@@ -16,18 +16,18 @@ You may find data scraped from the searched URL compiled altogether as csv and j
 
 ## Quickstart
 1. Update the search_URL parameter in `./config/config.ini`, pointing to your desired apartments.com search URL.
-2. Build and run Airflow, MySQL, and Redis on your laptop
+2. Download chromedriver and update the path in `./config/config.ini`.
+3. Build and run Airflow, MySQL, and Redis on your laptop
 ```bash
-docker build -t flask-custom:1.0 -f ./src/backend/Dockerfile_Flask .
 docker network create shared-network
 docker-compose -f ./src/backend/docker-compose.yaml up -d
 docker-compose -f ./src/Airflow/docker-compose.yaml up -d
 ```
-3. (This will be scheduled on Airflow soon!) Run the web scraper script
+4. (This will be scheduled on Airflow soon!) Run the web scraper script
 ```bash
 python ./src/crawler/web_scraper.py
 ```
-4. See the result with the following url: `http://127.0.0.1:5001/`. You may **search** or **sort** by column to find your desired housing.
+5. See the result with the following url: `http://127.0.0.1:5001/`. You may **search** or **sort** by column to find your desired housing.
 
 #### Note:
 If you only need to scrape data from Apartments.com, run the following command in your terminal. The result will be compiled as csv and json files under `./data/result`.
