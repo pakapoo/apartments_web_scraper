@@ -1,8 +1,8 @@
 # Apartments.com web scraper
-The tool allows user to scrape data from Apartments.com with **Python (beautifulsoup)** and export data to **MySQL** database deployed with **Docker**. It then displays data on a webpage developed with **Flask**, **Javascript**, and **CSS**. <p>
+The tool allows user to scrape data from Apartments.com with **Python (Selenium, beautifulsoup)** and export data to **MySQL** database fully-deployed with **Docker** and triggered by **Airflow**. It then displays data on a webpage developed with **Flask**, **Javascript**, and **CSS**. <p>
 Users can search, filter, and sort data based on factors such as price, location, number of bedrooms/bathrooms to find the units that meet their needs.
 
-<img width="600" alt="workflow" src="https://github.com/user-attachments/assets/7e874f5e-6267-46d3-8211-3a0587c1d15c" />
+<img width="620" alt="workflow" src="https://github.com/user-attachments/assets/7e874f5e-6267-46d3-8211-3a0587c1d15c" />
 
 ### What is Special
 * Unit-level granularity: Scrapes unit-level data, allowing user to search for ideal unit directly.
@@ -50,13 +50,9 @@ mysql -h 127.0.0.1 -u root -p
 ## Future Release
 The goal is to build a real-time App that pushes notification to Line/Whatsapp when there are new units that fit ones need. Here are some features and enhancement that I plan to add:
 ### Infrustracture
-* Dockerization: Containerize the web crawler, MySQL, Flask web application, Airflow, and Redash dashboard to Google Cloud Run
-    * Make sure the web crawler can store data to MySQL database
-    * Make sure data persist even the MySQL database is down
-    * Make sure Flask container can connect and use data from MySQL container
+* Dockerization: deploy to Google Cloud Run
 * Scheduling: set up Google Cloud Composer or Airflow for time trigger the crawler
 * Extract and load to datawarehouse: move data from MySQL to Bigquery with Google Cloud Functions (event trigger)
-* Docker Compose: Create a Docker Compose file for local deployment
 * Terraform: Create terraform scripts for cloud deployment
 ### Analytics
 * Data Visualization with Redash: Visualize housing data for better insights
