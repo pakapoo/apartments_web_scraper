@@ -1,31 +1,30 @@
 # Apartments.com web scraper
-The tool allows user to scrape data from Apartments.com with **Python (Selenium, beautifulsoup)** and export data to **MySQL** database fully-deployed with **Docker** and triggered by **Airflow**. It then displays data on a webpage developed with **Flask**, **Javascript**, and **CSS**. <p>
-Users can search, filter, and sort data based on factors such as price, location, number of bedrooms/bathrooms to find the units that meet their needs.
+The tool allows user to scrape data from Apartments.com with **Python** and persist data in **MySQL** database. The pipeline is fully-deployed with **Docker** and triggered by **Airflow**. It then displays the data on a webpage developed with **Flask**, **Javascript**, and **CSS**. Users can search, filter, and sort data based on factors such as price, location, number of bedrooms/bathrooms to find the units that meet their needs.
 
-<img width="620" alt="workflow" src="https://github.com/user-attachments/assets/7e874f5e-6267-46d3-8211-3a0587c1d15c" />
+<img width="700" alt="workflow" src="https://github.com/user-attachments/assets/7e874f5e-6267-46d3-8211-3a0587c1d15c" />
 
 ### What is Special
 * Unit-level granularity: Scrapes unit-level data, allowing user to search for ideal unit directly.
-* Short processing time: Utilizes **multiprocessing** technique that speeds up html parsing.
+* Short processing time for I/O bound task: Uses **multithreading** to speed up html parsing.
+* Bypass authentification: Use hybrid approach (Selenium + requests) to overcome anti-scraping techniques.
 
 https://github.com/pakapoo/apartments_web_scraper/assets/45991312/5f9af489-51f5-4978-869c-25cfe101d698
 
 ## Quickstart
 1. Update the search_URL parameter in `./config/config.ini`, pointing to your desired apartments.com search URL.
-2. Download chromedriver and update the path in `./config/config.ini`.
-3. Build and run Airflow, MySQL, and Redis on your laptop
+2. Build and run Airflow, MySQL, and Redis on your laptop
 ```bash
 docker network create shared-network
 docker-compose -f ./src/backend/docker-compose.yaml up -d
 docker-compose -f ./src/Airflow/docker-compose.yaml up -d
 ```
-4. (This will be scheduled on Airflow soon!) Run the web scraper script
+3. (This will be scheduled on Airflow soon!) Run the web scraper script
 ```bash
 python ./src/crawler/web_scraper.py
 ```
-5. See the result with the following url: `http://127.0.0.1:5001/`. You may **search** or **sort** by column to find your desired housing.
+4. See the result with the following url: `http://127.0.0.1:5001/`. You may **search** or **sort** by column to find your desired housing.
 
-#### Note:
+## Note:
 If you only need to scrape data from Apartments.com, run the following command in your terminal. The result will be compiled as csv and json files under `./data/result`.
 ```bash
 python ./src/crawler/web_scraper.py --no_dump_db
@@ -41,7 +40,7 @@ docker-compose -f ./src/Airflow/docker-compose.yaml down
 docker-compose -f ./src/backend/docker-compose.yaml up -d
 docker-compose -f ./src/Airflow/docker-compose.yaml up -d
 ```
-You may enter interactive mode to execute SQL commands in the Docker container.
+You may enter interactive mode to interact with the MySQL database with SQL commands in the Docker container.
 ```bash
 docker exec -it apartments_web_scraper-mysql-1 sh
 mysql -h 127.0.0.1 -u root -p
@@ -49,16 +48,16 @@ mysql -h 127.0.0.1 -u root -p
 
 ## Future Release
 The goal is to build a real-time App that pushes notification to Line/Whatsapp when there are new units that fit ones need. Here are some features and enhancement that I plan to add:
-### Infrustracture
-* Dockerization: deploy to Google Cloud Run
-* Scheduling: set up Google Cloud Composer or Airflow for time trigger the crawler
+#### Infrustracture
+* Cloud deployment: deploy to Google Cloud Run
+* Scheduling: compare Google Cloud Composer with Airflow
 * Extract and load to datawarehouse: move data from MySQL to Bigquery with Google Cloud Functions (event trigger)
 * Terraform: Create terraform scripts for cloud deployment
-### Analytics
+#### Analytics
 * Data Visualization with Redash: Visualize housing data for better insights
 * Spark/dbt: Perform the analytics engineering in Bigquery
     * Google Maps API: Calculate the distance from a targeted location
-### Good to have
+#### Good to have
 * Scrape data from different sources
 * Enable user to scrape multiple districts
 * Distributed scraping to avoid anti-scraping
