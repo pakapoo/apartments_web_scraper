@@ -7,8 +7,10 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.chrome.options import Options
+# from selenium.webdriver.chrome.service import Service
+# from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.firefox.service import Service
+from selenium.webdriver.firefox.options import Options
 
 import custom_extraction_functions
 import db_functions
@@ -42,7 +44,8 @@ POOL_SIZE = os.cpu_count()
 
 DB_USER = "root"
 DB_PASSWORD = "admpw"
-DB_HOST = "localhost"
+# DB_HOST = "localhost"
+DB_HOST = "mysql"
 DB_NAME = "apartment_db"
 
 
@@ -74,6 +77,9 @@ class Unit(Property):
 
 @utils.time_stats
 def init_config():
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    base_dir = os.path.abspath(current_dir)
+
     # Read config file
     config = configparser.ConfigParser()
     config_path = os.path.join(base_dir, 'config/config.ini')
@@ -81,31 +87,42 @@ def init_config():
     search_URL = config['user_config']['search_URL']
 
     # Set paths    
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    base_dir = os.path.abspath(os.path.join(current_dir, '../../'))
     result_path = os.path.join(base_dir, config['path']['tmp_output_folder'])
     os.makedirs(result_path, exist_ok=True)
-    chromedriver_path = os.path.join(base_dir, config['path']['chromedriver_path'])
 
     # generate the required 'cookie' parameter of headers with selenium
-    chrome_options = Options()
-    chrome_options.add_argument("--headless")
-    chrome_options.add_argument("--no-sandbox") 
-    service = Service(chromedriver_path)
-    driver = webdriver.Chrome(service=service, options=chrome_options)
+    # chromedriver_path = os.path.join(base_dir, config['path']['chromedriver_path'])
+    # chrome_options = Options()
+    # chrome_options.add_argument("--headless")
+    # chrome_options.add_argument("--no-sandbox")
+    # chrome_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
+    # service = Service(chromedriver_path)
+    # driver = webdriver.Chrome(service=service, options=chrome_options)
+
+    geckodriver_path = os.path.join(base_dir, config['path']['geckodriver_path'])
+    firefox_options = Options()
+    firefox_options.add_argument("--headless")
+    firefox_options.add_argument("--no-sandbox")
+    firefox_options.binary_location = "/usr/bin/firefox-esr"
+    service = Service(geckodriver_path)
+    driver = webdriver.Firefox(service=service, options=firefox_options)
+
     driver.get(search_URL)
     time.sleep(5)
+    global cookies
     cookies = driver.get_cookies()
+    global user_agent
+    user_agent = driver.execute_script("return navigator.userAgent;")
 
     parser = argparse.ArgumentParser(description='Web scraper for apartment listings')
     parser.add_argument('-N', '--no_dump_db', action='store_true', help='Do not dump data to database')
     args = parser.parse_args()
     print("Do not dump data to database: ", args.no_dump_db)
 
-    return search_URL, cookies, args, result_path
+    return search_URL, args, result_path
 
 @utils.time_stats
-def get_property_urls(search_URL, cookies):
+def get_property_urls(search_URL):
     """
     Fetches property URLs from the given search URL and stores them in a list.
 
@@ -116,7 +133,7 @@ def get_property_urls(search_URL, cookies):
     all_links (list): A list of property URLs.
     """
     headers = {
-                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',\
+                'User-Agent': f"{user_agent}",\
                 "Upgrade-Insecure-Requests": "1",\
                 "DNT": "1",\
                 "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",\
@@ -125,7 +142,7 @@ def get_property_urls(search_URL, cookies):
                 "cookie": f"{cookies}"
                 }
 
-    response = requests.get(search_URL, headers=headers)
+    response = requests.get(search_URL, headers=headers, timeout=15)
     soup = BeautifulSoup(response.text, 'html.parser')
     all_links = []
 
@@ -149,7 +166,7 @@ def get_property_urls(search_URL, cookies):
     return all_links
 
 @utils.time_stats
-def get_property_html(all_links, cookies):
+def get_property_html(all_links):
     """
     Get the HTML for each property URL as soup object, and store them in a list.
 
@@ -161,7 +178,7 @@ def get_property_html(all_links, cookies):
     """
     soup_list = []
     headers = {
-                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',\
+                'User-Agent': f"{user_agent}",\
                 "Upgrade-Insecure-Requests": "1",\
                 "DNT": "1",\
                 "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",\
@@ -205,12 +222,7 @@ def extract_property_info(soup, unit_list):
     management = custom_extraction_functions.management(soup[1], MANAGEMENT_SELECTOR)
 
     # extract units info
-    #print(soup)
-    #print(".........")
-    #print(soup[1])
-    #print(".........")
     plan_info = soup[1].select(PLAN_SELECTOR)
-    #print(plan_info)
     for plan in plan_info:
         unit_beds = custom_extraction_functions.beds(plan, UNIT_BEDS_SELECTOR)
         unit_baths = custom_extraction_functions.baths(plan, UNIT_BATHS_SELECTOR)
@@ -225,18 +237,20 @@ def extract_property_info(soup, unit_list):
     
 def main():
     # STEP 0: init configurations
-    search_URL, cookies, args, result_path = init_config()
+    search_URL, args, result_path = init_config()
 
     # STEP1: Get property URLs
     print("step 1: get property URLs")
-    all_links = get_property_urls(search_URL, cookies)
+    all_links = get_property_urls(search_URL)
 
     # STEP2: Get property HTML
     print("step 2: get property html")
-    soup_list = get_property_html(all_links, cookies)
+    soup_list = get_property_html(all_links)
 
     # STEP3: Extract property information
     print("step 3: extract property information")
+    print("pool size: ", POOL_SIZE)
+    start_time = time.time()
     pool = mp.Pool(POOL_SIZE)
     manager = mp.Manager()
     unit_list = manager.list()
@@ -244,6 +258,27 @@ def main():
         pool.apply_async(func=extract_property_info, args=(soup, unit_list))
     pool.close()
     pool.join()
+    print("Elapsed time in seconds:", time.time() - start_time)
+    print("length", len(unit_list))
+
+    print("step 3: benchmark (without multiprocessing)")
+    start_time = time.time()
+    tmp_unit_list = []
+    for soup in soup_list:
+        extract_property_info(soup, tmp_unit_list)
+    print("Elapsed time in seconds:", time.time() - start_time)
+    print("length", len(tmp_unit_list))
+
+    # from concurrent.futures import ThreadPoolExecutor
+    # print("step 3: extract property information (multithreading)")
+    # print("pool size: ", POOL_SIZE)
+    # start_time = time.time()
+    # with ThreadPoolExecutor(max_workers=POOL_SIZE) as executor:
+    #     futures = [executor.submit(extract_property_info, soup, unit_list) for soup in soup_list]
+    #     for future in futures:
+    #         future.result()  # This waits for all the results
+    # print("Elapsed time in seconds:", time.time() - start_time)
+    # print("length", len(futures))
     
     # STEP4: Save the extracted information (list of dictionaries) to json and csv files
     print("step 4: save extracted information")

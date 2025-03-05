@@ -20,7 +20,8 @@ services:
       - shared-network
 
   flask-app:
-    image: flask-custom:1.0
+    build:
+      dockerfile: Dockerfile_Flask
     ports:
       - "5001:5000"
     environment:
@@ -29,6 +30,22 @@ services:
       - ./:/app  # Mount the current directory to /app in the container
     networks:
       - shared-network
+
+  web_scraper:
+    build:
+      context: ../crawler
+      dockerfile: Dockerfile_crawler
+    container_name: web_scraper
+    networks:
+      - shared-network
+    environment:
+      - DB_HOST=mysql
+      - DB_USER=airflow
+      - DB_PASSWORD=airflowpw
+      - DB_NAME=apartment_db
+    volumes:
+      - ${PWD}/src/crawler:/app
+    command: ["sleep", "infinity"]
 
 networks:
   shared-network:

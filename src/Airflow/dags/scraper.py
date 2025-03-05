@@ -1,9 +1,10 @@
 import sys
 import os
-from airflow import DAG
-from airflow.operators.python import PythonOperator
-from airflow.utils.dates import days_ago
 from datetime import datetime
+from airflow import DAG
+from airflow.utils.dates import days_ago
+from airflow.operators.python import PythonOperator
+from airflow.operators.mysql_operator import MySqlOperator 
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../crawler')))
 
@@ -61,11 +62,21 @@ def save_and_store(**kwargs):
         df.to_csv(os.path.join(result_path, "result.csv"), index=False)
 
         if not args["no_dump_db"]:
-            db_functions.regenerate_table_schema('unit', os.getenv("DB_USER"), os.getenv("DB_PASSWORD"),
+            regenerate_table_schema('unit', os.getenv("DB_USER"), os.getenv("DB_PASSWORD"),
                                     os.getenv("DB_HOST"), os.getenv("DB_NAME"))
-            db_functions.dump_df_to_db(df, os.getenv("DB_USER"), os.getenv("DB_PASSWORD"),
+            dump_df_to_db(df, os.getenv("DB_USER"), os.getenv("DB_PASSWORD"),
                           os.getenv("DB_HOST"), os.getenv("DB_NAME"))
 
+# test
+with DAG('test', default_args=default_args, start_date = days_ago(1), schedule_interval = "@daily", \
+            catchup = False) as dag:
+    
+    show_table = MySqlOperator(
+        sql="sql/test.sql", 
+        task_id="showtable_task", 
+        mysql_conn_id="mysql_default"
+    ) 
+    
 # scrape the data from apartments.com everyday
 with DAG('apartments_com_scraper', default_args=default_args, start_date = days_ago(1), schedule_interval = "@daily", \
             catchup = False) as dag:
@@ -98,4 +109,5 @@ with DAG('apartments_com_scraper', default_args=default_args, start_date = days_
         provide_context=True
     )
 
+show_table
 task_load_config >> task_get_urls >> task_get_html >> task_extract_info >> task_save_and_store

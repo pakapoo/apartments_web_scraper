@@ -6,7 +6,7 @@ __pycache__/
 .DS_Store
 
 # Project logs, output and backups
-/data
+data/
 bk/
 logs/
 mysql-db-volume/

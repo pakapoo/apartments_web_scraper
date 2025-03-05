@@ -121,11 +121,11 @@ def unit_avail(soup, selector):
     if unit_avail_soup:
         unit_avail_soup = unit_avail_soup.get_text('|', strip=True).split('|')[-1].strip()
         if unit_avail_soup.split(' ')[-1].isdigit():
-            unit_avail = datetime.strptime(str(year) + unit_avail_soup,'%Y%b. %d').strftime('%Y%m%d')
+            unit_avail = datetime.strptime(str(year) + unit_avail_soup,'%Y%b %d').strftime('%Y%m%d')
         elif unit_avail_soup.split(' ')[-1] == "Now":
             unit_avail = datetime.today().strftime('%Y%m%d')
         else:
-            None
+            unit_avail = None
     else:
         unit_avail = None
     return unit_avail
