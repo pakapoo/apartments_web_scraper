@@ -109,10 +109,18 @@ def init_config():
 
     driver.get(search_URL)
     time.sleep(5)
-    global cookies
     cookies = driver.get_cookies()
-    global user_agent
     user_agent = driver.execute_script("return navigator.userAgent;")
+    global headers
+    headers = {
+            'User-Agent': f"{user_agent}",\
+            "Upgrade-Insecure-Requests": "1",\
+            "DNT": "1",\
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",\
+            "Accept-Encoding": "gzip, deflate, br, zstd",\
+            "accept-language": "zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7",\
+            "cookie": f"{cookies}"
+            }
 
     parser = argparse.ArgumentParser(description='Web scraper for apartment listings')
     parser.add_argument('-N', '--no_dump_db', action='store_true', help='Do not dump data to database')
@@ -132,16 +140,6 @@ def get_property_urls(search_URL):
     Returns:
     all_links (list): A list of property URLs.
     """
-    headers = {
-                'User-Agent': f"{user_agent}",\
-                "Upgrade-Insecure-Requests": "1",\
-                "DNT": "1",\
-                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",\
-                "Accept-Encoding": "gzip, deflate, br, zstd",\
-                "accept-language": "zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7",\
-                "cookie": f"{cookies}"
-                }
-
     response = requests.get(search_URL, headers=headers, timeout=15)
     soup = BeautifulSoup(response.text, 'html.parser')
     all_links = []
@@ -177,15 +175,6 @@ def get_property_html(all_links):
     soup_list (list): A list of soup objects.
     """
     soup_list = []
-    headers = {
-                'User-Agent': f"{user_agent}",\
-                "Upgrade-Insecure-Requests": "1",\
-                "DNT": "1",\
-                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",\
-                "Accept-Encoding": "gzip, deflate, br, zstd",\
-                "accept-language": "zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7",\
-                "cookie": f"{cookies}"
-                }
     for count, url in enumerate(all_links):
         response = requests.get(url, headers=headers)
         soup = BeautifulSoup(response.text, 'html.parser')
@@ -290,7 +279,7 @@ def main():
         df.to_csv(os.path.join(result_path, "result.csv"), index=False)
         # re-create table and dump the new data
         if not args.no_dump_db:
-            db_functions.regenerate_table_schema('unit', DB_USER, DB_PASSWORD, DB_HOST, DB_NAME)
+            # db_functions.regenerate_table_schema('unit', DB_USER, DB_PASSWORD, DB_HOST, DB_NAME)
             db_functions.dump_df_to_db(df, DB_USER, DB_PASSWORD, DB_HOST, DB_NAME)
 
 if __name__ == '__main__':

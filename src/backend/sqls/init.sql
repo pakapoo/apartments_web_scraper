@@ -27,5 +27,5 @@ CREATE TABLE IF NOT EXISTS unit (
     unit_price DECIMAL(10, 2),
     unit_sqft FLOAT,
     unit_avail DATE,
-    PRIMARY KEY (id, unit_no, unit_beds, unit_baths, unit_price, unit_sqft, unit_avail)
+    PRIMARY KEY (id, unit_no)
 );

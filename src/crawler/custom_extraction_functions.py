@@ -104,9 +104,11 @@ def unit_price(soup, selector1, selector2):
     unit_price_soup1 = soup.select_one(selector1)
     unit_price_soup2 = soup.select_one(selector2)
     if unit_price_soup1:
-        unit_price_tmp = int(unit_price_soup1.get_text(strip=True).replace('$', '').replace(',', ''))
+        up = unit_price_soup1.get_text(strip=True).replace('$', '').replace(',', '')
+        unit_price_tmp = int(up) if up.isdigit() else up
     elif unit_price_soup2:
-        unit_price_tmp = int(unit_price_soup2.get_text(strip=True).replace('$', '').replace(',', ''))
+        up = unit_price_soup2.get_text(strip=True).replace('$', '').replace(',', '')
+        unit_price_tmp = int(up) if up.isdigit() else up
     else:
         unit_price_tmp = None
     return unit_price_tmp
