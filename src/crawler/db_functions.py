@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 import mysql.connector
 import pandas as pd
 import os
@@ -6,7 +6,22 @@ import json
 
 def dump_df_to_db(df, DB_USER, DB_PASSWORD, DB_HOST, DB_NAME):
     engine = create_engine("mysql+mysqlconnector://" + DB_USER + ":" + DB_PASSWORD + "@" + DB_HOST + "/" + DB_NAME)
-    df.to_sql('unit', con=engine, if_exists='append', index=False)
+    # df.to_sql('unit', con=engine, if_exists='append', index=False)
+    with engine.connect() as conn:
+        for index, row in df.iterrows():
+            placeholders = ', '.join([f":{col}" for col in df.columns])
+            sql = f"""
+            INSERT INTO unit ({', '.join(df.columns)}) 
+            VALUES ({placeholders})
+            ON DUPLICATE KEY UPDATE 
+            {', '.join([f"{col} = VALUES({col})" for col in df.columns])};
+            """
+            
+            # Create a dictionary of parameter values
+            params = {col: None if pd.isna(val) else val for col, val in row.items()}
+            conn.execute(text(sql), params)
+            conn.commit()
+
 
 def regenerate_table_schema(table, DB_USER, DB_PASSWORD, DB_HOST, DB_NAME):
     init_script_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../backend/sqls/init.sql"))
@@ -42,5 +57,5 @@ def test(DB_USER, DB_PASSWORD, DB_HOST, DB_NAME):
     # df = pd.read_csv(os.path.join(result_path, "result.csv"))
     # dump_df_to_db(df, DB_USER, DB_PASSWORD, DB_HOST, DB_NAME)
 
-if __name__ == '__main__':
-    test() 
+# if __name__ == '__main__':
+#     test() 

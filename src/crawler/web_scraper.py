@@ -7,14 +7,16 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 from selenium import webdriver
-# from selenium.webdriver.chrome.service import Service
-# from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.firefox.service import Service
-from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.chrome.service import Service as ChromeService
+from selenium.webdriver.chrome.options import Options as ChromeOptions
+from selenium.webdriver.firefox.service import Service as FirefoxService
+from selenium.webdriver.firefox.options import Options as FirefoxOptions
+
 
 import custom_extraction_functions
 import db_functions
 import utils
+import parallelism_testing
 
 PAGE_NUMBER_SELECTOR = "p.searchResults > span"
 LINKS_SELECTOR = "a.property-link"
@@ -29,7 +31,7 @@ NEIGHBORHOOD_SELECTOR = "div.propertyAddressContainer span.neighborhoodAddress >
 BUILT_UNITS_STORIES_SELECTOR = "section.feesSection.feesSectionV2.js-viewAnalyticsSection div#profileV2FeesWrapper"
 MANAGEMENT_SELECTOR = "img.logo"
 
-PLAN_SELECTOR = "div.pricingGridItem.multiFamily.hasUnitGrid"
+PLAN_SELECTOR = "div.tab-section.active div.pricingGridItem.multiFamily.hasUnitGrid"
 UNIT_SELECTOR = "li.unitContainer.js-unitContainerV3"
 
 UNIT_BEDS_SELECTOR = "span.detailsTextWrapper > span:nth-child(1)"
@@ -39,14 +41,6 @@ UNIT_PRICE_SELECTOR1 = "div.pricingColumn.column span:nth-child(2)"
 UNIT_PRICE_SELECTOR2 = "div.pricingColumn.column div.rent-estimate-button.js-view-rent-estimate > span"
 UNIT_SQFT_SELECTOR = "div.sqftColumn.column span:nth-child(2)"
 UNIT_AVAIL_SELECTOR = "div.availableColumn.column span:nth-child(1)"
-
-POOL_SIZE = os.cpu_count()
-
-DB_USER = "root"
-DB_PASSWORD = "admpw"
-# DB_HOST = "localhost"
-DB_HOST = "mysql"
-DB_NAME = "apartment_db"
 
 
 class Property:
@@ -77,6 +71,8 @@ class Unit(Property):
 
 @utils.time_stats
 def init_config():
+    global search_URL, result_path, headers, args, DB_USER, DB_PASSWORD, DB_HOST, DB_NAME
+
     current_dir = os.path.dirname(os.path.abspath(__file__))
     base_dir = os.path.abspath(current_dir)
 
@@ -91,27 +87,26 @@ def init_config():
     os.makedirs(result_path, exist_ok=True)
 
     # generate the required 'cookie' parameter of headers with selenium
-    # chromedriver_path = os.path.join(base_dir, config['path']['chromedriver_path'])
-    # chrome_options = Options()
-    # chrome_options.add_argument("--headless")
-    # chrome_options.add_argument("--no-sandbox")
-    # chrome_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
-    # service = Service(chromedriver_path)
-    # driver = webdriver.Chrome(service=service, options=chrome_options)
+    chromedriver_path = os.path.join(base_dir, config['path']['chromedriver_path'])
+    chrome_options = ChromeOptions()
+    chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--no-sandbox")
+    service = ChromeService(chromedriver_path)
+    driver = webdriver.Chrome(service=service, options=chrome_options)
+    user_agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36"
 
     geckodriver_path = os.path.join(base_dir, config['path']['geckodriver_path'])
-    firefox_options = Options()
+    firefox_options = FirefoxOptions()
     firefox_options.add_argument("--headless")
     firefox_options.add_argument("--no-sandbox")
     firefox_options.binary_location = "/usr/bin/firefox-esr"
-    service = Service(geckodriver_path)
-    driver = webdriver.Firefox(service=service, options=firefox_options)
+    # service = FirefoxService(geckodriver_path)
+    # driver = webdriver.Firefox(service=service, options=firefox_options)
+    # user_agent = driver.execute_script("return navigator.userAgent;")
 
     driver.get(search_URL)
-    time.sleep(5)
     cookies = driver.get_cookies()
-    user_agent = driver.execute_script("return navigator.userAgent;")
-    global headers
+    
     headers = {
             'User-Agent': f"{user_agent}",\
             "Upgrade-Insecure-Requests": "1",\
@@ -127,7 +122,11 @@ def init_config():
     args = parser.parse_args()
     print("Do not dump data to database: ", args.no_dump_db)
 
-    return search_URL, args, result_path
+    # MySQL config
+    DB_USER = config['DB']['DB_USER']
+    DB_PASSWORD = config['DB']['DB_PASSWORD']
+    DB_HOST = config['DB']['DB_HOST']
+    DB_NAME = config['DB']['DB_NAME']
 
 @utils.time_stats
 def get_property_urls(search_URL):
@@ -140,7 +139,7 @@ def get_property_urls(search_URL):
     Returns:
     all_links (list): A list of property URLs.
     """
-    response = requests.get(search_URL, headers=headers, timeout=15)
+    response = requests.get(search_URL, headers=headers, timeout=10)
     soup = BeautifulSoup(response.text, 'html.parser')
     all_links = []
 
@@ -197,6 +196,51 @@ def extract_property_info(soup, unit_list):
     Returns:
     None
     """
+    tmp_unit_list = []
+
+    # extract property info
+    id = soup[0].split('/')[-2]
+    url = soup[0].strip()
+    name = custom_extraction_functions.name(soup[1], NAME_SELECTOR)
+    tel = custom_extraction_functions.tel(soup[1], TEL_SELECTOR)
+    address = custom_extraction_functions.address(soup[1], ADDRESS_SELECTOR)
+    city = custom_extraction_functions.city(soup[1], CITY_SELECTOR)
+    state = custom_extraction_functions.state(soup[1], STATE_SELECTOR)
+    zip = custom_extraction_functions.zip(soup[1], ZIP_SELECTOR)
+    neighborhood = custom_extraction_functions.neighborhood(soup[1], NEIGHBORHOOD_SELECTOR)
+    built, units, stories = custom_extraction_functions.built_units_stories(soup[1], BUILT_UNITS_STORIES_SELECTOR)
+    management = custom_extraction_functions.management(soup[1], MANAGEMENT_SELECTOR)
+#pricingView > div.tab-section.active > div:nth-child(1) > div.unitGridContainer.mortar-wrapper > div > ul > li:nth-child(1)
+#pricingView > div:nth-child(3) > div.pricingGridItem.multiFamily.hasUnitGrid.v3.UnitLevel_var2 > div.unitGridContainer.mortar-wrapper > div > ul > li:nth-child(1)
+    # extract units info
+    plan_info = soup[1].select(PLAN_SELECTOR)
+    for plan in plan_info:
+        unit_beds = custom_extraction_functions.beds(plan, UNIT_BEDS_SELECTOR)
+        unit_baths = custom_extraction_functions.baths(plan, UNIT_BATHS_SELECTOR)
+        unit_info = plan.select(UNIT_SELECTOR)
+        for unit in unit_info:
+            unit_no = custom_extraction_functions.unit_no(unit, UNIT_NO_SELECTOR)
+            unit_price = custom_extraction_functions.unit_price(unit, UNIT_PRICE_SELECTOR1, UNIT_PRICE_SELECTOR2)
+            unit_sqft = custom_extraction_functions.unit_sqft(unit, UNIT_SQFT_SELECTOR)
+            unit_avail = custom_extraction_functions.unit_avail(unit, UNIT_AVAIL_SELECTOR)
+            unit_data = Unit(id, url, name, tel, address, city, state, zip, neighborhood, built, units, stories, management, unit_no, unit_beds, unit_baths, unit_price, unit_sqft, unit_avail)
+            tmp_unit_list.append(vars(unit_data))
+    unit_list.extend(tmp_unit_list)
+
+def extract_property_info_map(soup):
+    """
+    Extract property information from the soup object and store in a list of dictionary shared among multi-processes.
+
+    Parameters:
+    soup (BeautifulSoup): The soup object to extract information from.
+    columns (list): A list of column names for the DataFrame.
+    unit_list (list): A list to store the extracted information.
+
+    Returns:
+    None
+    """
+    tmp_unit_list = []
+
     # extract property info
     id = soup[0].split('/')[-2]
     url = soup[0].strip()
@@ -222,11 +266,19 @@ def extract_property_info(soup, unit_list):
             unit_sqft = custom_extraction_functions.unit_sqft(unit, UNIT_SQFT_SELECTOR)
             unit_avail = custom_extraction_functions.unit_avail(unit, UNIT_AVAIL_SELECTOR)
             unit_data = Unit(id, url, name, tel, address, city, state, zip, neighborhood, built, units, stories, management, unit_no, unit_beds, unit_baths, unit_price, unit_sqft, unit_avail)
-            unit_list.append(vars(unit_data))
-    
+            tmp_unit_list.append(vars(unit_data))
+    return tmp_unit_list
+
+def extract_property_info_wrapper(soup_list, unit_list):
+    tmp_unit_list = []
+    for soup in soup_list:
+        extract_property_info(soup, tmp_unit_list)
+    unit_list.extend(tmp_unit_list)
+
 def main():
     # STEP 0: init configurations
-    search_URL, args, result_path = init_config()
+    init_config()
+    # custom_extraction_functions.test_connection(headers)
 
     # STEP1: Get property URLs
     print("step 1: get property URLs")
@@ -238,36 +290,12 @@ def main():
 
     # STEP3: Extract property information
     print("step 3: extract property information")
-    print("pool size: ", POOL_SIZE)
-    start_time = time.time()
-    pool = mp.Pool(POOL_SIZE)
-    manager = mp.Manager()
-    unit_list = manager.list()
-    for soup in soup_list:
-        pool.apply_async(func=extract_property_info, args=(soup, unit_list))
-    pool.close()
-    pool.join()
-    print("Elapsed time in seconds:", time.time() - start_time)
-    print("length", len(unit_list))
-
-    print("step 3: benchmark (without multiprocessing)")
-    start_time = time.time()
-    tmp_unit_list = []
-    for soup in soup_list:
-        extract_property_info(soup, tmp_unit_list)
-    print("Elapsed time in seconds:", time.time() - start_time)
-    print("length", len(tmp_unit_list))
-
-    # from concurrent.futures import ThreadPoolExecutor
-    # print("step 3: extract property information (multithreading)")
-    # print("pool size: ", POOL_SIZE)
-    # start_time = time.time()
-    # with ThreadPoolExecutor(max_workers=POOL_SIZE) as executor:
-    #     futures = [executor.submit(extract_property_info, soup, unit_list) for soup in soup_list]
-    #     for future in futures:
-    #         future.result()  # This waits for all the results
-    # print("Elapsed time in seconds:", time.time() - start_time)
-    # print("length", len(futures))
+    #parallelism_testing.non_parallel(soup_list)
+    unit_list = parallelism_testing.apply_async(soup_list)
+    #parallelism_testing.map(soup_list)
+    #parallelism_testing.chunk_apply_async(soup_list, 3)
+    #parallelism_testing.multithread(soup_list)
+    # parallelism_testing.(soup_list)
     
     # STEP4: Save the extracted information (list of dictionaries) to json and csv files
     print("step 4: save extracted information")

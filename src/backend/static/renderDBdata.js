@@ -132,12 +132,12 @@ function tableFilterBedBath(){
         if (tdBed && bedNum != 'X'){
             if (bedNum.includes('+')){
                 bedNum = bedNum.replace('+', '');
-                if (tdBed.innerHTML < bedNum){
+                if (parseFloat(tdBed.innerHTML) < bedNum){
                     tr[i].style.display = 'none';
                 }
             }
             else{
-                if (tdBed.innerHTML != bedNum){
+                if (parseInt(tdBed.innerHTML) != bedNum){
                     tr[i].style.display = 'none';
                 }
             }
@@ -145,12 +145,12 @@ function tableFilterBedBath(){
         if (tdBath && bathNum != 'X'){
             if (bathNum.includes('+')){
                 bathNum = bathNum.replace('+', '');
-                if (tdBath.innerHTML < bathNum){
+                if (parseFloat(tdBath.innerHTML) < bathNum){
                     tr[i].style.display = 'none';
                 }
             }
             else{
-                if (tdBath.innerHTML != bathNum){
+                if (parseInt(tdBath.innerHTML) != bathNum){
                     tr[i].style.display = 'none';
                 }
             }

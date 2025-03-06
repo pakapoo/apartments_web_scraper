@@ -1,6 +1,12 @@
 import re
 from datetime import datetime
 import os
+import requests
+
+def test_connection(headers):
+    response = requests.get("https://www.apartments.com/madison-wi/", headers=headers)
+    print(response.status_code)  # Should print 200 if successful
+    print(response.json())  # Should print the response content in JSON format
 
 def cleanup_dir(directory_path):
     """
@@ -78,7 +84,7 @@ def beds(soup, selector):
     beds_soup = soup.select_one(selector)
     if beds_soup:
         beds = beds_soup.get_text(strip=True)
-        beds_regex = re.compile(r'(\d+)(\s+)(Bed)')
+        beds_regex = re.compile(r'(\d+(\.\d+)?)(\s+)(Bed)')
         beds_match = beds_regex.search(beds)
         beds = int(beds_match.group(1)) if beds_match else 0
     else:
@@ -89,9 +95,9 @@ def baths(soup, selector):
     baths_soup = soup.select_one(selector)
     if baths_soup:
         baths = baths_soup.get_text(strip=True)
-        baths_regex = re.compile(r'(\d+)(\s+)(Bath)')
+        baths_regex = re.compile(r'(\d+(\.\d+)?)(\s+)(Bath)')
         baths_match = baths_regex.search(baths)
-        baths = int(baths_match.group(1)) if baths_match else None
+        baths = float(baths_match.group(1)) if baths_match else None
     else:
         baths = 0
     return baths
@@ -105,10 +111,10 @@ def unit_price(soup, selector1, selector2):
     unit_price_soup2 = soup.select_one(selector2)
     if unit_price_soup1:
         up = unit_price_soup1.get_text(strip=True).replace('$', '').replace(',', '')
-        unit_price_tmp = int(up) if up.isdigit() else up
+        unit_price_tmp = int(up) if up.isdigit() else None
     elif unit_price_soup2:
         up = unit_price_soup2.get_text(strip=True).replace('$', '').replace(',', '')
-        unit_price_tmp = int(up) if up.isdigit() else up
+        unit_price_tmp = int(up) if up.isdigit() else None
     else:
         unit_price_tmp = None
     return unit_price_tmp
@@ -120,14 +126,17 @@ def unit_sqft(soup, selector):
 def unit_avail(soup, selector):
     unit_avail_soup = soup.select_one(selector)
     year = datetime.today().year
-    if unit_avail_soup:
-        unit_avail_soup = unit_avail_soup.get_text('|', strip=True).split('|')[-1].strip()
-        if unit_avail_soup.split(' ')[-1].isdigit():
-            unit_avail = datetime.strptime(str(year) + unit_avail_soup,'%Y%b %d').strftime('%Y%m%d')
-        elif unit_avail_soup.split(' ')[-1] == "Now":
-            unit_avail = datetime.today().strftime('%Y%m%d')
+    try:
+        if unit_avail_soup:
+            unit_avail_soup = unit_avail_soup.get_text('|', strip=True).split('|')[-1].strip()
+            if unit_avail_soup.split(' ')[-1].isdigit():
+                unit_avail = datetime.strptime(str(year) + unit_avail_soup,'%Y%b %d').strftime('%Y%m%d')
+            elif unit_avail_soup.split(' ')[-1] == "Now":
+                unit_avail = datetime.today().strftime('%Y%m%d')
+            else:
+                unit_avail = None
         else:
             unit_avail = None
-    else:
+    except:
         unit_avail = None
     return unit_avail
