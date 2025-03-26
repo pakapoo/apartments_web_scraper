@@ -24,7 +24,15 @@ find ./src/backend/mysql-db-volume -mindepth 1 -delete # start fresh by cleaning
 docker-compose -f ./src/backend/docker-compose.yaml up -d
 docker-compose -f ./src/Airflow/docker-compose.yaml up -d
 ```
-3. You can choose to manually run the web scraper as below, or wait for Airflow to trigger the workflow daily.
+If there's any issue in docker-compose, try below to reboot all containers.:
+```bash
+find ./src/backend/mysql-db-volume -mindepth 1 -delete
+docker-compose -f ./src/backend/docker-compose.yaml down
+docker-compose -f ./src/Airflow/docker-compose.yaml down
+docker-compose -f ./src/backend/docker-compose.yaml up -d
+docker-compose -f ./src/Airflow/docker-compose.yaml up -d
+```
+3. You can choose to manually run the web scraper inside the container as below, or wait for Airflow to trigger the workflow daily. If you do not want to store data to the database but output the files, specify the `--no_dump_db` flag. The result will be stored as csv and json files under `./src/crawler/data/result/`.
 ```bash
 docker exec -it web_scraper bash
 python ./web_scraper.py

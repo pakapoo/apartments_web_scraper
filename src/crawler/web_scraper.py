@@ -91,18 +91,18 @@ def init_config():
     chrome_options = ChromeOptions()
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--no-sandbox")
-    service = ChromeService(chromedriver_path)
-    driver = webdriver.Chrome(service=service, options=chrome_options)
-    user_agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36"
+    # service = ChromeService(chromedriver_path)
+    # driver = webdriver.Chrome(service=service, options=chrome_options)
+    # user_agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36"
 
     geckodriver_path = os.path.join(base_dir, config['path']['geckodriver_path'])
     firefox_options = FirefoxOptions()
     firefox_options.add_argument("--headless")
     firefox_options.add_argument("--no-sandbox")
     firefox_options.binary_location = "/usr/bin/firefox-esr"
-    # service = FirefoxService(geckodriver_path)
-    # driver = webdriver.Firefox(service=service, options=firefox_options)
-    # user_agent = driver.execute_script("return navigator.userAgent;")
+    service = FirefoxService(geckodriver_path)
+    driver = webdriver.Firefox(service=service, options=firefox_options)
+    user_agent = driver.execute_script("return navigator.userAgent;")
 
     driver.get(search_URL)
     cookies = driver.get_cookies()
@@ -272,6 +272,7 @@ def main():
         df.to_csv(os.path.join(result_path, "result.csv"), index=False)
         # re-create table and dump the new data
         if not args.no_dump_db:
+            print("store to db")
             # db_functions.regenerate_table_schema('unit', DB_USER, DB_PASSWORD, DB_HOST, DB_NAME)
             db_functions.dump_df_to_db(df, DB_USER, DB_PASSWORD, DB_HOST, DB_NAME)
 

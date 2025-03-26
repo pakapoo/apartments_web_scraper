@@ -37,8 +37,8 @@ def apply_async(soup_list):
     # elapsed_time = time.time() - a1
     # print(f"test: {elapsed_time:.4f} seconds")
     # print("length", len(mp_unit_list))
-    df = pd.DataFrame(mp_unit_list[:])
-    df.to_csv(f"{result_path}df2.csv", index=False)
+    # df = pd.DataFrame(mp_unit_list[:])
+    # df.to_csv(f"{result_path}df2.csv", index=False)
     return mp_unit_list
 
 @utils.time_stats
