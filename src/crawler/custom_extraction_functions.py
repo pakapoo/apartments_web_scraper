@@ -121,7 +121,8 @@ def unit_price(soup, selector1, selector2):
 
 def unit_sqft(soup, selector):
     unit_sqft_soup = soup.select_one(selector)
-    return int(unit_sqft_soup.get_text(strip=True).replace(',', '')) if unit_sqft_soup else None
+    us = unit_sqft_soup.get_text(strip=True).replace(',', '')
+    return int(us) if us.isdigit() else None
 
 def unit_avail(soup, selector):
     unit_avail_soup = soup.select_one(selector)

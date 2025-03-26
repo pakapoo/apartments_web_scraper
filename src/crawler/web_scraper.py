@@ -145,8 +145,7 @@ def get_property_urls(search_URL):
 
     # Get number of pages for this search URL
     try:
-        # pages = soup.select_one(PAGE_NUMBER_SELECTOR).get_text().split(' ')[-1]
-        pages = 1
+        pages = soup.select_one(PAGE_NUMBER_SELECTOR).get_text().split(' ')[-1]
         print("Total pages: ", pages)
     except AttributeError:
         print("No pages information found.")
@@ -176,15 +175,15 @@ def get_property_html(all_links):
     soup_list = []
     for count, url in enumerate(all_links):
         response = requests.get(url, headers=headers)
-        soup = BeautifulSoup(response.text, 'html.parser')
-        soup_list.append((url, soup))
+        # soup = BeautifulSoup(response.text, 'html.parser')
+        soup_list.append((url, response.text))
         if count == (len(all_links)-1):
             print("All {} urls are processed!".format(count + 1)) 
         elif (count+1) % 10 == 0 and count != 0:
             print("{} urls processed".format(count + 1))
     return soup_list
 
-def extract_property_info(soup, unit_list):
+def extract_property_info(data, unit_list):
     """
     Extract property information from the soup object and store in a list of dictionary shared among multi-processes.
 
@@ -197,23 +196,24 @@ def extract_property_info(soup, unit_list):
     None
     """
     tmp_unit_list = []
-
+    soup = BeautifulSoup(data[1], 'html.parser')
+    # soup = data[1]
+    
     # extract property info
-    id = soup[0].split('/')[-2]
-    url = soup[0].strip()
-    name = custom_extraction_functions.name(soup[1], NAME_SELECTOR)
-    tel = custom_extraction_functions.tel(soup[1], TEL_SELECTOR)
-    address = custom_extraction_functions.address(soup[1], ADDRESS_SELECTOR)
-    city = custom_extraction_functions.city(soup[1], CITY_SELECTOR)
-    state = custom_extraction_functions.state(soup[1], STATE_SELECTOR)
-    zip = custom_extraction_functions.zip(soup[1], ZIP_SELECTOR)
-    neighborhood = custom_extraction_functions.neighborhood(soup[1], NEIGHBORHOOD_SELECTOR)
-    built, units, stories = custom_extraction_functions.built_units_stories(soup[1], BUILT_UNITS_STORIES_SELECTOR)
-    management = custom_extraction_functions.management(soup[1], MANAGEMENT_SELECTOR)
-#pricingView > div.tab-section.active > div:nth-child(1) > div.unitGridContainer.mortar-wrapper > div > ul > li:nth-child(1)
-#pricingView > div:nth-child(3) > div.pricingGridItem.multiFamily.hasUnitGrid.v3.UnitLevel_var2 > div.unitGridContainer.mortar-wrapper > div > ul > li:nth-child(1)
+    id = data[0].split('/')[-2]
+    url = data[0].strip()
+    name = custom_extraction_functions.name(soup, NAME_SELECTOR)
+    tel = custom_extraction_functions.tel(soup, TEL_SELECTOR)
+    address = custom_extraction_functions.address(soup, ADDRESS_SELECTOR)
+    city = custom_extraction_functions.city(soup, CITY_SELECTOR)
+    state = custom_extraction_functions.state(soup, STATE_SELECTOR)
+    zip = custom_extraction_functions.zip(soup, ZIP_SELECTOR)
+    neighborhood = custom_extraction_functions.neighborhood(soup, NEIGHBORHOOD_SELECTOR)
+    built, units, stories = custom_extraction_functions.built_units_stories(soup, BUILT_UNITS_STORIES_SELECTOR)
+    management = custom_extraction_functions.management(soup, MANAGEMENT_SELECTOR)
+
     # extract units info
-    plan_info = soup[1].select(PLAN_SELECTOR)
+    plan_info = soup.select(PLAN_SELECTOR)
     for plan in plan_info:
         unit_beds = custom_extraction_functions.beds(plan, UNIT_BEDS_SELECTOR)
         unit_baths = custom_extraction_functions.baths(plan, UNIT_BATHS_SELECTOR)
@@ -226,48 +226,6 @@ def extract_property_info(soup, unit_list):
             unit_data = Unit(id, url, name, tel, address, city, state, zip, neighborhood, built, units, stories, management, unit_no, unit_beds, unit_baths, unit_price, unit_sqft, unit_avail)
             tmp_unit_list.append(vars(unit_data))
     unit_list.extend(tmp_unit_list)
-
-def extract_property_info_map(soup):
-    """
-    Extract property information from the soup object and store in a list of dictionary shared among multi-processes.
-
-    Parameters:
-    soup (BeautifulSoup): The soup object to extract information from.
-    columns (list): A list of column names for the DataFrame.
-    unit_list (list): A list to store the extracted information.
-
-    Returns:
-    None
-    """
-    tmp_unit_list = []
-
-    # extract property info
-    id = soup[0].split('/')[-2]
-    url = soup[0].strip()
-    name = custom_extraction_functions.name(soup[1], NAME_SELECTOR)
-    tel = custom_extraction_functions.tel(soup[1], TEL_SELECTOR)
-    address = custom_extraction_functions.address(soup[1], ADDRESS_SELECTOR)
-    city = custom_extraction_functions.city(soup[1], CITY_SELECTOR)
-    state = custom_extraction_functions.state(soup[1], STATE_SELECTOR)
-    zip = custom_extraction_functions.zip(soup[1], ZIP_SELECTOR)
-    neighborhood = custom_extraction_functions.neighborhood(soup[1], NEIGHBORHOOD_SELECTOR)
-    built, units, stories = custom_extraction_functions.built_units_stories(soup[1], BUILT_UNITS_STORIES_SELECTOR)
-    management = custom_extraction_functions.management(soup[1], MANAGEMENT_SELECTOR)
-
-    # extract units info
-    plan_info = soup[1].select(PLAN_SELECTOR)
-    for plan in plan_info:
-        unit_beds = custom_extraction_functions.beds(plan, UNIT_BEDS_SELECTOR)
-        unit_baths = custom_extraction_functions.baths(plan, UNIT_BATHS_SELECTOR)
-        unit_info = plan.select(UNIT_SELECTOR)
-        for unit in unit_info:
-            unit_no = custom_extraction_functions.unit_no(unit, UNIT_NO_SELECTOR)
-            unit_price = custom_extraction_functions.unit_price(unit, UNIT_PRICE_SELECTOR1, UNIT_PRICE_SELECTOR2)
-            unit_sqft = custom_extraction_functions.unit_sqft(unit, UNIT_SQFT_SELECTOR)
-            unit_avail = custom_extraction_functions.unit_avail(unit, UNIT_AVAIL_SELECTOR)
-            unit_data = Unit(id, url, name, tel, address, city, state, zip, neighborhood, built, units, stories, management, unit_no, unit_beds, unit_baths, unit_price, unit_sqft, unit_avail)
-            tmp_unit_list.append(vars(unit_data))
-    return tmp_unit_list
 
 def extract_property_info_wrapper(soup_list, unit_list):
     tmp_unit_list = []
@@ -288,14 +246,21 @@ def main():
     print("step 2: get property html")
     soup_list = get_property_html(all_links)
 
+    # test parallelism
+    # import pickle
+    # with open("soup_list_mid_soup.pkl", "wb") as f:
+    #     pickle.dump(soup_list, f)
+    # return
+
     # STEP3: Extract property information
     print("step 3: extract property information")
-    #parallelism_testing.non_parallel(soup_list)
+    # parallelism_testing.non_parallel(soup_list)
     unit_list = parallelism_testing.apply_async(soup_list)
-    #parallelism_testing.map(soup_list)
-    #parallelism_testing.chunk_apply_async(soup_list, 3)
-    #parallelism_testing.multithread(soup_list)
-    # parallelism_testing.(soup_list)
+    # parallelism_testing.map(soup_list)
+    # parallelism_testing.chunk_apply_async(soup_list, 3)
+    # parallelism_testing.chunk_apply_async(soup_list, 1000)
+    # parallelism_testing.chunk_map(soup_list, 10)
+    # parallelism_testing.multithread(soup_list)
     
     # STEP4: Save the extracted information (list of dictionaries) to json and csv files
     print("step 4: save extracted information")
