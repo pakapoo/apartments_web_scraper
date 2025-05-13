@@ -1,17 +1,23 @@
 # Apartments.com web scraper
-The tool allows user to scrape data from Apartments.com and provides an interactive webpage to search, filter, and sort data based on factors such as price, location, number of bedrooms/bathrooms to find the units that meet their needs.
+The tool scrapes data from Apartments.com and provides an interactive webpage for searching, filtering, and sorting listings by price, location, number of bedrooms/bathrooms, and more at the unit level.
 
-### What is Special
-* Unit-level granularity: scrapes unit-level data, allowing user to search for ideal unit directly. Currently, there are no tools offering this granularity.
-* Short waiting time: multiple parallelism approaches are tested and carefully analyzed (27% performance gain in HTML parsing). Check [this](./parallelismAnalysis.md) out!
-* Easy to setup: fully containerized with **Docker Compose**, which can be set up easily (refer to [Quickstart](#quickstart))
-* Overcome anti-scraping mechanism: developed with **Python** with hybrid approach (Selenium + requests)
+### Key Features
+- **Unit-level detail**  
+  Unlike most scrapers that stop at the building level, this tool captures fine-grained data for each unit, allowing more accurate and meaningful apartment searches.
+
+- **Optimized performance**  
+  Scraping large volumes of data can be slow. This project implements and benchmarks multiple parallelism strategies, achieving a **27% speedup in HTML parsing**. [See detailed analysis](./parallelismAnalysis.md). *(More performance notes coming soon.)*
+
+- **Easy deployment**  
+  Fully containerized with **Docker Compose**. Get started in minutes by following the [Quickstart](#quickstart) guide.
+
+- **Bypasses anti-scraping defenses**  
+  Uses a hybrid approach of **Selenium** and **requests** to effectively handle dynamic content and anti-bot mechanisms on Apartments.com.
 
 ### Infrastructure
-<p>
-
 <img width="750" alt="workflow" src="https://github.com/user-attachments/assets/7e874f5e-6267-46d3-8211-3a0587c1d15c" />
 
+### Demo
 https://github.com/pakapoo/apartments_web_scraper/assets/45991312/5f9af489-51f5-4978-869c-25cfe101d698
 
 ## Quickstart
@@ -40,7 +46,7 @@ python ./web_scraper.py
 
 
 ## Future Release
-The goal is to build a real-time App that pushes notification to Line/Whatsapp when there are new units that fit ones need. Here are some features and enhancement that I plan to add:
+The goal is to build a real-time App that sends email or pushes notification when there are new units that fit ones need. Here are some features and enhancement that I plan to add:
 #### Infrustracture
 * Cloud deployment: deploy to Google Cloud Run
 * Scheduling: compare Google Cloud Composer with Airflow
