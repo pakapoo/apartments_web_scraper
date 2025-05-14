@@ -5,4 +5,4 @@ COPY . /app
 RUN pip install flask mysql-connector-python
 EXPOSE 5000
 
-CMD ["python", "app.py"]
+CMD ["python", "./flask/app.py"]

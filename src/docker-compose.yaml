@@ -7,8 +7,8 @@ services:
       MYSQL_USER: sqluser
       MYSQL_PASSWORD: userpw
     volumes:
-      - ./mysql-db-volume:/var/lib/mysql  # Persistent storage for MySQL data
-      - ./sqls/init.sql:/docker-entrypoint-initdb.d/init.sql  # Copy init.sql for initialization
+      - ./database/mysql-db-volume:/var/lib/mysql  # Persistent storage for MySQL data
+      - ./database/sqls/init.sql:/docker-entrypoint-initdb.d/init.sql  # Copy init.sql for initialization
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-padmpw"]
       interval: 5s
@@ -21,30 +21,30 @@ services:
 
   flask-app:
     build:
-      dockerfile: Dockerfile_Flask
+      context: ./web
+      dockerfile: Dockerfile
     ports:
       - "5001:5000"
     environment:
       - FLASK_ENV=development
     volumes:
-      - ./:/app  # Mount the current directory to /app in the container
+      - ./web:/app
     networks:
       - shared-network
 
   web_scraper:
     build:
-      context: ../crawler
-      dockerfile: Dockerfile_crawler
+      context: ./crawler
+      dockerfile: Dockerfile
     container_name: web_scraper
     networks:
       - shared-network
-    environment:
+    environment: # overwrite config.ini
       - DB_HOST=mysql
       - DB_USER=airflow
       - DB_PASSWORD=airflowpw
-      - DB_NAME=apartment_db
     volumes:
-      - ${PWD}/src/crawler:/app
+      - ./crawler:/app
     command: ["sleep", "infinity"]
 
 networks:

@@ -25,16 +25,16 @@ https://github.com/pakapoo/apartments_web_scraper/assets/45991312/5f9af489-51f5-
 2. Build and run Airflow, MySQL, web app, web scraper containers with **Docker Compose**. Create a shared network for containers to communicate with each other.
 ```bash
 docker network create shared-network
-find ./src/backend/mysql-db-volume -mindepth 1 -delete # start fresh by cleaning mysql volume
-docker-compose -f ./src/backend/docker-compose.yaml up -d
+find ./src/database/mysql-db-volume -mindepth 1 -delete # start fresh by cleaning mysql volume
+docker-compose -f ./src/docker-compose.yaml up -d
 docker-compose -f ./src/Airflow/docker-compose.yaml up -d
 ```
 If there's any issue in docker-compose, try below to reboot all containers.:
 ```bash
-find ./src/backend/mysql-db-volume -mindepth 1 -delete
-docker-compose -f ./src/backend/docker-compose.yaml down
+find ./src/database/mysql-db-volume -mindepth 1 -delete
+docker-compose -f ./src/docker-compose.yaml down
 docker-compose -f ./src/Airflow/docker-compose.yaml down
-docker-compose -f ./src/backend/docker-compose.yaml up -d
+docker-compose -f ./src/docker-compose.yaml up -d
 docker-compose -f ./src/Airflow/docker-compose.yaml up -d
 ```
 3. You can choose to manually run the web scraper inside the container as below, or wait for Airflow to trigger the workflow daily. If you do not want to store data to the database but output the files, specify the `--no_dump_db` flag. The result will be stored as csv and json files under `./src/crawler/data/result/`.

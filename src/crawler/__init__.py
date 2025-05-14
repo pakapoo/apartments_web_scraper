@@ -1,1 +1,1 @@
-# for airflow script "/src/Airflow/dags/scraper.py" to import functions under the this directory
+# for airflow script "/src/airflow/dags/scraper.py" to import functions under the this directory

@@ -24,7 +24,7 @@ def dump_df_to_db(df, DB_USER, DB_PASSWORD, DB_HOST, DB_NAME):
 
 
 def regenerate_table_schema(table, DB_USER, DB_PASSWORD, DB_HOST, DB_NAME):
-    init_script_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../backend/sqls/init.sql"))
+    init_script_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../database/sqls/init.sql"))
     drop_command = "DROP TABLE IF EXISTS " + table + ";"
     create_command = open(init_script_path, "r").read()
     conn = mysql.connector.connect(user=DB_USER, password=DB_PASSWORD, host=DB_HOST, database=DB_NAME)

@@ -18,7 +18,7 @@ RUN wget https://github.com/mozilla/geckodriver/releases/download/v0.30.0/geckod
 
 # Install Python dependencies
 WORKDIR /app
-COPY requirements.txt /app/requirements.txt
+COPY requirements_docker.txt /app/requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Install specific MySQL Python connector

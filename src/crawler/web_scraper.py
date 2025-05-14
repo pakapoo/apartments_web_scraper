@@ -123,10 +123,10 @@ def init_config():
     print("Do not dump data to database: ", args.no_dump_db)
 
     # MySQL config
-    DB_USER = config['DB']['DB_USER']
-    DB_PASSWORD = config['DB']['DB_PASSWORD']
-    DB_HOST = config['DB']['DB_HOST']
-    DB_NAME = config['DB']['DB_NAME']
+    DB_USER = os.getenv("DB_USER", config.get("DB", "DB_USER"))
+    DB_PASSWORD = os.getenv("DB_PASSWORD", config.get("DB", "DB_PASSWORD"))
+    DB_HOST = os.getenv("DB_HOST", config.get("DB", "DB_HOST"))
+    DB_NAME = os.getenv("DB_NAME", config.get("DB", "DB_NAME"))
 
 @utils.time_stats
 def get_property_urls(search_URL):
@@ -146,6 +146,7 @@ def get_property_urls(search_URL):
     # Get number of pages for this search URL
     try:
         pages = soup.select_one(PAGE_NUMBER_SELECTOR).get_text().split(' ')[-1]
+        pages = 1 # testing
         print("Total pages: ", pages)
     except AttributeError:
         print("No pages information found.")
