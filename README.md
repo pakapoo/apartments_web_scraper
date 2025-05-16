@@ -6,7 +6,8 @@ The tool scrapes data from Apartments.com and provides an interactive webpage fo
   Unlike most scrapers that stop at the building level, this tool captures fine-grained data for each unit, allowing more accurate and meaningful apartment searches.
 
 - **Optimized performance**  
-  Scraping large volumes of data can be slow. This project implements and benchmarks multiple parallelism strategies, achieving a **27% speedup in HTML parsing**. [See detailed analysis](./parallelismAnalysis.md). *(More performance notes coming soon.)*
+  Scraping large volumes of data can be slow. This project aims to implement and benchmark multiple parallelism strategies and find out the bottleneck for each stage.
+  * For HTML parsing, we achieve a **27% speedup**! [See detailed analysis](./parallelismAnalysis.md). *(More performance optimization of other stages coming soon.)*
 
 - **Easy deployment**  
   Fully containerized with **Docker Compose**. Get started in minutes by following the [Quickstart](#quickstart) guide.
@@ -29,20 +30,20 @@ find ./src/database/mysql-db-volume -mindepth 1 -delete # start fresh by cleanin
 docker-compose -f ./src/docker-compose.yaml up -d
 docker-compose -f ./src/Airflow/docker-compose.yaml up -d
 ```
-If there's any issue in docker-compose, try below to reboot all containers.:
+If there's any issue in docker-compose, fix the code and try below to reboot all containers:
 ```bash
-find ./src/database/mysql-db-volume -mindepth 1 -delete
 docker-compose -f ./src/docker-compose.yaml down
 docker-compose -f ./src/Airflow/docker-compose.yaml down
+find ./src/database/mysql-db-volume -mindepth 1 -delete
 docker-compose -f ./src/docker-compose.yaml up -d
 docker-compose -f ./src/Airflow/docker-compose.yaml up -d
 ```
 3. You can choose to manually run the web scraper inside the container as below, or wait for Airflow to trigger the workflow daily. If you do not want to store data to the database but output the files, specify the `--no_dump_db` flag. The result will be stored as csv and json files under `./src/crawler/data/result/`.
 ```bash
 docker exec -it web_scraper bash
-python ./web_scraper.py
+python ./web_scraper.py <--no_dump_db>
 ```
-4. See the result in your local browser `http://127.0.0.1:5001/`. You may **search**, **filter** or **sort** by column(s) to find your desired housing.
+4. See the result in your local browser `http://127.0.0.1:5001/`. You may **search**, **filter** or **sort** by different attributes to find your desired housing.
 
 
 ## Future Release

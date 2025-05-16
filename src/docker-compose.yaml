@@ -2,6 +2,7 @@ version: '3'
 services:
   mysql:
     image: mysql:latest
+    container_name: mysql
     environment:
       MYSQL_ROOT_PASSWORD: admpw
       MYSQL_USER: sqluser
@@ -23,6 +24,7 @@ services:
     build:
       context: ./web
       dockerfile: Dockerfile
+    container_name: flask
     ports:
       - "5001:5000"
     environment:
@@ -36,16 +38,17 @@ services:
     build:
       context: ./crawler
       dockerfile: Dockerfile
+    image: web_scraper:latest # tag the image for Airflow container to reuse
     container_name: web_scraper
     networks:
       - shared-network
-    environment: # overwrite config.ini
+    environment: # env variables defined here will overwrite config.ini
       - DB_HOST=mysql
       - DB_USER=airflow
       - DB_PASSWORD=airflowpw
     volumes:
       - ./crawler:/app
-    command: ["sleep", "infinity"]
+    command: ["sleep", "infinity"] # if you are using Airflow, you may comment out and let the container just die as Airflow container will start when needed
 
 networks:
   shared-network:
