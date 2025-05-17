@@ -19,7 +19,8 @@ The tool scrapes data from Apartments.com and provides an interactive webpage fo
   Remind you about new and updated listing daily with Airflow automation.
 
 ### Infrastructure
-<img width="750" alt="workflow" src="https://github.com/user-attachments/assets/7e874f5e-6267-46d3-8211-3a0587c1d15c" />
+<img width="700" alt="project_wf_0517" src="https://github.com/user-attachments/assets/93d7fec3-1736-453c-a724-50868966f49c" />
+
 
 ### Demo
 https://github.com/pakapoo/apartments_web_scraper/assets/45991312/5f9af489-51f5-4978-869c-25cfe101d698
