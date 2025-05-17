@@ -10,6 +10,6 @@ For MacOS or Linux user, you may also schedule the workflow in crontab. For exam
 ---
 For debug, user may enter interactive mode to interact with the MySQL database container with SQL commands.
 ```bash
-docker exec -it backend-mysql-1 sh
+docker exec -it mysql sh
 mysql -h 127.0.0.1 -u root -p
 ```

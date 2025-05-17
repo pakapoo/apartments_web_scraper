@@ -103,7 +103,7 @@ def init_config():
     service = FirefoxService(geckodriver_path)
     driver = webdriver.Firefox(service=service, options=firefox_options)
     user_agent = driver.execute_script("return navigator.userAgent;")
-
+    
     driver.get(search_URL)
     cookies = driver.get_cookies()
     
@@ -116,10 +116,13 @@ def init_config():
             "accept-language": "zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7",\
             "cookie": f"{cookies}"
             }
+    
+    driver.quit() # quit the headless browser, if this is not done, the container will get signifincantly slower and slower
 
     parser = argparse.ArgumentParser(description='Web scraper for apartment listings')
     parser.add_argument('-N', '--no_dump_db', action='store_true', help='Do not dump data to database')
     args = parser.parse_args()
+    print("DEBUG7")
     print("Do not dump data to database: ", args.no_dump_db)
 
     # MySQL config
@@ -127,6 +130,7 @@ def init_config():
     DB_PASSWORD = os.getenv("DB_PASSWORD", config.get("DB", "DB_PASSWORD"))
     DB_HOST = os.getenv("DB_HOST", config.get("DB", "DB_HOST"))
     DB_NAME = os.getenv("DB_NAME", config.get("DB", "DB_NAME"))
+    print("DEBUG8")
 
 @utils.time_stats
 def get_property_urls(search_URL):
@@ -276,6 +280,7 @@ def main():
             print("store to db")
             # db_functions.regenerate_table_schema('unit', DB_USER, DB_PASSWORD, DB_HOST, DB_NAME)
             db_functions.dump_df_to_db(df, DB_USER, DB_PASSWORD, DB_HOST, DB_NAME)
+            print("store to db done")
 
 if __name__ == '__main__':
     main()

@@ -14,6 +14,9 @@ The tool scrapes data from Apartments.com and provides an interactive webpage fo
 
 - **Bypasses anti-scraping defenses**  
   Uses a hybrid approach of **Selenium** and **requests** to effectively handle dynamic content and anti-bot mechanisms on Apartments.com.
+  
+- **Email notification**  
+  Remind you about new and updated listing daily with Airflow automation.
 
 ### Infrastructure
 <img width="750" alt="workflow" src="https://github.com/user-attachments/assets/7e874f5e-6267-46d3-8211-3a0587c1d15c" />
@@ -22,7 +25,10 @@ The tool scrapes data from Apartments.com and provides an interactive webpage fo
 https://github.com/pakapoo/apartments_web_scraper/assets/45991312/5f9af489-51f5-4978-869c-25cfe101d698
 
 ## Quickstart
-1. Update the search_URL in `src/crawler/config/config.ini` to specify apartments.com search URL of your interest.
+1. Configurations
+* Update the search_URL in `src/crawler/config/config.ini` to specify apartments.com search URL of your interest.
+* Update the email (email receiver(s)) and HOST_PROJECT_PATH (project directory) in `src/airflow/dags/.env`.
+* Currently I'm testing email functions with **mailtrap**, you may want to update the SMTP settings in `src/airflow/docker-compose.yaml` to use a different email delivery platform.
 2. Build and run Airflow, MySQL, web app, web scraper containers with **Docker Compose**. Create a shared network for containers to communicate with each other.
 ```bash
 docker network create shared-network
