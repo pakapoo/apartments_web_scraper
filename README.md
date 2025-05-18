@@ -54,20 +54,23 @@ python ./web_scraper.py <--no_dump_db>
 
 
 ## Future Release
-The goal is to build a real-time App that sends email or pushes notification when there are new units that fit ones need. Here are some features and enhancement that I plan to add:
+Here are some features and enhancement that I plan to add:
 #### Infrustracture
-* Cloud deployment: deploy to Google Cloud Run
-* Scheduling: compare Google Cloud Composer with Airflow
-* Extract and load to datawarehouse: move data from MySQL to Bigquery with Google Cloud Functions (event trigger)
-* Terraform: Create terraform scripts for cloud deployment
+* Hold Airflow in EC2 + docker compose
+* Pack scraper image to ECR（Elastic Container Registry）
+* Set API gateway trigger on AWS Lambda for triggering scraper
+* Store the scraped result in RDS
+* Store the generated csv files in S3
+* configure Airflow EmailOperator with AWS SES (free and easier to configure on AWS)
+* CDK autodeploy
 #### Analytics
 * Data Visualization with Redash: Visualize housing data for better insights
-* Spark/dbt: Perform the analytics engineering in Bigquery
+* Spark/dbt
     * Google Maps API: Calculate the distance from a targeted location
 #### Good to have
-* Scrape data from different sources
+* Also scrape data from different websites
 * Enable user to scrape multiple districts
-* Distributed scraping to avoid anti-scraping
-* Notification Service: Integrate with apps like Line, Whatsapp to receive instant notifications about ideal housing options
+* Speed up with distributed scraping to avoid anti-scraping
+* Notification Service: currently we can only receive notifications through email, should integrate with apps like Line, Whatsapp
 
 Feel free to contribute to the project with a pull request (PR) or reach out if you have any suggestions or feedback!
