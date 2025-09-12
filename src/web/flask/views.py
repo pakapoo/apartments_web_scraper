@@ -25,3 +25,4 @@ def query():
 
 if __name__ == '__main__':
     db_functions.get_data('unit', DB_USER, DB_PASSWORD, DB_HOST, DB_NAME)
+    

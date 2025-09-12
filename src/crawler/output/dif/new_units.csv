@@ -1,206 +1,42 @@
 id,url,name,tel,address,city,state,zip,neighborhood,built,units,stories,management,unit_no,unit_beds,unit_baths,unit_price,unit_sqft,unit_avail
-wkrbkgk,https://www.apartments.com/the-fitzgerald-madison-wi/wkrbkgk/,The Fitzgerald,608-571-1931,3914 Monona Dr,Madison,WI,53716,,2023.0,69,5,prime urban properties,405,0,1.0,1585.0,543,20250517
-wkrbkgk,https://www.apartments.com/the-fitzgerald-madison-wi/wkrbkgk/,The Fitzgerald,608-571-1931,3914 Monona Dr,Madison,WI,53716,,2023.0,69,5,prime urban properties,418,0,1.0,1605.0,551,20250901
-wkrbkgk,https://www.apartments.com/the-fitzgerald-madison-wi/wkrbkgk/,The Fitzgerald,608-571-1931,3914 Monona Dr,Madison,WI,53716,,2023.0,69,5,prime urban properties,415,1,1.0,1725.0,711,20250517
-wkrbkgk,https://www.apartments.com/the-fitzgerald-madison-wi/wkrbkgk/,The Fitzgerald,608-571-1931,3914 Monona Dr,Madison,WI,53716,,2023.0,69,5,prime urban properties,214,1,1.0,1735.0,732,20250517
-wkrbkgk,https://www.apartments.com/the-fitzgerald-madison-wi/wkrbkgk/,The Fitzgerald,608-571-1931,3914 Monona Dr,Madison,WI,53716,,2023.0,69,5,prime urban properties,503,1,1.0,1800.0,713,20250517
-wkrbkgk,https://www.apartments.com/the-fitzgerald-madison-wi/wkrbkgk/,The Fitzgerald,608-571-1931,3914 Monona Dr,Madison,WI,53716,,2023.0,69,5,prime urban properties,403,1,1.0,1800.0,713,20250517
-wkrbkgk,https://www.apartments.com/the-fitzgerald-madison-wi/wkrbkgk/,The Fitzgerald,608-571-1931,3914 Monona Dr,Madison,WI,53716,,2023.0,69,5,prime urban properties,404,1,1.0,1810.0,718,20250517
-wkrbkgk,https://www.apartments.com/the-fitzgerald-madison-wi/wkrbkgk/,The Fitzgerald,608-571-1931,3914 Monona Dr,Madison,WI,53716,,2023.0,69,5,prime urban properties,515,1,1.0,1855.0,711,20250517
-wkrbkgk,https://www.apartments.com/the-fitzgerald-madison-wi/wkrbkgk/,The Fitzgerald,608-571-1931,3914 Monona Dr,Madison,WI,53716,,2023.0,69,5,prime urban properties,513,1,1.0,1900.0,728,20250517
-wkrbkgk,https://www.apartments.com/the-fitzgerald-madison-wi/wkrbkgk/,The Fitzgerald,608-571-1931,3914 Monona Dr,Madison,WI,53716,,2023.0,69,5,prime urban properties,219,1,1.0,1625.0,717,20250601
-wkrbkgk,https://www.apartments.com/the-fitzgerald-madison-wi/wkrbkgk/,The Fitzgerald,608-571-1931,3914 Monona Dr,Madison,WI,53716,,2023.0,69,5,prime urban properties,414,1,1.0,1830.0,732,20250701
-wkrbkgk,https://www.apartments.com/the-fitzgerald-madison-wi/wkrbkgk/,The Fitzgerald,608-571-1931,3914 Monona Dr,Madison,WI,53716,,2023.0,69,5,prime urban properties,517,1,1.0,1870.0,716,20250701
-wkrbkgk,https://www.apartments.com/the-fitzgerald-madison-wi/wkrbkgk/,The Fitzgerald,608-571-1931,3914 Monona Dr,Madison,WI,53716,,2023.0,69,5,prime urban properties,210,1,1.0,1670.0,705,20250801
-wkrbkgk,https://www.apartments.com/the-fitzgerald-madison-wi/wkrbkgk/,The Fitzgerald,608-571-1931,3914 Monona Dr,Madison,WI,53716,,2023.0,69,5,prime urban properties,217,1,1.0,1700.0,716,20250801
-wkrbkgk,https://www.apartments.com/the-fitzgerald-madison-wi/wkrbkgk/,The Fitzgerald,608-571-1931,3914 Monona Dr,Madison,WI,53716,,2023.0,69,5,prime urban properties,310,1,1.0,1735.0,705,20250801
-wkrbkgk,https://www.apartments.com/the-fitzgerald-madison-wi/wkrbkgk/,The Fitzgerald,608-571-1931,3914 Monona Dr,Madison,WI,53716,,2023.0,69,5,prime urban properties,315,1,1.0,1750.0,711,20250901
-wkrbkgk,https://www.apartments.com/the-fitzgerald-madison-wi/wkrbkgk/,The Fitzgerald,608-571-1931,3914 Monona Dr,Madison,WI,53716,,2023.0,69,5,prime urban properties,411,1,1.0,2325.0,981,20250517
-wkrbkgk,https://www.apartments.com/the-fitzgerald-madison-wi/wkrbkgk/,The Fitzgerald,608-571-1931,3914 Monona Dr,Madison,WI,53716,,2023.0,69,5,prime urban properties,511,1,1.0,2425.0,981,20250517
-wkrbkgk,https://www.apartments.com/the-fitzgerald-madison-wi/wkrbkgk/,The Fitzgerald,608-571-1931,3914 Monona Dr,Madison,WI,53716,,2023.0,69,5,prime urban properties,208,2,2.0,2350.0,1024,20250517
-wkrbkgk,https://www.apartments.com/the-fitzgerald-madison-wi/wkrbkgk/,The Fitzgerald,608-571-1931,3914 Monona Dr,Madison,WI,53716,,2023.0,69,5,prime urban properties,201,2,2.0,2400.0,1067,20250517
-wkrbkgk,https://www.apartments.com/the-fitzgerald-madison-wi/wkrbkgk/,The Fitzgerald,608-571-1931,3914 Monona Dr,Madison,WI,53716,,2023.0,69,5,prime urban properties,306,2,2.0,2505.0,1098,20250517
-wkrbkgk,https://www.apartments.com/the-fitzgerald-madison-wi/wkrbkgk/,The Fitzgerald,608-571-1931,3914 Monona Dr,Madison,WI,53716,,2023.0,69,5,prime urban properties,406,2,2.0,2565.0,1098,20250517
-wkrbkgk,https://www.apartments.com/the-fitzgerald-madison-wi/wkrbkgk/,The Fitzgerald,608-571-1931,3914 Monona Dr,Madison,WI,53716,,2023.0,69,5,prime urban properties,402,2,2.0,2590.0,1096,20250517
-wkrbkgk,https://www.apartments.com/the-fitzgerald-madison-wi/wkrbkgk/,The Fitzgerald,608-571-1931,3914 Monona Dr,Madison,WI,53716,,2023.0,69,5,prime urban properties,501,2,2.0,2640.0,1067,20250517
-wkrbkgk,https://www.apartments.com/the-fitzgerald-madison-wi/wkrbkgk/,The Fitzgerald,608-571-1931,3914 Monona Dr,Madison,WI,53716,,2023.0,69,5,prime urban properties,220,2,2.0,2605.0,1095,20250601
-wkrbkgk,https://www.apartments.com/the-fitzgerald-madison-wi/wkrbkgk/,The Fitzgerald,608-571-1931,3914 Monona Dr,Madison,WI,53716,,2023.0,69,5,prime urban properties,202,2,2.0,2605.0,1096,20250701
-wkrbkgk,https://www.apartments.com/the-fitzgerald-madison-wi/wkrbkgk/,The Fitzgerald,608-571-1931,3914 Monona Dr,Madison,WI,53716,,2023.0,69,5,prime urban properties,512,2,2.0,3000.0,1038,20250801
-wkrbkgk,https://www.apartments.com/the-fitzgerald-madison-wi/wkrbkgk/,The Fitzgerald,608-571-1931,3914 Monona Dr,Madison,WI,53716,,2023.0,69,5,prime urban properties,520,2,2.0,3450.0,1130,20250801
-wkrbkgk,https://www.apartments.com/the-fitzgerald-madison-wi/wkrbkgk/,The Fitzgerald,608-571-1931,3914 Monona Dr,Madison,WI,53716,,2023.0,69,5,prime urban properties,408,2,2.0,3695.0,1379,20250801
-wkrbkgk,https://www.apartments.com/the-fitzgerald-madison-wi/wkrbkgk/,The Fitzgerald,608-571-1931,3914 Monona Dr,Madison,WI,53716,,2023.0,69,5,prime urban properties,308,2,2.0,3595.0,1379,20250901
-gfs5l7x,https://www.apartments.com/starkweather-place-madison-wi/gfs5l7x/,Starkweather Place,608-422-4032,215 N Fair Oaks Ave,Madison,WI,53714,,2024.0,112,4,stone house development inc,226,0,1.0,1395.0,497,20250517
-gfs5l7x,https://www.apartments.com/starkweather-place-madison-wi/gfs5l7x/,Starkweather Place,608-422-4032,215 N Fair Oaks Ave,Madison,WI,53714,,2024.0,112,4,stone house development inc,134,0,1.0,1465.0,469,20250517
-gfs5l7x,https://www.apartments.com/starkweather-place-madison-wi/gfs5l7x/,Starkweather Place,608-422-4032,215 N Fair Oaks Ave,Madison,WI,53714,,2024.0,112,4,stone house development inc,316,0,1.0,1475.0,493,20250517
-gfs5l7x,https://www.apartments.com/starkweather-place-madison-wi/gfs5l7x/,Starkweather Place,608-422-4032,215 N Fair Oaks Ave,Madison,WI,53714,,2024.0,112,4,stone house development inc,228,0,1.0,1480.0,501,20250517
-gfs5l7x,https://www.apartments.com/starkweather-place-madison-wi/gfs5l7x/,Starkweather Place,608-422-4032,215 N Fair Oaks Ave,Madison,WI,53714,,2024.0,112,4,stone house development inc,324,0,1.0,1480.0,497,20250517
-gfs5l7x,https://www.apartments.com/starkweather-place-madison-wi/gfs5l7x/,Starkweather Place,608-422-4032,215 N Fair Oaks Ave,Madison,WI,53714,,2024.0,112,4,stone house development inc,436,0,1.0,1535.0,487,20250517
-gfs5l7x,https://www.apartments.com/starkweather-place-madison-wi/gfs5l7x/,Starkweather Place,608-422-4032,215 N Fair Oaks Ave,Madison,WI,53714,,2024.0,112,4,stone house development inc,422,0,1.0,1535.0,497,20250517
-gfs5l7x,https://www.apartments.com/starkweather-place-madison-wi/gfs5l7x/,Starkweather Place,608-422-4032,215 N Fair Oaks Ave,Madison,WI,53714,,2024.0,112,4,stone house development inc,216,0,1.0,1475.0,493,20250601
-gfs5l7x,https://www.apartments.com/starkweather-place-madison-wi/gfs5l7x/,Starkweather Place,608-422-4032,215 N Fair Oaks Ave,Madison,WI,53714,,2024.0,112,4,stone house development inc,326,0,1.0,1480.0,497,20250601
-gfs5l7x,https://www.apartments.com/starkweather-place-madison-wi/gfs5l7x/,Starkweather Place,608-422-4032,215 N Fair Oaks Ave,Madison,WI,53714,,2024.0,112,4,stone house development inc,428,0,1.0,1540.0,501,20250601
-gfs5l7x,https://www.apartments.com/starkweather-place-madison-wi/gfs5l7x/,Starkweather Place,608-422-4032,215 N Fair Oaks Ave,Madison,WI,53714,,2024.0,112,4,stone house development inc,236,0,1.0,1475.0,487,20250701
-gfs5l7x,https://www.apartments.com/starkweather-place-madison-wi/gfs5l7x/,Starkweather Place,608-422-4032,215 N Fair Oaks Ave,Madison,WI,53714,,2024.0,112,4,stone house development inc,322,0,1.0,1480.0,497,20250701
-gfs5l7x,https://www.apartments.com/starkweather-place-madison-wi/gfs5l7x/,Starkweather Place,608-422-4032,215 N Fair Oaks Ave,Madison,WI,53714,,2024.0,112,4,stone house development inc,420,0,1.0,1535.0,495,20250701
-gfs5l7x,https://www.apartments.com/starkweather-place-madison-wi/gfs5l7x/,Starkweather Place,608-422-4032,215 N Fair Oaks Ave,Madison,WI,53714,,2024.0,112,4,stone house development inc,120,0,1.0,1465.0,473,20250801
-gfs5l7x,https://www.apartments.com/starkweather-place-madison-wi/gfs5l7x/,Starkweather Place,608-422-4032,215 N Fair Oaks Ave,Madison,WI,53714,,2024.0,112,4,stone house development inc,328,0,1.0,1480.0,501,20250801
-gfs5l7x,https://www.apartments.com/starkweather-place-madison-wi/gfs5l7x/,Starkweather Place,608-422-4032,215 N Fair Oaks Ave,Madison,WI,53714,,2024.0,112,4,stone house development inc,434,0,1.0,1535.0,492,20250801
-gfs5l7x,https://www.apartments.com/starkweather-place-madison-wi/gfs5l7x/,Starkweather Place,608-422-4032,215 N Fair Oaks Ave,Madison,WI,53714,,2024.0,112,4,stone house development inc,211,0,1.0,1540.0,492,20250517
-gfs5l7x,https://www.apartments.com/starkweather-place-madison-wi/gfs5l7x/,Starkweather Place,608-422-4032,215 N Fair Oaks Ave,Madison,WI,53714,,2024.0,112,4,stone house development inc,411,0,1.0,1590.0,492,20250517
-gfs5l7x,https://www.apartments.com/starkweather-place-madison-wi/gfs5l7x/,Starkweather Place,608-422-4032,215 N Fair Oaks Ave,Madison,WI,53714,,2024.0,112,4,stone house development inc,112,2,1.5,2175.0,991,20250517
-gfs5l7x,https://www.apartments.com/starkweather-place-madison-wi/gfs5l7x/,Starkweather Place,608-422-4032,215 N Fair Oaks Ave,Madison,WI,53714,,2024.0,112,4,stone house development inc,412,2,1.5,2300.0,1011,20250517
-gfs5l7x,https://www.apartments.com/starkweather-place-madison-wi/gfs5l7x/,Starkweather Place,608-422-4032,215 N Fair Oaks Ave,Madison,WI,53714,,2024.0,112,4,stone house development inc,312,2,1.5,2250.0,1011,20250701
-gfs5l7x,https://www.apartments.com/starkweather-place-madison-wi/gfs5l7x/,Starkweather Place,608-422-4032,215 N Fair Oaks Ave,Madison,WI,53714,,2024.0,112,4,stone house development inc,212,2,1.5,2250.0,1011,20250801
-gfs5l7x,https://www.apartments.com/starkweather-place-madison-wi/gfs5l7x/,Starkweather Place,608-422-4032,215 N Fair Oaks Ave,Madison,WI,53714,,2024.0,112,4,stone house development inc,202,2,2.0,2450.0,1026,20250517
-gfs5l7x,https://www.apartments.com/starkweather-place-madison-wi/gfs5l7x/,Starkweather Place,608-422-4032,215 N Fair Oaks Ave,Madison,WI,53714,,2024.0,112,4,stone house development inc,302,2,2.0,2745.0,1026,20250601
-gfs5l7x,https://www.apartments.com/starkweather-place-madison-wi/gfs5l7x/,Starkweather Place,608-422-4032,215 N Fair Oaks Ave,Madison,WI,53714,,2024.0,112,4,stone house development inc,325,2,2.0,2550.0,1029,20250517
-gfs5l7x,https://www.apartments.com/starkweather-place-madison-wi/gfs5l7x/,Starkweather Place,608-422-4032,215 N Fair Oaks Ave,Madison,WI,53714,,2024.0,112,4,stone house development inc,425,2,2.0,2620.0,1029,20250517
-gfs5l7x,https://www.apartments.com/starkweather-place-madison-wi/gfs5l7x/,Starkweather Place,608-422-4032,215 N Fair Oaks Ave,Madison,WI,53714,,2024.0,112,4,stone house development inc,137,2,2.0,2625.0,1068,20250517
-gfs5l7x,https://www.apartments.com/starkweather-place-madison-wi/gfs5l7x/,Starkweather Place,608-422-4032,215 N Fair Oaks Ave,Madison,WI,53714,,2024.0,112,4,stone house development inc,138,2,2.0,2665.0,1129,20250517
-gfs5l7x,https://www.apartments.com/starkweather-place-madison-wi/gfs5l7x/,Starkweather Place,608-422-4032,215 N Fair Oaks Ave,Madison,WI,53714,,2024.0,112,4,stone house development inc,415,2,2.0,2765.0,1128,20250517
-gfs5l7x,https://www.apartments.com/starkweather-place-madison-wi/gfs5l7x/,Starkweather Place,608-422-4032,215 N Fair Oaks Ave,Madison,WI,53714,,2024.0,112,4,stone house development inc,315,2,2.0,2665.0,1128,20250601
-gfs5l7x,https://www.apartments.com/starkweather-place-madison-wi/gfs5l7x/,Starkweather Place,608-422-4032,215 N Fair Oaks Ave,Madison,WI,53714,,2024.0,112,4,stone house development inc,237,2,2.0,2850.0,1165,20250517
-gfs5l7x,https://www.apartments.com/starkweather-place-madison-wi/gfs5l7x/,Starkweather Place,608-422-4032,215 N Fair Oaks Ave,Madison,WI,53714,,2024.0,112,4,stone house development inc,404,2,2.0,2450.0,983,20250601
-gfs5l7x,https://www.apartments.com/starkweather-place-madison-wi/gfs5l7x/,Starkweather Place,608-422-4032,215 N Fair Oaks Ave,Madison,WI,53714,,2024.0,112,4,stone house development inc,104,2,2.0,2200.0,937,20250701
-gfs5l7x,https://www.apartments.com/starkweather-place-madison-wi/gfs5l7x/,Starkweather Place,608-422-4032,215 N Fair Oaks Ave,Madison,WI,53714,,2024.0,112,4,stone house development inc,109,2,2.0,2400.0,971,20250701
-gfs5l7x,https://www.apartments.com/starkweather-place-madison-wi/gfs5l7x/,Starkweather Place,608-422-4032,215 N Fair Oaks Ave,Madison,WI,53714,,2024.0,112,4,stone house development inc,409,2,2.0,2650.0,1041,20250701
-gfs5l7x,https://www.apartments.com/starkweather-place-madison-wi/gfs5l7x/,Starkweather Place,608-422-4032,215 N Fair Oaks Ave,Madison,WI,53714,,2024.0,112,4,stone house development inc,215,2,2.0,2665.0,1128,20250701
-gfs5l7x,https://www.apartments.com/starkweather-place-madison-wi/gfs5l7x/,Starkweather Place,608-422-4032,215 N Fair Oaks Ave,Madison,WI,53714,,2024.0,112,4,stone house development inc,125,2,2.0,2455.0,1002,20250801
-gfs5l7x,https://www.apartments.com/starkweather-place-madison-wi/gfs5l7x/,Starkweather Place,608-422-4032,215 N Fair Oaks Ave,Madison,WI,53714,,2024.0,112,4,stone house development inc,418,3,2.0,3560.0,1449,20250517
-gfs5l7x,https://www.apartments.com/starkweather-place-madison-wi/gfs5l7x/,Starkweather Place,608-422-4032,215 N Fair Oaks Ave,Madison,WI,53714,,2024.0,112,4,stone house development inc,318,3,2.0,3505.0,1449,20250701
-gfs5l7x,https://www.apartments.com/starkweather-place-madison-wi/gfs5l7x/,Starkweather Place,608-422-4032,215 N Fair Oaks Ave,Madison,WI,53714,,2024.0,112,4,stone house development inc,218,3,2.0,3505.0,1449,20250601
-69n943r,https://www.apartments.com/252-dunning-madison-wi/69n943r/,252 Dunning,608-807-0541,252 Dunning St,Madison,WI,53704,,2025.0,32,3,prime urban properties,303,1,1.0,1900.0,632,20250517
-69n943r,https://www.apartments.com/252-dunning-madison-wi/69n943r/,252 Dunning,608-807-0541,252 Dunning St,Madison,WI,53704,,2025.0,32,3,prime urban properties,107,1,1.0,1995.0,679,20250517
-69n943r,https://www.apartments.com/252-dunning-madison-wi/69n943r/,252 Dunning,608-807-0541,252 Dunning St,Madison,WI,53704,,2025.0,32,3,prime urban properties,105,1,1.0,1995.0,679,20250517
-69n943r,https://www.apartments.com/252-dunning-madison-wi/69n943r/,252 Dunning,608-807-0541,252 Dunning St,Madison,WI,53704,,2025.0,32,3,prime urban properties,207,1,1.0,1995.0,679,20250517
-69n943r,https://www.apartments.com/252-dunning-madison-wi/69n943r/,252 Dunning,608-807-0541,252 Dunning St,Madison,WI,53704,,2025.0,32,3,prime urban properties,205,1,1.0,1995.0,679,20250517
-69n943r,https://www.apartments.com/252-dunning-madison-wi/69n943r/,252 Dunning,608-807-0541,252 Dunning St,Madison,WI,53704,,2025.0,32,3,prime urban properties,307,1,1.0,2025.0,679,20250517
-69n943r,https://www.apartments.com/252-dunning-madison-wi/69n943r/,252 Dunning,608-807-0541,252 Dunning St,Madison,WI,53704,,2025.0,32,3,prime urban properties,201,1,1.0,2025.0,695,20250517
-69n943r,https://www.apartments.com/252-dunning-madison-wi/69n943r/,252 Dunning,608-807-0541,252 Dunning St,Madison,WI,53704,,2025.0,32,3,prime urban properties,109,1,1.0,2225.0,757,20250517
-69n943r,https://www.apartments.com/252-dunning-madison-wi/69n943r/,252 Dunning,608-807-0541,252 Dunning St,Madison,WI,53704,,2025.0,32,3,prime urban properties,209,1,1.0,2225.0,757,20250517
-69n943r,https://www.apartments.com/252-dunning-madison-wi/69n943r/,252 Dunning,608-807-0541,252 Dunning St,Madison,WI,53704,,2025.0,32,3,prime urban properties,106,1,1.0,2245.0,770,20250517
-69n943r,https://www.apartments.com/252-dunning-madison-wi/69n943r/,252 Dunning,608-807-0541,252 Dunning St,Madison,WI,53704,,2025.0,32,3,prime urban properties,108,1,1.0,2245.0,770,20250517
-69n943r,https://www.apartments.com/252-dunning-madison-wi/69n943r/,252 Dunning,608-807-0541,252 Dunning St,Madison,WI,53704,,2025.0,32,3,prime urban properties,104,1,1.0,2245.0,772,20250517
-69n943r,https://www.apartments.com/252-dunning-madison-wi/69n943r/,252 Dunning,608-807-0541,252 Dunning St,Madison,WI,53704,,2025.0,32,3,prime urban properties,110,1,1.0,2245.0,772,20250517
-69n943r,https://www.apartments.com/252-dunning-madison-wi/69n943r/,252 Dunning,608-807-0541,252 Dunning St,Madison,WI,53704,,2025.0,32,3,prime urban properties,111,1,1.0,2245.0,786,20250517
-69n943r,https://www.apartments.com/252-dunning-madison-wi/69n943r/,252 Dunning,608-807-0541,252 Dunning St,Madison,WI,53704,,2025.0,32,3,prime urban properties,211,1,1.0,2245.0,786,20250517
-69n943r,https://www.apartments.com/252-dunning-madison-wi/69n943r/,252 Dunning,608-807-0541,252 Dunning St,Madison,WI,53704,,2025.0,32,3,prime urban properties,309,1,1.0,2250.0,755,20250517
-69n943r,https://www.apartments.com/252-dunning-madison-wi/69n943r/,252 Dunning,608-807-0541,252 Dunning St,Madison,WI,53704,,2025.0,32,3,prime urban properties,311,1,1.0,2275.0,2275,20250517
-69n943r,https://www.apartments.com/252-dunning-madison-wi/69n943r/,252 Dunning,608-807-0541,252 Dunning St,Madison,WI,53704,,2025.0,32,3,prime urban properties,213,1,1.0,2275.0,770,20250517
-69n943r,https://www.apartments.com/252-dunning-madison-wi/69n943r/,252 Dunning,608-807-0541,252 Dunning St,Madison,WI,53704,,2025.0,32,3,prime urban properties,112,2,2.0,2875.0,994,20250517
-69n943r,https://www.apartments.com/252-dunning-madison-wi/69n943r/,252 Dunning,608-807-0541,252 Dunning St,Madison,WI,53704,,2025.0,32,3,prime urban properties,102,2,1.0,2895.0,1001,20250517
-69n943r,https://www.apartments.com/252-dunning-madison-wi/69n943r/,252 Dunning,608-807-0541,252 Dunning St,Madison,WI,53704,,2025.0,32,3,prime urban properties,208,2,2.0,3450.0,1261,20250517
-69n943r,https://www.apartments.com/252-dunning-madison-wi/69n943r/,252 Dunning,608-807-0541,252 Dunning St,Madison,WI,53704,,2025.0,32,3,prime urban properties,204,2,2.0,3450.0,1262,20250517
-y6st30v,https://www.apartments.com/revelry-madison-wi/y6st30v/,Revelry,608-975-3704,7449 Weekend Way,Madison,WI,53719,,2024.0,191,5,saturday properties,315,0,1.0,1380.0,449,20250616
-y6st30v,https://www.apartments.com/revelry-madison-wi/y6st30v/,Revelry,608-975-3704,7449 Weekend Way,Madison,WI,53719,,2024.0,191,5,saturday properties,332,0,1.0,1380.0,449,20250630
-y6st30v,https://www.apartments.com/revelry-madison-wi/y6st30v/,Revelry,608-975-3704,7449 Weekend Way,Madison,WI,53719,,2024.0,191,5,saturday properties,446,0,1.0,1430.0,449,20250710
-y6st30v,https://www.apartments.com/revelry-madison-wi/y6st30v/,Revelry,608-975-3704,7449 Weekend Way,Madison,WI,53719,,2024.0,191,5,saturday properties,337,0,1.0,1380.0,449,20250714
-y6st30v,https://www.apartments.com/revelry-madison-wi/y6st30v/,Revelry,608-975-3704,7449 Weekend Way,Madison,WI,53719,,2024.0,191,5,saturday properties,146,0,1.0,1430.0,449,20250806
-y6st30v,https://www.apartments.com/revelry-madison-wi/y6st30v/,Revelry,608-975-3704,7449 Weekend Way,Madison,WI,53719,,2024.0,191,5,saturday properties,205,1,1.0,1695.0,547,20250517
-y6st30v,https://www.apartments.com/revelry-madison-wi/y6st30v/,Revelry,608-975-3704,7449 Weekend Way,Madison,WI,53719,,2024.0,191,5,saturday properties,429,1,1.0,1695.0,547,20250603
-y6st30v,https://www.apartments.com/revelry-madison-wi/y6st30v/,Revelry,608-975-3704,7449 Weekend Way,Madison,WI,53719,,2024.0,191,5,saturday properties,225,1,1.0,1520.0,547,20250907
-y6st30v,https://www.apartments.com/revelry-madison-wi/y6st30v/,Revelry,608-975-3704,7449 Weekend Way,Madison,WI,53719,,2024.0,191,5,saturday properties,544,1,1.0,2136.0,657,20250517
-y6st30v,https://www.apartments.com/revelry-madison-wi/y6st30v/,Revelry,608-975-3704,7449 Weekend Way,Madison,WI,53719,,2024.0,191,5,saturday properties,309,1,1.0,1949.0,653,20250517
-y6st30v,https://www.apartments.com/revelry-madison-wi/y6st30v/,Revelry,608-975-3704,7449 Weekend Way,Madison,WI,53719,,2024.0,191,5,saturday properties,409,1,1.0,1999.0,653,20250517
-y6st30v,https://www.apartments.com/revelry-madison-wi/y6st30v/,Revelry,608-975-3704,7449 Weekend Way,Madison,WI,53719,,2024.0,191,5,saturday properties,509,1,1.0,2199.0,653,20250517
-y6st30v,https://www.apartments.com/revelry-madison-wi/y6st30v/,Revelry,608-975-3704,7449 Weekend Way,Madison,WI,53719,,2024.0,191,5,saturday properties,416,1,1.0,1835.0,702,20250524
-y6st30v,https://www.apartments.com/revelry-madison-wi/y6st30v/,Revelry,608-975-3704,7449 Weekend Way,Madison,WI,53719,,2024.0,191,5,saturday properties,336,1,1.0,1785.0,702,20250607
-y6st30v,https://www.apartments.com/revelry-madison-wi/y6st30v/,Revelry,608-975-3704,7449 Weekend Way,Madison,WI,53719,,2024.0,191,5,saturday properties,516,1,1.0,2185.0,702,20250707
-y6st30v,https://www.apartments.com/revelry-madison-wi/y6st30v/,Revelry,608-975-3704,7449 Weekend Way,Madison,WI,53719,,2024.0,191,5,saturday properties,216,1,1.0,1735.0,702,20250902
-y6st30v,https://www.apartments.com/revelry-madison-wi/y6st30v/,Revelry,608-975-3704,7449 Weekend Way,Madison,WI,53719,,2024.0,191,5,saturday properties,230,1,1.0,1743.0,674,20250721
-y6st30v,https://www.apartments.com/revelry-madison-wi/y6st30v/,Revelry,608-975-3704,7449 Weekend Way,Madison,WI,53719,,2024.0,191,5,saturday properties,449,2,2.0,2173.0,1065,20250517
-y6st30v,https://www.apartments.com/revelry-madison-wi/y6st30v/,Revelry,608-975-3704,7449 Weekend Way,Madison,WI,53719,,2024.0,191,5,saturday properties,311,2,2.0,2196.0,1065,20250517
-y6st30v,https://www.apartments.com/revelry-madison-wi/y6st30v/,Revelry,608-975-3704,7449 Weekend Way,Madison,WI,53719,,2024.0,191,5,saturday properties,511,2,2.0,2340.0,1065,20250517
-y6st30v,https://www.apartments.com/revelry-madison-wi/y6st30v/,Revelry,608-975-3704,7449 Weekend Way,Madison,WI,53719,,2024.0,191,5,saturday properties,542,2,2.0,2432.0,1065,20250517
-y6st30v,https://www.apartments.com/revelry-madison-wi/y6st30v/,Revelry,608-975-3704,7449 Weekend Way,Madison,WI,53719,,2024.0,191,5,saturday properties,501,2,2.0,2340.0,1074,20250517
-y6st30v,https://www.apartments.com/revelry-madison-wi/y6st30v/,Revelry,608-975-3704,7449 Weekend Way,Madison,WI,53719,,2024.0,191,5,saturday properties,549,2,2.0,2340.0,1074,20250517
-y6st30v,https://www.apartments.com/revelry-madison-wi/y6st30v/,Revelry,608-975-3704,7449 Weekend Way,Madison,WI,53719,,2024.0,191,5,saturday properties,550,2,2.0,2340.0,1074,20250517
-y6st30v,https://www.apartments.com/revelry-madison-wi/y6st30v/,Revelry,608-975-3704,7449 Weekend Way,Madison,WI,53719,,2024.0,191,5,saturday properties,417,2,2.0,2235.0,1047,20250517
-y6st30v,https://www.apartments.com/revelry-madison-wi/y6st30v/,Revelry,608-975-3704,7449 Weekend Way,Madison,WI,53719,,2024.0,191,5,saturday properties,526,2,2.0,2448.0,1047,20250517
-y6st30v,https://www.apartments.com/revelry-madison-wi/y6st30v/,Revelry,608-975-3704,7449 Weekend Way,Madison,WI,53719,,2024.0,191,5,saturday properties,524,2,2.0,2510.0,1047,20250517
-y6st30v,https://www.apartments.com/revelry-madison-wi/y6st30v/,Revelry,608-975-3704,7449 Weekend Way,Madison,WI,53719,,2024.0,191,5,saturday properties,517,2,2.0,2526.0,1047,20250517
-y6st30v,https://www.apartments.com/revelry-madison-wi/y6st30v/,Revelry,608-975-3704,7449 Weekend Way,Madison,WI,53719,,2024.0,191,5,saturday properties,326,2,2.0,2578.0,1047,20250620
-y6st30v,https://www.apartments.com/revelry-madison-wi/y6st30v/,Revelry,608-975-3704,7449 Weekend Way,Madison,WI,53719,,2024.0,191,5,saturday properties,224,2,2.0,2528.0,1047,20250807
-y6st30v,https://www.apartments.com/revelry-madison-wi/y6st30v/,Revelry,608-975-3704,7449 Weekend Way,Madison,WI,53719,,2024.0,191,5,saturday properties,535,2,2.0,2448.0,1047,20250517
-y6st30v,https://www.apartments.com/revelry-madison-wi/y6st30v/,Revelry,608-975-3704,7449 Weekend Way,Madison,WI,53719,,2024.0,191,5,saturday properties,341,3,2.0,3051.0,1321,20250517
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,419,1,1.0,1860.0,855,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,519,1,1.0,1890.0,855,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,129,1,1.0,1560.0,710,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,227,1,1.0,1585.0,710,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,127,1,1.0,1610.0,679,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,117,1,1.0,1610.0,679,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,327,1,1.0,1610.0,710,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,228,1,1.0,1615.0,679,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,226,1,1.0,1615.0,679,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,427,1,1.0,1635.0,710,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,328,1,1.0,1640.0,679,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,326,1,1.0,1640.0,679,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,220,1,1.0,1640.0,679,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,128,1,1.0,1640.0,679,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,126,1,1.0,1640.0,679,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,116,1,1.0,1640.0,679,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,234,1,1.0,1650.0,694,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,236,1,1.0,1650.0,694,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,527,1,1.0,1660.0,710,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,517,1,1.0,1665.0,679,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,428,1,1.0,1665.0,679,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,426,1,1.0,1665.0,679,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,320,1,1.0,1665.0,679,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,136,1,1.0,1665.0,694,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,134,1,1.0,1665.0,694,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,336,1,1.0,1665.0,694,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,334,1,1.0,1665.0,694,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,434,1,1.0,1680.0,679,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,436,1,1.0,1680.0,694,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,515,1,1.0,1685.0,679,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,513,1,1.0,1685.0,679,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,511,1,1.0,1685.0,679,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,526,1,1.0,1695.0,679,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,420,1,1.0,1695.0,679,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,528,1,1.0,1695.0,679,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,514,1,1.0,1710.0,679,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,536,1,1.0,1710.0,694,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,534,1,1.0,1710.0,694,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,235,2,1.0,1930.0,987,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,335,2,1.0,1945.0,987,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,135,2,1.0,1945.0,987,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,435,2,1.0,1960.0,987,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,535,2,1.0,1990.0,987,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,518,2,1.0,2035.0,979,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,255,2,2.0,2060.0,984,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,325,2,2.0,2070.0,984,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,425,2,2.0,2085.0,984,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,118,2,2.0,2090.0,984,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,230,2,2.0,2090.0,984,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,224,2,2.0,2090.0,984,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,330,2,2.0,2105.0,984,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,324,2,2.0,2105.0,984,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,130,2,2.0,2110.0,984,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,124,2,2.0,2110.0,984,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,525,2,2.0,2115.0,984,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,430,2,2.0,2120.0,984,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,424,2,2.0,2120.0,984,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,418,2,2.0,2120.0,984,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,530,2,2.0,2150.0,984,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,524,2,2.0,2150.0,984,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,516,2,2.0,2150.0,984,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,512,2,2.0,2150.0,984,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,237,2,2.0,2235.0,1120,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,337,2,2.0,2250.0,1120,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,437,2,2.0,2265.0,1120,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,137,2,2.0,2265.0,1120,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,138,2,2.0,2270.0,1120,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,238,2,2.0,2285.0,1120,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,537,2,2.0,2295.0,1120,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,338,2,2.0,2300.0,1120,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,438,2,2.0,2315.0,1120,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,222,2,2.0,2320.0,1182,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,322,2,2.0,2335.0,1182,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,538,2,2.0,2345.0,1120,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,232,2,2.0,2350.0,1282,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,422,2,2.0,2350.0,1182,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,122,2,2.0,2350.0,1182,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,132,2,2.0,2375.0,1282,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,332,2,2.0,2400.0,1282,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,432,2,2.0,2430.0,1282,20251001
-597nbkm,https://www.apartments.com/grand-teton-madison-wi/597nbkm/,Grand Teton,608-597-2527,6503 Grand Teton Plz,Madison,WI,53719,,2025.0,81,6,msp real estate inc,532,2,2.0,2480.0,1282,20251001
+226jqwb,https://www.apartments.com/the-brennan-madison-wi/226jqwb/,The Brennan,608-292-4391,1689 Capital Ave,Madison,WI,53705,,2023.0,66,4,,102,2,2.0,2200,1259,20250912
+226jqwb,https://www.apartments.com/the-brennan-madison-wi/226jqwb/,The Brennan,608-292-4391,1689 Capital Ave,Madison,WI,53705,,2023.0,66,4,,114,2,2.0,2250,1027,20250912
+226jqwb,https://www.apartments.com/the-brennan-madison-wi/226jqwb/,The Brennan,608-292-4391,1689 Capital Ave,Madison,WI,53705,,2023.0,66,4,,103,2,2.0,2250,1024,20250912
+226jqwb,https://www.apartments.com/the-brennan-madison-wi/226jqwb/,The Brennan,608-292-4391,1689 Capital Ave,Madison,WI,53705,,2023.0,66,4,,201,2,2.0,2300,1182,20250912
+wkrbkgk,https://www.apartments.com/the-fitzgerald-madison-wi/wkrbkgk/,The Fitzgerald,608-571-1931,3914 Monona Dr,Madison,WI,53716,,2023.0,69,5,prime urban properties,214,1,1.0,1670,732,20250912
+wkrbkgk,https://www.apartments.com/the-fitzgerald-madison-wi/wkrbkgk/,The Fitzgerald,608-571-1931,3914 Monona Dr,Madison,WI,53716,,2023.0,69,5,prime urban properties,317,1,1.0,1745,716,20250912
+wkrbkgk,https://www.apartments.com/the-fitzgerald-madison-wi/wkrbkgk/,The Fitzgerald,608-571-1931,3914 Monona Dr,Madison,WI,53716,,2023.0,69,5,prime urban properties,315,1,1.0,1750,711,20250912
+wkrbkgk,https://www.apartments.com/the-fitzgerald-madison-wi/wkrbkgk/,The Fitzgerald,608-571-1931,3914 Monona Dr,Madison,WI,53716,,2023.0,69,5,prime urban properties,215,1,1.0,1735,711,20251001
+wkrbkgk,https://www.apartments.com/the-fitzgerald-madison-wi/wkrbkgk/,The Fitzgerald,608-571-1931,3914 Monona Dr,Madison,WI,53716,,2023.0,69,5,prime urban properties,411,1,1.0,1940,981,20250912
+wkrbkgk,https://www.apartments.com/the-fitzgerald-madison-wi/wkrbkgk/,The Fitzgerald,608-571-1931,3914 Monona Dr,Madison,WI,53716,,2023.0,69,5,prime urban properties,511,1,1.0,2025,981,20250912
+wkrbkgk,https://www.apartments.com/the-fitzgerald-madison-wi/wkrbkgk/,The Fitzgerald,608-571-1931,3914 Monona Dr,Madison,WI,53716,,2023.0,69,5,prime urban properties,308,2,2.0,2925,1379,20250912
+wkrbkgk,https://www.apartments.com/the-fitzgerald-madison-wi/wkrbkgk/,The Fitzgerald,608-571-1931,3914 Monona Dr,Madison,WI,53716,,2023.0,69,5,prime urban properties,408,2,2.0,2995,1379,20250912
+2n50jfb,https://www.apartments.com/eastpark-apartments-madison-wi/2n50jfb/,Eastpark Apartments,608-292-2460,5601 Fraser Cir,Madison,WI,53718,,2023.0,306,4,rpm,5-409,0,1.0,1324,520,20251122
+2n50jfb,https://www.apartments.com/eastpark-apartments-madison-wi/2n50jfb/,Eastpark Apartments,608-292-2460,5601 Fraser Cir,Madison,WI,53718,,2023.0,306,4,rpm,4-313,1,1.0,1500,651,20250912
+2n50jfb,https://www.apartments.com/eastpark-apartments-madison-wi/2n50jfb/,Eastpark Apartments,608-292-2460,5601 Fraser Cir,Madison,WI,53718,,2023.0,306,4,rpm,2-110,1,1.0,1500,651,20250912
+2n50jfb,https://www.apartments.com/eastpark-apartments-madison-wi/2n50jfb/,Eastpark Apartments,608-292-2460,5601 Fraser Cir,Madison,WI,53718,,2023.0,306,4,rpm,3-101,1,1.0,1740,829,20250912
+2n50jfb,https://www.apartments.com/eastpark-apartments-madison-wi/2n50jfb/,Eastpark Apartments,608-292-2460,5601 Fraser Cir,Madison,WI,53718,,2023.0,306,4,rpm,2-102,1,1.0,1821,829,20250912
+2n50jfb,https://www.apartments.com/eastpark-apartments-madison-wi/2n50jfb/,Eastpark Apartments,608-292-2460,5601 Fraser Cir,Madison,WI,53718,,2023.0,306,4,rpm,4-201,1,1.0,1821,829,20250920
+2n50jfb,https://www.apartments.com/eastpark-apartments-madison-wi/2n50jfb/,Eastpark Apartments,608-292-2460,5601 Fraser Cir,Madison,WI,53718,,2023.0,306,4,rpm,5-116,1,1.0,1813,802,20250912
+2n50jfb,https://www.apartments.com/eastpark-apartments-madison-wi/2n50jfb/,Eastpark Apartments,608-292-2460,5601 Fraser Cir,Madison,WI,53718,,2023.0,306,4,rpm,5-103,1,1.0,1813,802,20250912
+2n50jfb,https://www.apartments.com/eastpark-apartments-madison-wi/2n50jfb/,Eastpark Apartments,608-292-2460,5601 Fraser Cir,Madison,WI,53718,,2023.0,306,4,rpm,5-216,1,1.0,1813,802,20250912
+2n50jfb,https://www.apartments.com/eastpark-apartments-madison-wi/2n50jfb/,Eastpark Apartments,608-292-2460,5601 Fraser Cir,Madison,WI,53718,,2023.0,306,4,rpm,1-401,1,1.0,1845,808,20250912
+2n50jfb,https://www.apartments.com/eastpark-apartments-madison-wi/2n50jfb/,Eastpark Apartments,608-292-2460,5601 Fraser Cir,Madison,WI,53718,,2023.0,306,4,rpm,2-314,1,1.0,1649,770,20250917
+2n50jfb,https://www.apartments.com/eastpark-apartments-madison-wi/2n50jfb/,Eastpark Apartments,608-292-2460,5601 Fraser Cir,Madison,WI,53718,,2023.0,306,4,rpm,3-117,1,1.0,1699,770,20250918
+2n50jfb,https://www.apartments.com/eastpark-apartments-madison-wi/2n50jfb/,Eastpark Apartments,608-292-2460,5601 Fraser Cir,Madison,WI,53718,,2023.0,306,4,rpm,2-118,1,1.0,1549,770,20250920
+2n50jfb,https://www.apartments.com/eastpark-apartments-madison-wi/2n50jfb/,Eastpark Apartments,608-292-2460,5601 Fraser Cir,Madison,WI,53718,,2023.0,306,4,rpm,3-310,1,1.0,1599,739,20250927
+2n50jfb,https://www.apartments.com/eastpark-apartments-madison-wi/2n50jfb/,Eastpark Apartments,608-292-2460,5601 Fraser Cir,Madison,WI,53718,,2023.0,306,4,rpm,4-105,1,1.0,1850,805,20250927
+2n50jfb,https://www.apartments.com/eastpark-apartments-madison-wi/2n50jfb/,Eastpark Apartments,608-292-2460,5601 Fraser Cir,Madison,WI,53718,,2023.0,306,4,rpm,3-314,1,1.0,1391,503,20251108
+2n50jfb,https://www.apartments.com/eastpark-apartments-madison-wi/2n50jfb/,Eastpark Apartments,608-292-2460,5601 Fraser Cir,Madison,WI,53718,,2023.0,306,4,rpm,3-221,1,1.0,1799,807,20251111
+2n50jfb,https://www.apartments.com/eastpark-apartments-madison-wi/2n50jfb/,Eastpark Apartments,608-292-2460,5601 Fraser Cir,Madison,WI,53718,,2023.0,306,4,rpm,2-201,2,2.0,2038,1080,20250912
+2n50jfb,https://www.apartments.com/eastpark-apartments-madison-wi/2n50jfb/,Eastpark Apartments,608-292-2460,5601 Fraser Cir,Madison,WI,53718,,2023.0,306,4,rpm,4-102,2,2.0,2350,1080,20250912
+2n50jfb,https://www.apartments.com/eastpark-apartments-madison-wi/2n50jfb/,Eastpark Apartments,608-292-2460,5601 Fraser Cir,Madison,WI,53718,,2023.0,306,4,rpm,1-302,2,2.0,2149,1095,20250912
+2n50jfb,https://www.apartments.com/eastpark-apartments-madison-wi/2n50jfb/,Eastpark Apartments,608-292-2460,5601 Fraser Cir,Madison,WI,53718,,2023.0,306,4,rpm,5-218,2,2.0,2357,1095,20250912
+2n50jfb,https://www.apartments.com/eastpark-apartments-madison-wi/2n50jfb/,Eastpark Apartments,608-292-2460,5601 Fraser Cir,Madison,WI,53718,,2023.0,306,4,rpm,5-301,2,2.0,2357,1095,20250913
+2n50jfb,https://www.apartments.com/eastpark-apartments-madison-wi/2n50jfb/,Eastpark Apartments,608-292-2460,5601 Fraser Cir,Madison,WI,53718,,2023.0,306,4,rpm,4-104,2,2.0,2165,1102,20250912
+2n50jfb,https://www.apartments.com/eastpark-apartments-madison-wi/2n50jfb/,Eastpark Apartments,608-292-2460,5601 Fraser Cir,Madison,WI,53718,,2023.0,306,4,rpm,2-203,2,2.0,2355,1102,20251008
+2n50jfb,https://www.apartments.com/eastpark-apartments-madison-wi/2n50jfb/,Eastpark Apartments,608-292-2460,5601 Fraser Cir,Madison,WI,53718,,2023.0,306,4,rpm,1-316,2,2.0,2165,1122,20250912
+2n50jfb,https://www.apartments.com/eastpark-apartments-madison-wi/2n50jfb/,Eastpark Apartments,608-292-2460,5601 Fraser Cir,Madison,WI,53718,,2023.0,306,4,rpm,1-403,2,2.0,2269,1122,20250912
+2n50jfb,https://www.apartments.com/eastpark-apartments-madison-wi/2n50jfb/,Eastpark Apartments,608-292-2460,5601 Fraser Cir,Madison,WI,53718,,2023.0,306,4,rpm,1-416,2,2.0,2320,1122,20250912
+2n50jfb,https://www.apartments.com/eastpark-apartments-madison-wi/2n50jfb/,Eastpark Apartments,608-292-2460,5601 Fraser Cir,Madison,WI,53718,,2023.0,306,4,rpm,3-320,2,2.0,2170,1106,20250912
+2n50jfb,https://www.apartments.com/eastpark-apartments-madison-wi/2n50jfb/,Eastpark Apartments,608-292-2460,5601 Fraser Cir,Madison,WI,53718,,2023.0,306,4,rpm,1-303,2,2.0,2239,1122,20251025

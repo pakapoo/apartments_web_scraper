@@ -25,6 +25,7 @@ def normalize(val):
         return round(float_val, 2)
     except:
         pass
+
     return str(val)
 
 def dump_df_to_db(df, DB_USER, DB_PASSWORD, DB_HOST, DB_NAME):
@@ -32,35 +33,29 @@ def dump_df_to_db(df, DB_USER, DB_PASSWORD, DB_HOST, DB_NAME):
     inserted_rows = []
     updated_rows = []
 
-    # df.to_sql('unit', con=engine, if_exists='append', index=False)
+    # sqlalchemy uses semicolon as placeholder, and later passes in a dictionary of parameter values
+    check_sql = f"SELECT * FROM unit WHERE id = :unit_id AND unit_no = :unit_no"
+    upsert_sql = f"""
+    INSERT INTO unit ({', '.join(df.columns)}) 
+    VALUES ({', '.join([f":{col}" for col in df.columns])})
+    ON DUPLICATE KEY UPDATE 
+    {', '.join([f"{col} = VALUES({col})" for col in df.columns])};
+    """
+
     with engine.connect() as conn:
         for index, row in df.iterrows():
             unit_id = row['id']  # primary key
             unit_no = row['unit_no'] # primary key
-            check_sql = f"SELECT * FROM unit WHERE id = :unit_id AND unit_no = :unit_no"
             existing = conn.execute(text(check_sql), {"unit_id": unit_id, "unit_no": unit_no}).fetchone()
-
-            placeholders = ', '.join([f":{col}" for col in df.columns])
-            sql = f"""
-            INSERT INTO unit ({', '.join(df.columns)}) 
-            VALUES ({placeholders})
-            ON DUPLICATE KEY UPDATE 
-            {', '.join([f"{col} = VALUES({col})" for col in df.columns])};
-            """
             
-            # Create a dictionary of parameter values
             params = {col: None if pd.isna(val) else val for col, val in row.items()}
-            conn.execute(text(sql), params)
+            conn.execute(text(upsert_sql), params)
             conn.commit()
 
+            # Generate dif result files for email attachment
             if existing is None:
                 inserted_rows.append(row)
             else:
-                for col in df.columns: # for debug
-                    db_val = normalize(existing._mapping.get(col))
-                    df_val = normalize(row[col])
-                    if db_val != df_val:
-                        print(f"Column '{col}' differs: db='{db_val}' vs df='{df_val}'")
                 is_updated = any(
                     normalize(row[col]) != normalize(existing._mapping.get(col)) 
                     for col in df.columns
@@ -69,11 +64,17 @@ def dump_df_to_db(df, DB_USER, DB_PASSWORD, DB_HOST, DB_NAME):
                 if is_updated:
                     updated_rows.append(row)
 
+    # cleanup old dif files
+    os.makedirs("./output/dif", exist_ok=True)
+    for file in os.listdir("./output/dif"):
+        file_path = os.path.join("./output/dif", file)
+        if os.path.isfile(file_path):
+            os.remove(file_path)
+
     if inserted_rows:
         pd.DataFrame(inserted_rows).to_csv("./output/dif/new_units.csv", index=False)
     else:
         pd.DataFrame(columns=df.columns).to_csv("./output/dif/new_units.csv", index=False)
-
     if updated_rows:
         pd.DataFrame(updated_rows).to_csv("./output/dif/updated_units.csv", index=False)
     else:
@@ -81,7 +82,7 @@ def dump_df_to_db(df, DB_USER, DB_PASSWORD, DB_HOST, DB_NAME):
 
     print(f"Inserted: {len(inserted_rows)}, Updated: {len(updated_rows)}")
 
-
+# Below are just for development and testing purpose
 def regenerate_table_schema(table, DB_USER, DB_PASSWORD, DB_HOST, DB_NAME):
     init_script_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../database/sqls/init.sql"))
     drop_command = "DROP TABLE IF EXISTS " + table + ";"
@@ -102,8 +103,6 @@ def get_data(table, DB_USER, DB_PASSWORD, DB_HOST, DB_NAME):
     conn.close()
     return json.dumps(data, default=str)
 
-
-
 def test(DB_USER, DB_PASSWORD, DB_HOST, DB_NAME):
     # Set paths
     current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -111,7 +110,6 @@ def test(DB_USER, DB_PASSWORD, DB_HOST, DB_NAME):
     result_path = os.path.join(base_dir, 'data/result/')
 
     data = get_data('unit', DB_USER, DB_PASSWORD, DB_HOST, DB_NAME)
-    # default=str handles Decimal and datatime columns that are not serializable
     print(json.dumps(data, default=str))
     # df = pd.read_csv(os.path.join(result_path, "result.csv"))
     # dump_df_to_db(df, DB_USER, DB_PASSWORD, DB_HOST, DB_NAME)
