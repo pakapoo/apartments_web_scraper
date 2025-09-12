@@ -6,8 +6,6 @@ __pycache__/
 .DS_Store
 
 # Project logs, output and backups
-data/
-output/
 sampledata/
 bk/
 logs/
@@ -15,9 +13,6 @@ mysql-db-volume/
 
 # ChromeDriver
 /chromedriver-mac-arm64
-
-# Project tracking documentation
-*.docx
 
 # Google Cloud testing
 venv/

@@ -3,7 +3,7 @@ import mysql.connector
 def get_data(table, DB_USER, DB_PASSWORD, DB_HOST, DB_NAME):
     conn = mysql.connector.connect(user=DB_USER, password=DB_PASSWORD, host=DB_HOST, database=DB_NAME)
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM unit")
+    cursor.execute(f"SELECT * FROM {table}")
     rows = cursor.fetchall()
     cursor.close()
     conn.close()

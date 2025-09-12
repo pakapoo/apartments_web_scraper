@@ -1,10 +1,36 @@
-# This is a backup file for testing different parallelism techniques
+"""
+This script is designed to test and compare various parallelism methods for web scraping tasks. It demonstrates how to process a list of BeautifulSoup objects (`soup_list`) using different approaches, including non-parallel processing, multiprocessing, and multithreading. The goal is to evaluate the performance and efficiency of each method when extracting property information from web pages.
+
+### How to Use:
+1. **Prepare the Input Data**:
+    - Recommend using a pickled file named `soup_list_mid_soup.pkl` containing the list of BeautifulSoup objects to be processed. Place this file in the same directory as the script.
+    - import pickle
+      with open("soup_list_mid_soup.pkl", "wb") as f:
+        pickle.dump(soup_list, f)
+2. **Run the Script**:
+    - Execute the script directly. It will load the `soup_list_mid_soup.pkl` file and process the data using the following methods:
+      - `non_parallel(soup_list)`: Sequential processing without parallelism.
+      - `apply_async(soup_list)`: Multiprocessing using `apply_async`.
+      - `map(soup_list)`: Multiprocessing using `map`.
+      - `chunk_apply_async(soup_list, CHUNK_MULTIPLES)`: Multiprocessing with chunked data using `apply_async`.
+      - `multithread(soup_list)`: Multithreading using `ThreadPoolExecutor`.
+
+3. **Output**:
+    - Each method generates a CSV file containing the extracted property information. The files are saved in the `data` directory relative to the script's location. The filenames indicate the method and parameters used (e.g., `df1.csv`, `df4_3.csv`).
+
+4. **Customization**:
+    - Modify the `CHUNK_MULTIPLES` or other parameters to experiment with different configurations.
+    - Uncomment specific method calls in the `if __name__ == '__main__'` section to test only the desired methods.
+
+This script is useful for benchmarking parallelism techniques and optimizing web scraping workflows.
+"""
+
 import time
 import pandas as pd
 import multiprocessing as mp
 from concurrent.futures import ThreadPoolExecutor
-from web_scraper import extract_property_info_wrapper, extract_property_info
-import utils
+from web_scraper import extract_property_info
+import utils as utils
 import os
 import pickle
 
@@ -29,16 +55,10 @@ def apply_async(soup_list):
     pool = mp.Pool(POOL_SIZE)
     manager = mp.Manager()
     mp_unit_list = manager.list()
-    # a1 = time.time()
     for soup in soup_list:
         pool.apply_async(func=extract_property_info, args=(soup, mp_unit_list))
     pool.close()
     pool.join()
-    # elapsed_time = time.time() - a1
-    # print(f"test: {elapsed_time:.4f} seconds")
-    # print("length", len(mp_unit_list))
-    # df = pd.DataFrame(mp_unit_list[:])
-    # df.to_csv(f"{result_path}df2.csv", index=False)
     return mp_unit_list
 
 @utils.time_stats
@@ -53,6 +73,13 @@ def map(soup_list):
     df.to_csv(f"{result_path}df3.csv", index=False)
     return mp_unit_list
 
+
+def extract_property_info_wrapper(soup_list, unit_list):
+    tmp_unit_list = []
+    for soup in soup_list:
+        extract_property_info(soup, tmp_unit_list)
+    unit_list.extend(tmp_unit_list)
+
 @utils.time_stats
 def chunk_apply_async(soup_list, CHUNK_MULTIPLES):
     pool = mp.Pool(POOL_SIZE)
@@ -61,15 +88,11 @@ def chunk_apply_async(soup_list, CHUNK_MULTIPLES):
     l = len(soup_list)
     chunk_size = max(1, l // (POOL_SIZE*CHUNK_MULTIPLES))
     chunked_soup_lists = [soup_list[i:i + chunk_size] for i in range(0, len(soup_list), chunk_size)]
-    # a1 = time.time()
     print(len(chunked_soup_lists))
     for chunked_soup_list in chunked_soup_lists[:25]:
         pool.apply_async(func=extract_property_info_wrapper, args=(chunked_soup_list, mp_unit_list))
     pool.close()
     pool.join()
-    # elapsed_time = time.time() - a1
-    # print(f"test: {elapsed_time:.4f} seconds")
-    # print("length", len(mp_unit_list))
     df = pd.DataFrame(mp_unit_list[:])
     df.to_csv(f"{result_path}df4_{CHUNK_MULTIPLES}.csv", index=False)
     return mp_unit_list

@@ -13,10 +13,10 @@ from selenium.webdriver.firefox.service import Service as FirefoxService
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
 
 
-import custom_extraction_functions
-import db_functions
-import utils
-import parallelism_testing
+import custom_extraction_functions as custom_extraction_functions
+import db_functions as db_functions
+import utils as utils
+import parallelism_testing as parallelism_testing
 
 PAGE_NUMBER_SELECTOR = "p.searchResults > span"
 LINKS_SELECTOR = "a.property-link"
@@ -28,7 +28,7 @@ CITY_SELECTOR = "div.propertyAddressContainer span:nth-child(2)"
 STATE_SELECTOR = "div.propertyAddressContainer span.stateZipContainer > span:nth-child(1)"
 ZIP_SELECTOR = "div.propertyAddressContainer span.stateZipContainer > span:nth-child(2)"
 NEIGHBORHOOD_SELECTOR = "div.propertyAddressContainer span.neighborhoodAddress > a.neighborhood"
-BUILT_UNITS_STORIES_SELECTOR = "section.feesSection.feesSectionV2.js-viewAnalyticsSection div#profileV2FeesWrapper"
+BUILT_UNITS_STORIES_SELECTOR = "section.feesSection.feesSectionV2 div#profileV2FeesWrapper"
 MANAGEMENT_SELECTOR = "img.logo"
 
 PLAN_SELECTOR = "div.tab-section.active div.pricingGridItem.multiFamily.hasUnitGrid"
@@ -60,8 +60,8 @@ class Property:
         self.management = management
      
 class Unit(Property):
-    def __init__(self, id, url, name, tel, address, city, state, zip, neighborhood, built, units, stories, management, unit_no, unit_beds, unit_baths, unit_price, unit_sqft, unit_avail):
-        Property.__init__(self, id, url, name, tel, address, city, state, zip, neighborhood, built, units, stories, management)
+    def __init__(self, unit_no, unit_beds, unit_baths, unit_price, unit_sqft, unit_avail, **kwargs):
+        super().__init__(**kwargs)
         self.unit_no = unit_no
         self.unit_beds = unit_beds
         self.unit_baths = unit_baths
@@ -74,7 +74,7 @@ def init_config():
     global search_URL, result_path, headers, args, DB_USER, DB_PASSWORD, DB_HOST, DB_NAME
 
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    base_dir = os.path.abspath(current_dir)
+    base_dir = os.path.abspath(os.path.join(current_dir, ".."))
 
     # Read config file
     config = configparser.ConfigParser()
@@ -87,10 +87,10 @@ def init_config():
     os.makedirs(result_path, exist_ok=True)
 
     # generate the required 'cookie' parameter of headers with selenium
-    chromedriver_path = os.path.join(base_dir, config['path']['chromedriver_path'])
-    chrome_options = ChromeOptions()
-    chrome_options.add_argument("--headless")
-    chrome_options.add_argument("--no-sandbox")
+    # chromedriver_path = os.path.join(base_dir, config['path']['chromedriver_path'])
+    # chrome_options = ChromeOptions()
+    # chrome_options.add_argument("--headless")
+    # chrome_options.add_argument("--no-sandbox")
     # service = ChromeService(chromedriver_path)
     # driver = webdriver.Chrome(service=service, options=chrome_options)
     # user_agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36"
@@ -122,7 +122,6 @@ def init_config():
     parser = argparse.ArgumentParser(description='Web scraper for apartment listings')
     parser.add_argument('-N', '--no_dump_db', action='store_true', help='Do not dump data to database')
     args = parser.parse_args()
-    print("DEBUG7")
     print("Do not dump data to database: ", args.no_dump_db)
 
     # MySQL config
@@ -130,7 +129,6 @@ def init_config():
     DB_PASSWORD = os.getenv("DB_PASSWORD", config.get("DB", "DB_PASSWORD"))
     DB_HOST = os.getenv("DB_HOST", config.get("DB", "DB_HOST"))
     DB_NAME = os.getenv("DB_NAME", config.get("DB", "DB_NAME"))
-    print("DEBUG8")
 
 @utils.time_stats
 def get_property_urls(search_URL):
@@ -154,7 +152,6 @@ def get_property_urls(search_URL):
         print("Total pages: ", pages)
     except AttributeError:
         print("No pages information found.")
-        pages = 1
     # Loop through all pages and scrape the property links
     for page in range(1, int(pages)+1):
         print("processing page: ", page)
@@ -228,20 +225,19 @@ def extract_property_info(data, unit_list):
             unit_price = custom_extraction_functions.unit_price(unit, UNIT_PRICE_SELECTOR1, UNIT_PRICE_SELECTOR2)
             unit_sqft = custom_extraction_functions.unit_sqft(unit, UNIT_SQFT_SELECTOR)
             unit_avail = custom_extraction_functions.unit_avail(unit, UNIT_AVAIL_SELECTOR)
-            unit_data = Unit(id, url, name, tel, address, city, state, zip, neighborhood, built, units, stories, management, unit_no, unit_beds, unit_baths, unit_price, unit_sqft, unit_avail)
+            unit_data = Unit(
+                id=id, url=url, name=name, tel=tel, address=address,
+                city=city, state=state, zip=zip, neighborhood=neighborhood,
+                built=built, units=units, stories=stories, management=management,
+                unit_no=unit_no, unit_beds=unit_beds, unit_baths=unit_baths,
+                unit_price=unit_price, unit_sqft=unit_sqft, unit_avail=unit_avail
+            )
             tmp_unit_list.append(vars(unit_data))
-    unit_list.extend(tmp_unit_list)
-
-def extract_property_info_wrapper(soup_list, unit_list):
-    tmp_unit_list = []
-    for soup in soup_list:
-        extract_property_info(soup, tmp_unit_list)
     unit_list.extend(tmp_unit_list)
 
 def main():
     # STEP 0: init configurations
     init_config()
-    # custom_extraction_functions.test_connection(headers)
 
     # STEP1: Get property URLs
     print("step 1: get property URLs")
@@ -251,22 +247,10 @@ def main():
     print("step 2: get property html")
     soup_list = get_property_html(all_links)
 
-    # test parallelism
-    # import pickle
-    # with open("soup_list_mid_soup.pkl", "wb") as f:
-    #     pickle.dump(soup_list, f)
-    # return
-
     # STEP3: Extract property information
     print("step 3: extract property information")
-    # parallelism_testing.non_parallel(soup_list)
     unit_list = parallelism_testing.apply_async(soup_list)
-    # parallelism_testing.map(soup_list)
-    # parallelism_testing.chunk_apply_async(soup_list, 3)
-    # parallelism_testing.chunk_apply_async(soup_list, 1000)
-    # parallelism_testing.chunk_map(soup_list, 10)
-    # parallelism_testing.multithread(soup_list)
-    
+
     # STEP4: Save the extracted information (list of dictionaries) to json and csv files
     print("step 4: save extracted information")
     df = pd.DataFrame(unit_list[:])
@@ -275,10 +259,8 @@ def main():
         df = df.drop_duplicates()
         df.to_json(os.path.join(result_path, "result.json"), orient='records', lines=True)
         df.to_csv(os.path.join(result_path, "result.csv"), index=False)
-        # re-create table and dump the new data
         if not args.no_dump_db:
             print("store to db")
-            # db_functions.regenerate_table_schema('unit', DB_USER, DB_PASSWORD, DB_HOST, DB_NAME)
             db_functions.dump_df_to_db(df, DB_USER, DB_PASSWORD, DB_HOST, DB_NAME)
             print("store to db done")
 
