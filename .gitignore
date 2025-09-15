@@ -17,3 +17,7 @@ mysql-db-volume/
 # Google Cloud testing
 venv/
 google_functions/
+
+# Environment files that contain sensitive information
+.env
+config.ini
