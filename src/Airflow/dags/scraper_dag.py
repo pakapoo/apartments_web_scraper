@@ -16,9 +16,6 @@ default_args = {
 
 env_config = dotenv_values("/opt/airflow/dags/.env")
 
-# def create_output_dir():
-#     os.makedirs('/opt/airflow/crawler/output/dif', exist_ok=True)
-
 with DAG(
     dag_id='web_scraper_dag',
     default_args=default_args,
@@ -44,12 +41,6 @@ with DAG(
         ], # as airflow is spinning up a new container, note that source refers to directory on "host" but not airflow container!
     )
 
-    # create directory in airflow container (which is already mounted to host)
-    # create_dir_task = PythonOperator(
-    #     task_id='create_output_dir',
-    #     python_callable=create_output_dir,
-    # )
-
     to_emails = env_config.get("email", "").split(",")
     send_email = EmailOperator(
         task_id='send_email',
@@ -64,7 +55,5 @@ with DAG(
             '/opt/airflow/crawler/output/dif/updated_units.csv'
         ],
     )
-
-    # create_dir_task >> scrape_task >> send_email
 
     scrape_task >> send_email
