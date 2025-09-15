@@ -1,25 +1,5 @@
 version: '3'
 services:
-  mysql:
-    image: mysql:latest
-    container_name: mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: admpw
-      MYSQL_USER: sqluser
-      MYSQL_PASSWORD: userpw
-    volumes:
-      - ./database/mysql-db-volume:/var/lib/mysql  # Persistent storage for MySQL data
-      - ./database/sqls/init.sql:/docker-entrypoint-initdb.d/init.sql  # Copy init.sql for initialization
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-padmpw"]
-      interval: 5s
-      retries: 5
-    restart: always
-    ports:
-      - "3306:3306"
-    networks:
-      - shared-network
-
   flask-app:
     build:
       context: ./web

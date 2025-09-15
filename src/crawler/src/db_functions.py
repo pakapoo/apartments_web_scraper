@@ -5,7 +5,6 @@ import os
 import json
 from datetime import datetime
 
-# format translation from ChatGPT
 def normalize(val):
     if pd.isna(val) or val is None:
         return None
@@ -28,8 +27,11 @@ def normalize(val):
 
     return str(val)
 
-def dump_df_to_db(df, DB_USER, DB_PASSWORD, DB_HOST, DB_NAME):
-    engine = create_engine("mysql+mysqlconnector://" + DB_USER + ":" + DB_PASSWORD + "@" + DB_HOST + "/" + DB_NAME)
+def dump_df_to_db(df, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME):
+    # engine = create_engine("mysql+mysqlconnector://" + DB_USER + ":" + DB_PASSWORD + "@" + DB_HOST + "/" + DB_NAME)
+    engine = create_engine(
+        f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+    )
     inserted_rows = []
     updated_rows = []
 
@@ -64,6 +66,12 @@ def dump_df_to_db(df, DB_USER, DB_PASSWORD, DB_HOST, DB_NAME):
                 if is_updated:
                     updated_rows.append(row)
 
+    with engine.connect() as conn:
+        result = conn.execute(text("SELECT COUNT(*) FROM unit"))
+        print("DEBUG count after insert:", result.scalar())
+
+    print("Current directory:", os.getcwd()) # should be /app
+    
     # cleanup old dif files
     os.makedirs("./output/dif", exist_ok=True)
     for file in os.listdir("./output/dif"):

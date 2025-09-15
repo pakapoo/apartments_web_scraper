@@ -6,6 +6,8 @@ import configparser
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
+import boto3
+from datetime import datetime, timezone
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options as ChromeOptions
@@ -27,7 +29,7 @@ ADDRESS_SELECTOR = "div.propertyAddressContainer span.delivery-address > span:nt
 CITY_SELECTOR = "div.propertyAddressContainer span:nth-child(2)"
 STATE_SELECTOR = "div.propertyAddressContainer span.stateZipContainer > span:nth-child(1)"
 ZIP_SELECTOR = "div.propertyAddressContainer span.stateZipContainer > span:nth-child(2)"
-NEIGHBORHOOD_SELECTOR = "div.propertyAddressContainer span.neighborhoodAddress > a.neighborhood"
+NEIGHBORHOOD_SELECTOR = "div#breadcrumbs-container a[data-type='neighborhood']"
 BUILT_UNITS_STORIES_SELECTOR = "section.feesSection.feesSectionV2 div#profileV2FeesWrapper"
 MANAGEMENT_SELECTOR = "img.logo"
 
@@ -71,18 +73,15 @@ class Unit(Property):
 
 @utils.time_stats
 def init_config():
-    global search_URL, result_path, headers, args, DB_USER, DB_PASSWORD, DB_HOST, DB_NAME
-
+    global search_URL, result_path, headers, args, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME, S3_BUCKET_NAME
     current_dir = os.path.dirname(os.path.abspath(__file__))
     base_dir = os.path.abspath(os.path.join(current_dir, ".."))
 
-    # Read config file
     config = configparser.ConfigParser()
     config_path = os.path.join(base_dir, 'config/config.ini')
     config.read(config_path)
     search_URL = config['user_config']['search_URL']
 
-    # Set paths    
     result_path = os.path.join(base_dir, config['path']['tmp_output_folder'])
     os.makedirs(result_path, exist_ok=True)
 
@@ -124,11 +123,17 @@ def init_config():
     args = parser.parse_args()
     print("Do not dump data to database: ", args.no_dump_db)
 
-    # MySQL config
+    # When triggerred by Airflow, the env variables are set in .env file
+    # If run locally, the env variables are set in config.ini
     DB_USER = os.getenv("DB_USER", config.get("DB", "DB_USER"))
     DB_PASSWORD = os.getenv("DB_PASSWORD", config.get("DB", "DB_PASSWORD"))
     DB_HOST = os.getenv("DB_HOST", config.get("DB", "DB_HOST"))
+    DB_PORT = os.getenv("DB_PORT", config.get("DB", "DB_PORT"))
     DB_NAME = os.getenv("DB_NAME", config.get("DB", "DB_NAME"))
+    os.environ["AWS_ACCESS_KEY_ID"] = os.getenv("AWS_ACCESS_KEY_ID", config.get("S3", "AWS_ACCESS_KEY_ID"))
+    os.environ["AWS_SECRET_ACCESS_KEY"] = os.getenv("AWS_SECRET_ACCESS_KEY", config.get("S3", "AWS_SECRET_ACCESS_KEY"))
+    os.environ["AWS_DEFAULT_REGION"] = os.getenv("AWS_DEFAULT_REGION", config.get("S3", "AWS_DEFAULT_REGION"))
+    S3_BUCKET_NAME = os.getenv("S3_BUCKET_NAME", config.get("S3", "S3_BUCKET_NAME"))
 
 @utils.time_stats
 def get_property_urls(search_URL):
@@ -235,6 +240,18 @@ def extract_property_info(data, unit_list):
             tmp_unit_list.append(vars(unit_data))
     unit_list.extend(tmp_unit_list)
 
+def test():
+    df = pd.DataFrame({"id": [1, 2], "name": ["Alice", "Bob"]})
+    df.to_csv("test.csv", index=False)
+    s3 = boto3.client("s3")
+    s3.upload_file("test.csv", S3_BUCKET_NAME, "test/test.csv")
+    print("Upload done!")
+
+def upload_to_s3(local_file, bucket, key):
+    s3 = boto3.client("s3")
+    s3.upload_file(local_file, bucket, key)
+    print(f"Uploaded {local_file} to s3://{bucket}/{key}")
+
 def main():
     # STEP 0: init configurations
     init_config()
@@ -256,13 +273,14 @@ def main():
     df = pd.DataFrame(unit_list[:])
     print(df.head())
     if not df.empty:
-        df = df.drop_duplicates()
-        df.to_json(os.path.join(result_path, "result.json"), orient='records', lines=True)
+        date_str = datetime.now(timezone.utc).strftime("%Y%m%d")
+        local_csv = os.path.join(result_path, "result.csv")
         df.to_csv(os.path.join(result_path, "result.csv"), index=False)
+        s3_key = f"raw/{date_str}/result.csv"
+        upload_to_s3(local_csv, S3_BUCKET_NAME, s3_key)
+
         if not args.no_dump_db:
-            print("store to db")
-            db_functions.dump_df_to_db(df, DB_USER, DB_PASSWORD, DB_HOST, DB_NAME)
-            print("store to db done")
+            db_functions.dump_df_to_db(df, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME)
 
 if __name__ == '__main__':
     main()
