@@ -58,6 +58,20 @@ def management(soup, selector):
         management = None
     return management
 
+def rating(soup, selector):
+    rating_soup = soup.select_one(selector)
+    return float(rating_soup.get_text(strip=True)) if rating_soup else None
+
+def num_ratings(soup, selector):
+    num_ratings_soup = soup.select_one(selector)
+    if num_ratings_soup:
+        num_ratings_regex = re.compile(r'(\d+)(\s+)(Renter Reviews)')
+        num_ratings_match = num_ratings_regex.search(num_ratings_soup.get_text(strip=True))
+        num_ratings = int(num_ratings_match.group(1)) if num_ratings_match else None
+    else:
+        num_ratings = None
+    return num_ratings
+
 def beds(soup, selector):
     beds_soup = soup.select_one(selector)
     if beds_soup:

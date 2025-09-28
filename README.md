@@ -55,6 +55,11 @@ Here are some features and enhancement that I plan to add:
 * **Flask App**: separate EC2 instance querying RDS (filtering + summary stats)  
 * **IaC**: AWS CDK for provisioning resources
 
+Parquet (partitioned) + arrow
+4張表, serving, fact, agg*2
+合併的DAG圖(email, 有分支)
+
+
 #### Analytics
 * Aggregation:
 1. Top 5 management companies (by average rating, with >20 ratings)

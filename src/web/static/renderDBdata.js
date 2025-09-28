@@ -203,4 +203,30 @@ function clearFilterInput() {
     inputMin.value = "";
     inputMax.value = "";
     tableFilterBedBath();
-  } 
+  }
+
+function buildTopManagement(data) {
+    let mgmtTable = document.getElementById("topManagementTable");
+    let rows = "";
+    data.forEach(row => {
+        rows += `<tr>
+            <td>${row.management}</td>
+            <td>${Number(row.avg_rating).toFixed(2)}</td>
+            <td>${row.rating_count}</td>
+        </tr>`;
+    });
+    mgmtTable.innerHTML = rows;
+}
+
+function buildTopNeighborhood(data) {
+    let nbTable = document.getElementById("topNeighborhoodTable");
+    let rows = "";
+    data.forEach(row => {
+        rows += `<tr>
+            <td>${row.neighborhood}</td>
+            <td>$${Number(row.avg_price_per_sqft).toFixed(2)}</td>
+            <td>${row.unit_count}</td>
+        </tr>`;
+    });
+    nbTable.innerHTML = rows;
+}

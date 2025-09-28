@@ -32,6 +32,8 @@ ZIP_SELECTOR = "div.propertyAddressContainer span.stateZipContainer > span:nth-c
 NEIGHBORHOOD_SELECTOR = "div#breadcrumbs-container a[data-type='neighborhood']"
 BUILT_UNITS_STORIES_SELECTOR = "section.feesSection.feesSectionV2 div#profileV2FeesWrapper"
 MANAGEMENT_SELECTOR = "img.logo"
+RATING_SELECTOR = "section#reviewsSection div.averageRating"
+NUM_RATINGS_SELECTOR = "section#reviewsSection div.ratingReviewsWrapper > p.renterReviewsLabel"
 
 PLAN_SELECTOR = "div.tab-section.active div.pricingGridItem.multiFamily.hasUnitGrid"
 UNIT_SELECTOR = "li.unitContainer.js-unitContainerV3"
@@ -46,7 +48,7 @@ UNIT_AVAIL_SELECTOR = "div.availableColumn.column span:nth-child(1)"
 
 
 class Property:
-    def __init__(self, id, url, name, tel, address, city, state, zip, neighborhood, built, units, stories, management):
+    def __init__(self, id, url, name, tel, address, city, state, zip, neighborhood, built, units, stories, management, rating, num_ratings):
         self.id = id
         self.url = url
         self.name = name
@@ -60,6 +62,8 @@ class Property:
         self.units = units
         self.stories = stories
         self.management = management
+        self.rating = rating
+        self.num_ratings = num_ratings
      
 class Unit(Property):
     def __init__(self, unit_no, unit_beds, unit_baths, unit_price, unit_sqft, unit_avail, **kwargs):
@@ -218,6 +222,8 @@ def extract_property_info(data, unit_list):
     neighborhood = custom_extraction_functions.neighborhood(soup, NEIGHBORHOOD_SELECTOR)
     built, units, stories = custom_extraction_functions.built_units_stories(soup, BUILT_UNITS_STORIES_SELECTOR)
     management = custom_extraction_functions.management(soup, MANAGEMENT_SELECTOR)
+    rating = custom_extraction_functions.rating(soup, RATING_SELECTOR)
+    num_ratings = custom_extraction_functions.num_ratings(soup, NUM_RATINGS_SELECTOR)
 
     # extract units info
     plan_info = soup.select(PLAN_SELECTOR)
@@ -233,7 +239,7 @@ def extract_property_info(data, unit_list):
             unit_data = Unit(
                 id=id, url=url, name=name, tel=tel, address=address,
                 city=city, state=state, zip=zip, neighborhood=neighborhood,
-                built=built, units=units, stories=stories, management=management,
+                built=built, units=units, stories=stories, management=management, rating=rating, num_ratings=num_ratings,
                 unit_no=unit_no, unit_beds=unit_beds, unit_baths=unit_baths,
                 unit_price=unit_price, unit_sqft=unit_sqft, unit_avail=unit_avail
             )
@@ -278,9 +284,6 @@ def main():
         df.to_csv(os.path.join(result_path, "result.csv"), index=False)
         s3_key = f"raw/{date_str}/result.csv"
         upload_to_s3(local_csv, S3_BUCKET_NAME, s3_key)
-
-        if not args.no_dump_db:
-            db_functions.dump_df_to_db(df, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME)
 
 if __name__ == '__main__':
     main()

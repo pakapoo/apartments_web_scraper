@@ -19,5 +19,5 @@ venv/
 google_functions/
 
 # Environment files that contain sensitive information
-.env
-config.ini
+# .env
+# config.ini

@@ -12,7 +12,43 @@
         <h2 class="title-group" style="margin-top: 20px;">Madison Housing Data</h2>
         <h5 class="title-group">find the best units in Madison according to your budget and conditions</h5>
     </header>
+
     <script type="text/javascript" src="{{ url_for('static', filename='renderDBdata.js') }}"></script>
+
+<!-- Summary Tables -->
+<div class="container mt-4">
+    <div class="row" style="display: flex; flex-wrap: nowrap;">
+        <!-- Top Management -->
+        <div class="col-md-6" style="flex: 0 0 50%; max-width: 50%; padding-right: 15px;">
+            <h4>Top 5 Managements by Rating</h4>
+            <table class="table table-sm table-striped">
+                <thead>
+                    <tr>
+                        <th>Management</th>
+                        <th>Avg Rating</th>
+                        <th>Count</th>
+                    </tr>
+                </thead>
+                <tbody id="topManagementTable"></tbody>
+            </table>
+        </div>
+        <!-- Top Neighborhood -->
+        <div class="col-md-6" style="flex: 0 0 50%; max-width: 50%; padding-left: 15px;">
+            <h4>Top 5 Cheapest Neighborhoods (Price per Sqft)</h4>
+            <table class="table table-sm table-striped">
+                <thead>
+                    <tr>
+                        <th>Neighborhood</th>
+                        <th>Avg Price/Sqft</th>
+                        <th>Count</th>
+                    </tr>
+                </thead>
+                <tbody id="topNeighborhoodTable"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
     <div>
         <select class="searchbar-top" id="bedNum" name="bedNum" onchange="tableFilterBedBath()">
             <option value="X"> --- Select number of Bedrooms --- </option>
@@ -65,22 +101,18 @@
         </form>    
         <button id="filter-clear-button" onclick="clearFilterInput()" style="display:inline-block; float:right; margin-top: 10px">Clear</button> 
     </div>
+
     <div id="rowcount" style="margin-top: 10px; margin-bottom: 10px;"></div>
+
     <table id="table">
         <thead>
             <tr>
                 <th data-column="fav" style="width: 6vw;"><button data-type="string" data-order="desc">Fav</button></th>
                 <th data-column="name" style="width: 20vw;"><button data-type="string" data-order="desc">Name</button></th>
-                <!--th data-column="tel" data-type="string" data-order="desc">tel</th-->
                 <th data-column="address" style="width: 20vw;"><button data-type="string" data-order="desc">Address</button></th>
-                <!-- th data-column="city" data-type="string" data-order="desc">City</th-->
-                <!--th data-column="state" data-type="string" data-order="desc">State</th-->
-                <!--th data-column="zip" data-type="numeric" data-order="desc">Zip</th-->
-                <!--th data-column="neighborhood" data-type="string" data-order="desc">Neighborhood</th-->
                 <th data-column="built" style="width: 7vw;"><button data-type="numeric" data-order="desc">Built</button></th>
                 <th data-column="units" style="width: 7vw;"><button data-type="numeric" data-order="desc">Units</button></th>
                 <th data-column="stories" style="width: 8vw;"><button data-type="numeric" data-order="desc">Stories</button></th>
-                <!-- <th data-column="management" data-type="string" data-order="desc">management</th> -->
                 <th data-column="unit_no" style="width: 7vw;"><button data-type="string" data-order="desc">Unit_no</button></th>
                 <th data-column="unit_beds" style="width: 6vw;"><button data-type="numeric" data-order="desc">Bed</button></th>
                 <th data-column="unit_baths" style="width: 7vw;"><button data-type="numeric" data-order="desc">Bath</button></th>
@@ -89,15 +121,19 @@
                 <th data-column="unit_avail" style="width: 10vw;"><button data-type="date" data-order="desc">Availability</button></th>
             </tr>
         </thead>
-        <tbody id="tableData">
-        </tbody>
+        <tbody id="tableData"></tbody>
     </table>
+
     <script>
         var data = JSON.parse('{{ data | tojson | safe }}');
         buildTable(data);
         addSortingEventListenerToTable();
         sortTable(10);
+
+        var topManagement = JSON.parse('{{ top_management | tojson | safe }}');
+        var topNeighborhood = JSON.parse('{{ top_neighborhood | tojson | safe }}');
+        buildTopManagement(topManagement);
+        buildTopNeighborhood(topNeighborhood);
     </script>
-</body>
 </body>
 </html>
