@@ -77,6 +77,8 @@ x-airflow-common:
     - ../../${AIRFLOW_PROJ_DIR:-.}/sample_output/raw:/tmp/sample_output/raw # for result from scraping DAG (downloaded in cleaning DAG)
     - ../../${AIRFLOW_PROJ_DIR:-.}/sample_output/cleaned:/tmp/sample_output/cleaned # for result from cleaning DAG
     - /var/run/docker.sock:/var/run/docker.sock  # enable Airflow container to control host Docker
+    - /etc/localtime:/etc/localtime:ro # make sure the time is in sync with the host (S3 will check the time)
+    - /etc/timezone:/etc/timezone:ro  # make sure the timezone is in sync with the host (S3 will check the time)
   networks:
     - shared-network
   user: "${AIRFLOW_UID:-50000}:0"
