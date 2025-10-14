@@ -1,5 +1,6 @@
-# Apartments.com web scraper
+# RentRadar – Housing Data Insights Platform
 An automated data pipeline that scrapes unit-level listings from Apartments.com, built with a lightweight ELT architecture on AWS, and notifies users daily via email.
+#### Note: The project is now fully on AWS with new web UI, the README will be updated soon (end of October 2025)
 
 ### Key Features
 - **Unit-level detail**  
@@ -20,6 +21,7 @@ An automated data pipeline that scrapes unit-level listings from Apartments.com,
 
 
 ### Demo
+<This is outdated and will be updated soon>
 https://github.com/pakapoo/apartments_web_scraper/assets/45991312/5f9af489-51f5-4978-869c-25cfe101d698
 
 ## Quickstart
@@ -54,11 +56,6 @@ Here are some features and enhancement that I plan to add:
 * **Serving Layer**: RDS (MySQL), timestamped tables for historical queries  
 * **Flask App**: separate EC2 instance querying RDS (filtering + summary stats)  
 * **IaC**: AWS CDK for provisioning resources
-
-Parquet (partitioned) + arrow
-4張表, serving, fact, agg*2
-合併的DAG圖(email, 有分支)
-
 
 #### Analytics
 * Aggregation:

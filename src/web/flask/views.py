@@ -1,12 +1,20 @@
 from flask import Blueprint, render_template, request, jsonify, redirect, url_for
 import json
 import db_functions as db
+import os, boto3
 
-DB_USER = "admin"
-DB_PASSWORD = "test1234"
-DB_HOST = "apartments-rds.c5yi466cgccj.us-west-1.rds.amazonaws.com"
-DB_PORT = "3306"
-DB_NAME = "apartment_db"
+DB_HOST = os.getenv("DB_HOST")
+DB_PORT = os.getenv("DB_PORT", "3306")
+DB_NAME = os.getenv("DB_NAME")
+
+client = boto3.client("secretsmanager", region_name="us-west-1")
+secret_arn = os.getenv("DB_SECRET_ARN")
+response = client.get_secret_value(SecretId=secret_arn)
+creds = json.loads(response["SecretString"])
+
+DB_USER = creds["username"]
+DB_PASSWORD = creds["password"]
+
 
 views = Blueprint('views', __name__, template_folder="../templates", static_folder="../static")
 
