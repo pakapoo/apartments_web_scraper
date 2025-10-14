@@ -17,7 +17,7 @@ An automated data pipeline that scrapes unit-level listings from Apartments.com,
   Sends daily email alerts about new and updated listings with **Airflow** automation.
 
 ### Infrastructure
-<img width="700" alt="project_wf_0517" src="https://github.com/user-attachments/assets/93d7fec3-1736-453c-a724-50868966f49c" />
+<img width="800" alt="rentRadar drawio" src="https://github.com/user-attachments/assets/2b07568c-1d26-44e0-8f8f-2fcc808d4b80" />
 
 
 ### Demo
