@@ -1,4 +1,5 @@
-FROM python:3.9
+# Use an ARM64 base image for compatibility with Mac M1/M2
+FROM --platform=linux/arm64 python:3.9
 
 # Install dependencies for Firefox and geckodriver
 RUN apt-get update && apt-get install -y \

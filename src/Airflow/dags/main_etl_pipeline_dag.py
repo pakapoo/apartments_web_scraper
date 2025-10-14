@@ -1,31 +1,25 @@
 from datetime import datetime, timedelta, timezone
-import os
+import os, json
 import boto3
 import pandas as pd
 from dotenv import dotenv_values
 from airflow import DAG
-from airflow.providers.docker.operators.docker import DockerOperator
+from airflow.providers.amazon.aws.operators.ecs import EcsRunTaskOperator
 from airflow.operators.python import PythonOperator, ShortCircuitOperator
 from airflow.operators.email_operator import EmailOperator
 from airflow.utils.trigger_rule import TriggerRule
-from docker.types import Mount
 from sqlalchemy import create_engine, text
 
-# ------------------
-# ENV + Config
-# ------------------
-env_config = dotenv_values("/opt/airflow/dags/.env")
+S3_BUCKET_NAME = os.getenv("S3_BUCKET_NAME")
+DB_HOST = os.getenv("DB_HOST")
+DB_PORT = int(os.getenv("DB_PORT", 3306))
+DB_NAME = os.getenv("DB_NAME", "apartment_db")
 
-S3_BUCKET_NAME = env_config.get("S3_BUCKET_NAME")
-DB_USER = env_config.get("DB_USER")
-DB_PASSWORD = env_config.get("DB_PASSWORD")
-DB_HOST = env_config.get("DB_HOST")
-DB_PORT = int(env_config.get("DB_PORT", 3306))
-DB_NAME = env_config.get("DB_NAME", "apartment_db")
-
-os.environ["AWS_ACCESS_KEY_ID"] = env_config.get("AWS_ACCESS_KEY_ID", "")
-os.environ["AWS_SECRET_ACCESS_KEY"] = env_config.get("AWS_SECRET_ACCESS_KEY", "")
-os.environ["AWS_DEFAULT_REGION"] = env_config.get("AWS_DEFAULT_REGION", "us-east-1")
+secret_arn = os.getenv("DB_SECRET_ARN")
+client = boto3.client("secretsmanager", region_name="us-west-1")
+creds = json.loads(client.get_secret_value(SecretId=secret_arn)["SecretString"])
+DB_USER = creds["username"]
+DB_PASSWORD = creds["password"]
 
 COLUMN_TRANSFORMS = {
     "unit_price": {"type": "numeric", "round": 2},
@@ -35,9 +29,12 @@ COLUMN_TRANSFORMS = {
     "stories": {"type": "integer"},
 }
 
+# for email notifications
+env_config = dotenv_values("/opt/airflow/dags/.env")
+
 dag_default_args = {
     "owner": "airflow",
-    "depends_on_past": False, # doesn't stop because previous run fails
+    "depends_on_past": False, # won't stop when previous run fails
     "retries": 1,
     "retry_delay": timedelta(minutes=10), # applies to both regular DAG runs and catchup DAG runs
     "email_on_failure": True,  # notify when pipeline fails
@@ -48,7 +45,7 @@ dag_default_args = {
 # Raw CSV -> Cleaned Parquet
 # ------------------
 def clean_csv_to_parquet(**context):
-    s3 = boto3.client("s3")
+    s3 = boto3.client("s3", region_name="us-west-1")
     date_str = datetime.now(timezone.utc).strftime("%Y%m%d")
 
     s3_raw_key = f"raw/{date_str}/result.csv"
@@ -95,7 +92,7 @@ def clean_csv_to_parquet(**context):
 # Parquet -> RDS + Upload diffs to S3
 # ------------------
 def parquet_to_rds(**context):
-    s3 = boto3.client("s3")
+    s3 = boto3.client("s3", region_name="us-west-1")
     ti = context["ti"]
     today_str = ti.xcom_pull(task_ids="clean_csv_to_parquet")["date_str"]
 
@@ -202,22 +199,33 @@ with DAG(
     tags=["etl", "s3", "rds"],
 ) as dag:
 
-    scrape_task = DockerOperator(
+    scrape_task = EcsRunTaskOperator(
         task_id="run_scraper",
-        image="web_scraper:latest",
-        command="python ./src/web_scraper.py",
-        docker_url="unix://var/run/docker.sock",
-        network_mode="shared-network",
-        auto_remove=True,
-        environment=env_config,
-        working_dir="/app",
-        mounts=[
-            Mount(
-                source=os.path.join(env_config.get("HOST_PROJECT_PATH", ""), "src/crawler"),
-                target="/app",
-                type="bind",
-            ),
-        ],
+        cluster="apartment-scraper-cluster",
+        task_definition="apartments-web-scraper",
+        launch_type="FARGATE", # serverless
+        aws_conn_id="aws_default", # set up in Airflow UI
+        overrides={
+            "containerOverrides": [
+                {
+                    "name": "scraper-container",
+                    "command": ["python", "src/web_scraper.py"],
+                    "environment": [
+                        {"name": "S3_BUCKET_NAME", "value": S3_BUCKET_NAME},
+                    ],
+                }
+            ]
+        },
+        network_configuration={
+            "awsvpcConfiguration": {
+                "subnets": [
+                "subnet-06d68a8171cf0f313",
+                "subnet-0cf148f75cd116d41"
+            ],
+                "securityGroups": ["sg-0443020b0c90476e5"], # allow outbound to internet (for scraper to store to S3)
+                "assignPublicIp": "ENABLED",
+            }
+        },
     )
 
     clean_task = ShortCircuitOperator(

@@ -21,3 +21,4 @@ google_functions/
 # Environment files that contain sensitive information
 # .env
 # config.ini
+.pem

@@ -1,0 +1,49 @@
+{
+    "family": "apartments-flask",
+    "networkMode": "awsvpc",
+    "requiresCompatibilities": ["FARGATE"],
+    "cpu": "512",
+    "memory": "1024",
+    "executionRoleArn": "arn:aws:iam::493504727387:role/ecsTaskExecutionRole",
+    "taskRoleArn": "arn:aws:iam::493504727387:role/ecsTaskExecutionRole",
+    "containerDefinitions": [
+      {
+        "name": "flask-container",
+        "image": "493504727387.dkr.ecr.us-west-1.amazonaws.com/apartments-flask:latest",
+        "essential": true,
+        "portMappings": [
+          {
+            "containerPort": 5000,
+            "protocol": "tcp"
+          }
+        ],
+        "environment": [
+          {
+            "name": "DB_HOST",
+            "value": "apartments-rds.c5yi466cgccj.us-west-1.rds.amazonaws.com"
+          },
+          {
+            "name": "DB_NAME",
+            "value": "apartment_db"
+          },
+          {
+            "name": "DB_PORT",
+            "value": "3306"
+          },
+          {
+            "name": "DB_SECRET_ARN",
+            "value": "arn:aws:secretsmanager:us-west-1:493504727387:secret:apartments/db_credentials-gymN1f"
+          }
+        ],
+        "logConfiguration": {
+          "logDriver": "awslogs",
+          "options": {
+            "awslogs-group": "/ecs/apartments-flask",
+            "awslogs-region": "us-west-1",
+            "awslogs-stream-prefix": "ecs"
+          }
+        }
+      }
+    ]
+  }
+  

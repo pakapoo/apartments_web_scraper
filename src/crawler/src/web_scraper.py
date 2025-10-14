@@ -77,7 +77,7 @@ class Unit(Property):
 
 @utils.time_stats
 def init_config():
-    global search_URL, result_path, headers, args, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME, S3_BUCKET_NAME
+    global search_URL, result_path, headers, args, S3_BUCKET_NAME
     current_dir = os.path.dirname(os.path.abspath(__file__))
     base_dir = os.path.abspath(os.path.join(current_dir, ".."))
 
@@ -127,17 +127,17 @@ def init_config():
     args = parser.parse_args()
     print("Do not dump data to database: ", args.no_dump_db)
 
-    # When triggerred by Airflow, the env variables are set in .env file
+    # <local> When triggerred by Airflow, the env variables are set in .env file
     # If run locally, the env variables are set in config.ini
-    DB_USER = os.getenv("DB_USER", config.get("DB", "DB_USER"))
-    DB_PASSWORD = os.getenv("DB_PASSWORD", config.get("DB", "DB_PASSWORD"))
-    DB_HOST = os.getenv("DB_HOST", config.get("DB", "DB_HOST"))
-    DB_PORT = os.getenv("DB_PORT", config.get("DB", "DB_PORT"))
-    DB_NAME = os.getenv("DB_NAME", config.get("DB", "DB_NAME"))
-    os.environ["AWS_ACCESS_KEY_ID"] = os.getenv("AWS_ACCESS_KEY_ID", config.get("S3", "AWS_ACCESS_KEY_ID"))
-    os.environ["AWS_SECRET_ACCESS_KEY"] = os.getenv("AWS_SECRET_ACCESS_KEY", config.get("S3", "AWS_SECRET_ACCESS_KEY"))
-    os.environ["AWS_DEFAULT_REGION"] = os.getenv("AWS_DEFAULT_REGION", config.get("S3", "AWS_DEFAULT_REGION"))
-    S3_BUCKET_NAME = os.getenv("S3_BUCKET_NAME", config.get("S3", "S3_BUCKET_NAME"))
+    # DB_USER = os.getenv("DB_USER", config.get("DB", "DB_USER"))
+    # DB_PASSWORD = os.getenv("DB_PASSWORD", config.get("DB", "DB_PASSWORD"))
+    # DB_HOST = os.getenv("DB_HOST", config.get("DB", "DB_HOST"))
+    # DB_PORT = os.getenv("DB_PORT", config.get("DB", "DB_PORT"))
+    # DB_NAME = os.getenv("DB_NAME", config.get("DB", "DB_NAME"))
+    # os.environ["AWS_ACCESS_KEY_ID"] = os.getenv("AWS_ACCESS_KEY_ID", config.get("S3", "AWS_ACCESS_KEY_ID"))
+    # os.environ["AWS_SECRET_ACCESS_KEY"] = os.getenv("AWS_SECRET_ACCESS_KEY", config.get("S3", "AWS_SECRET_ACCESS_KEY"))
+    # os.environ["AWS_DEFAULT_REGION"] = os.getenv("AWS_DEFAULT_REGION", config.get("S3", "AWS_DEFAULT_REGION"))
+    S3_BUCKET_NAME = os.getenv("S3_BUCKET_NAME", config.get("S3", "S3_BUCKET_NAME")) # pass in from Airflow ECS Operator environment variables
 
 @utils.time_stats
 def get_property_urls(search_URL):
@@ -249,12 +249,12 @@ def extract_property_info(data, unit_list):
 def test():
     df = pd.DataFrame({"id": [1, 2], "name": ["Alice", "Bob"]})
     df.to_csv("test.csv", index=False)
-    s3 = boto3.client("s3")
+    s3 = boto3.client("s3", region_name="us-west-1")
     s3.upload_file("test.csv", S3_BUCKET_NAME, "test/test.csv")
     print("Upload done!")
 
 def upload_to_s3(local_file, bucket, key):
-    s3 = boto3.client("s3")
+    s3 = boto3.client("s3", region_name="us-west-1")
     s3.upload_file(local_file, bucket, key)
     print(f"Uploaded {local_file} to s3://{bucket}/{key}")
 
