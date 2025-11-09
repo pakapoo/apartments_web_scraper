@@ -22,3 +22,7 @@ google_functions/
 # .env
 # config.ini
 .pem
+
+# AWS lambda layer
+lambda_sql/
+sql_layer.zip

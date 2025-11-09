@@ -89,7 +89,7 @@ with DAG(
     start_date=days_ago(1),
     schedule_interval=None,  # manual trigger (only need to run once)
     catchup=False,
-    tags=["infra", "init"]
+    tags=["apartment_etl", "rds"]
 ) as dag:
 
     init_schema_task = PythonOperator(

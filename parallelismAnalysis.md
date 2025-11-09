@@ -2,6 +2,8 @@
 
 To optimize the performance of an HTML parsing pipeline, I experimented with various parallelization strategies using Python's `multiprocessing` and `multithreading` modules.
 
+Note that this is tested locally, but not on AWS ECS.
+
 ### Testing Dataset Overview
 
 - **Pages**: 10  

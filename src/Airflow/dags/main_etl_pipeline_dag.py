@@ -1,36 +1,18 @@
 from datetime import datetime, timedelta, timezone
 import os, json
 import boto3
-import pandas as pd
 from dotenv import dotenv_values
 from airflow import DAG
 from airflow.providers.amazon.aws.operators.ecs import EcsRunTaskOperator
-from airflow.operators.python import PythonOperator, ShortCircuitOperator
+from airflow.operators.python import PythonOperator
+from airflow.providers.amazon.aws.operators.lambda_function import LambdaInvokeFunctionOperator
 from airflow.operators.email_operator import EmailOperator
 from airflow.utils.trigger_rule import TriggerRule
-from sqlalchemy import create_engine, text
+from airflow.models.param import Param
 
 S3_BUCKET_NAME = os.getenv("S3_BUCKET_NAME")
-DB_HOST = os.getenv("DB_HOST")
-DB_PORT = int(os.getenv("DB_PORT", 3306))
-DB_NAME = os.getenv("DB_NAME", "apartment_db")
 
-secret_arn = os.getenv("DB_SECRET_ARN")
-client = boto3.client("secretsmanager", region_name="us-west-1")
-creds = json.loads(client.get_secret_value(SecretId=secret_arn)["SecretString"])
-DB_USER = creds["username"]
-DB_PASSWORD = creds["password"]
-
-COLUMN_TRANSFORMS = {
-    "unit_price": {"type": "numeric", "round": 2},
-    "unit_avail": {"type": "datetime"},
-    "built": {"type": "integer"},
-    "units": {"type": "integer"},
-    "stories": {"type": "integer"},
-}
-
-# for email notifications
-env_config = dotenv_values("/opt/airflow/dags/.env")
+env_config = dotenv_values("/opt/airflow/dags/.env") # for email notifications
 
 dag_default_args = {
     "owner": "airflow",
@@ -41,150 +23,29 @@ dag_default_args = {
     "email": env_config.get("pipeline_alert_email", "").split(","),
 }
 
-# ------------------
-# Raw CSV -> Cleaned Parquet
-# ------------------
-def clean_csv_to_parquet(**context):
-    s3 = boto3.client("s3", region_name="us-west-1")
-    date_str = datetime.now(timezone.utc).strftime("%Y%m%d")
-
-    s3_raw_key = f"raw/{date_str}/result.csv"
-    local_csv = f"/tmp/result_{date_str}.csv"
-    local_clean_csv = f"/tmp/result_clean_{date_str}.csv"
-    local_clean_parquet = f"/tmp/result_{date_str}.parquet"
-    s3_cleaned_key_csv = f"cleaned/{date_str}/result.csv"
-    s3_cleaned_key_parquet = f"cleaned/{date_str}/result.parquet"
-
-    s3.download_file(S3_BUCKET_NAME, s3_raw_key, local_csv)
-    df = pd.read_csv(local_csv)
-
-    if df.empty:
-        print("DataFrame is empty, skip downstream tasks.")
-        return False  # ShortCircuitOperator will stop the DAG
-
-    df = df.drop_duplicates()
-    for col, rules in COLUMN_TRANSFORMS.items():
-        if col not in df.columns:
-            continue
-        if rules["type"] == "numeric":
-            df[col] = pd.to_numeric(df[col], errors="coerce")
-            if "round" in rules:
-                df[col] = df[col].round(rules["round"])
-        elif rules["type"] == "integer":
-            df[col] = pd.to_numeric(df[col], errors="coerce", downcast="integer").astype("Int64")
-        elif rules["type"] == "datetime":
-            df[col] = pd.to_datetime(df[col].astype(str), errors="coerce", format="%Y%m%d")
-
-    df.to_csv(local_clean_csv, index=False)
-    s3.upload_file(local_clean_csv, S3_BUCKET_NAME, s3_cleaned_key_csv)
-
-    df.to_parquet(local_clean_parquet, engine="pyarrow", index=False)
-    s3.upload_file(local_clean_parquet, S3_BUCKET_NAME, s3_cleaned_key_parquet)
-
-    for f in [local_csv, local_clean_csv, local_clean_parquet]:
-        if os.path.exists(f):
-            os.remove(f)
-
-    return {"date_str": date_str}
-
-
-# ------------------
-# Parquet -> RDS + Upload diffs to S3
-# ------------------
-def parquet_to_rds(**context):
-    s3 = boto3.client("s3", region_name="us-west-1")
+def download_diff_files(**context):
     ti = context["ti"]
-    today_str = ti.xcom_pull(task_ids="clean_csv_to_parquet")["date_str"]
+    result = json.loads(ti.xcom_pull(task_ids="parquet_to_rds_lambda"))
+    print(f"pull from parquet_to_rds_lambda: {result}")
+    s3_new = result["s3_new"]
+    s3_upd = result["s3_upd"]
 
-    # find the most recent date < today, so that we can compare the diffs
-    resp = s3.list_objects_v2(Bucket=S3_BUCKET_NAME, Prefix="cleaned/")
-    all_dates = sorted(
-        {obj["Key"].split("/")[1] for obj in resp.get("Contents", []) if obj["Key"].count("/") >= 2}
-    )
-    yesterday_str = max([d for d in all_dates if d < today_str], default=None)
+    s3 = boto3.client("s3", region_name="us-west-1")
 
-    print(f"Today = {today_str}, Yesterday = {yesterday_str}")
+    for s3_path in [s3_new, s3_upd]:
+        bucket, key = s3_path.replace("s3://", "").split("/", 1)
+        local_path = f"/tmp/{os.path.basename(key)}"
+        print(f"Downloading {s3_path} → {local_path}")
+        s3.download_file(bucket, key, local_path)
 
-    s3_today_key = f"cleaned/{today_str}/result.parquet"
-    local_today = f"/tmp/result_{today_str}.parquet"
-    s3.download_file(S3_BUCKET_NAME, s3_today_key, local_today)
-    df_today = pd.read_parquet(local_today)
+    return True
 
-    if df_today.empty:
-        print("No data to insert into RDS.")
-        return None
-
-    # load yesterday if exists
-    df_yesterday = pd.DataFrame()
-    if yesterday_str:
-        s3_yesterday_key = f"cleaned/{yesterday_str}/result.parquet"
-        local_yesterday = f"/tmp/result_{yesterday_str}.parquet"
-        try:
-            s3.download_file(S3_BUCKET_NAME, s3_yesterday_key, local_yesterday)
-            df_yesterday = pd.read_parquet(local_yesterday)
-        except Exception as e:
-            print(f"Warning: cannot load yesterday's parquet: {e}")
-
-    # find diffs (new, updated)
-    inserted, updated = [], []
-    if not df_yesterday.empty:
-        yesterday_dict = {
-            (r["id"], r["unit_no"]): r.to_dict()
-            for _, r in df_yesterday.iterrows()
-        }
-        for _, row in df_today.iterrows():
-            key = (row["id"], row["unit_no"])
-            if key not in yesterday_dict:
-                inserted.append(row.to_dict())
-            else:
-                dif = any(str(row[c]) != str(yesterday_dict[key].get(c)) for c in df_today.columns)
-                if dif:
-                    updated.append(row.to_dict())
-    else:
-        inserted = df_today.to_dict(orient="records")
-
-    engine = create_engine(
-        f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
-    )
-    df_today["ingested_at"] = pd.to_datetime(today_str, format="%Y%m%d").date()
-    df_today.to_sql("unit", con=engine, if_exists="append", index=False, method="multi")
-
-    # Aggregates: only using today's data
-    with engine.begin() as conn:
-        conn.execute(text("TRUNCATE TABLE top_management;"))
-        conn.execute(text("""
-        INSERT INTO top_management (management, avg_rating, rating_count)
-        SELECT management, SUM(rating*num_ratings)/SUM(num_ratings) as avg_rating, SUM(num_ratings) as rating_count
-        FROM (SELECT DISTINCT name, management, rating, num_ratings  
-                        FROM unit
-                        WHERE ingested_at = :today AND management IS NOT NULL AND num_ratings IS NOT NULL) as sub
-        GROUP BY management
-        ORDER BY avg_rating DESC, rating_count DESC
-        """), {"today": df_today["ingested_at"].iloc[0]})
-
-        conn.execute(text("TRUNCATE TABLE top_neighborhood;"))
-        conn.execute(text("""
-        INSERT INTO top_neighborhood (neighborhood, avg_price_per_sqft, unit_count)
-        SELECT neighborhood,
-               AVG(unit_price / unit_sqft) as avg_price_per_sqft,
-               COUNT(*) as unit_count
-        FROM unit
-        WHERE ingested_at = :today AND neighborhood IS NOT NULL AND unit_price IS NOT NULL AND unit_sqft > 0
-        GROUP BY neighborhood
-        ORDER BY avg_price_per_sqft ASC
-        """), {"today": df_today["ingested_at"].iloc[0]})
-
-    local_new = f"/tmp/new_units_{today_str}.csv"
-    local_upd = f"/tmp/updated_units_{today_str}.csv"
-    pd.DataFrame(inserted).to_csv(local_new, index=False)
-    pd.DataFrame(updated).to_csv(local_upd, index=False)
-
-    return {
-        "local_new": local_new,
-        "local_upd": local_upd,
-        "date_str": today_str,
-    }
-
+def get_date_str_from_xcom(**context):
+    import json
+    ti = context['ti']
+    result = ti.xcom_pull(task_ids='parquet_to_rds_lambda')
+    result = json.loads(result)
+    return f"Daily Unit Update - {result.get('date_str', 'N/A')}"
 
 # ------------------
 # DAG
@@ -196,7 +57,10 @@ with DAG(
     schedule_interval="@daily",
     start_date=datetime(2024, 1, 1),
     catchup=False,
-    tags=["etl", "s3", "rds"],
+    tags=["apartment_etl"],
+    params={
+        "date_str": datetime.now(timezone.utc).strftime("%Y%m%d"),
+    },
 ) as dag:
 
     scrape_task = EcsRunTaskOperator(
@@ -228,26 +92,45 @@ with DAG(
         },
     )
 
-    clean_task = ShortCircuitOperator(
-        task_id="clean_csv_to_parquet",
-        python_callable=clean_csv_to_parquet,
+    clean_task = LambdaInvokeFunctionOperator(
+        task_id="clean_csv_to_parquet_lambda",
+        function_name="clean_csv_to_parquet_lambda",
+        aws_conn_id="aws_default",
+        invocation_type="RequestResponse",
+        payload=json.dumps({
+            "date_str": "{{ dag_run.conf.get('date_str', params.date_str) }}"
+        }),
     )
 
-    rds_task = PythonOperator(
-        task_id="parquet_to_rds",
-        python_callable=parquet_to_rds,
+    rds_task = LambdaInvokeFunctionOperator(
+        task_id="parquet_to_rds_lambda",
+        function_name="apartments-parquet-to-rds",
+        aws_conn_id="aws_default",
+        invocation_type="RequestResponse",
+        payload="{{ ti.xcom_pull(task_ids='clean_csv_to_parquet_lambda') }}",
+    )
+
+    download_task = PythonOperator(
+        task_id="download_diff_files",
+        python_callable=download_diff_files,
+    )
+
+    get_subject = PythonOperator(
+        task_id='get_subject',
+        python_callable=get_date_str_from_xcom,
     )
 
     send_email = EmailOperator(
         task_id="send_email",
         to=env_config.get("email", "").split(","),
-        subject="Daily Unit Update",
+        subject="{{ (ti.xcom_pull(task_ids='get_subject')) }}",
         html_content="<p>Attached are the new and updated units for today.</p>",
         files=[
-            "{{ ti.xcom_pull(task_ids='parquet_to_rds')['local_new'] }}",
-            "{{ ti.xcom_pull(task_ids='parquet_to_rds')['local_upd'] }}",
+            "/tmp/new.csv",
+            "/tmp/updated.csv",
         ],
-        trigger_rule=TriggerRule.ALL_SUCCESS,
+        trigger_rule="all_success",
     )
 
-    scrape_task >> clean_task >> rds_task >> send_email
+
+    scrape_task >> clean_task >> rds_task >> download_task >> get_subject >> send_email

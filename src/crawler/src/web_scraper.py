@@ -44,8 +44,7 @@ UNIT_NO_SELECTOR = "div.unitColumn.column span:nth-child(2)"
 UNIT_PRICE_SELECTOR1 = "div.pricingColumn.column span:nth-child(2)"
 UNIT_PRICE_SELECTOR2 = "div.pricingColumn.column div.rent-estimate-button.js-view-rent-estimate > span"
 UNIT_SQFT_SELECTOR = "div.sqftColumn.column span:nth-child(2)"
-UNIT_AVAIL_SELECTOR = "div.availableColumn.column span:nth-child(1)"
-
+UNIT_AVAIL_SELECTOR = "div.availableColumn.column div.availableColumnInnerContainer span:nth-child(1)"
 
 class Property:
     def __init__(self, id, url, name, tel, address, city, state, zip, neighborhood, built, units, stories, management, rating, num_ratings):
@@ -127,16 +126,6 @@ def init_config():
     args = parser.parse_args()
     print("Do not dump data to database: ", args.no_dump_db)
 
-    # <local> When triggerred by Airflow, the env variables are set in .env file
-    # If run locally, the env variables are set in config.ini
-    # DB_USER = os.getenv("DB_USER", config.get("DB", "DB_USER"))
-    # DB_PASSWORD = os.getenv("DB_PASSWORD", config.get("DB", "DB_PASSWORD"))
-    # DB_HOST = os.getenv("DB_HOST", config.get("DB", "DB_HOST"))
-    # DB_PORT = os.getenv("DB_PORT", config.get("DB", "DB_PORT"))
-    # DB_NAME = os.getenv("DB_NAME", config.get("DB", "DB_NAME"))
-    # os.environ["AWS_ACCESS_KEY_ID"] = os.getenv("AWS_ACCESS_KEY_ID", config.get("S3", "AWS_ACCESS_KEY_ID"))
-    # os.environ["AWS_SECRET_ACCESS_KEY"] = os.getenv("AWS_SECRET_ACCESS_KEY", config.get("S3", "AWS_SECRET_ACCESS_KEY"))
-    # os.environ["AWS_DEFAULT_REGION"] = os.getenv("AWS_DEFAULT_REGION", config.get("S3", "AWS_DEFAULT_REGION"))
     S3_BUCKET_NAME = os.getenv("S3_BUCKET_NAME", config.get("S3", "S3_BUCKET_NAME")) # pass in from Airflow ECS Operator environment variables
 
 @utils.time_stats
@@ -157,7 +146,7 @@ def get_property_urls(search_URL):
     # Get number of pages for this search URL
     try:
         pages = soup.select_one(PAGE_NUMBER_SELECTOR).get_text().split(' ')[-1]
-        pages = 1 # testing
+        # pages = 1 # testing
         print("Total pages: ", pages)
     except AttributeError:
         print("No pages information found.")

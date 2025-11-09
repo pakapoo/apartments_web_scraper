@@ -1,0 +1,11 @@
+mkdir -p lambda_layer/python
+
+# create layer in the right environment
+docker run -it --rm -v "$PWD/lambda_layer":/layer amazonlinux:2023 bash
+
+dnf install -y python3.12 python3.12-pip zip
+pip3.12 install pandas pyarrow sqlalchemy pymysql -t /layer/python/
+exit
+
+cd lambda_layer
+zip -r ../etl_layer.zip python
