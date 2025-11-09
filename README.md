@@ -19,13 +19,13 @@ AWS (Lambda, ECS, ECR, S3, RDS, EC2, Secrets Manager, IAM, CloudWatch) · Apache
 
 ### Architecture Overview
 The architecture separates orchestration, transformation, and serving layers for modularity and fault isolation.
-<img width="800" alt="rentRadar drawio" src="https://github.com/user-attachments/assets/2b07568c-1d26-44e0-8f8f-2fcc808d4b80" />
+<img width="800" alt="rentRadar drawio" src="https://github.com/user-attachments/assets/4e54ca7a-bf26-45f7-b980-9e61550092fb" />
 
-
-### Dashboard View
-
+### Web Dashboard View
+https://github.com/user-attachments/assets/dcc58930-fc2e-415b-ac8c-cf0709ac9d92
 
 ### Email Notification
+<img width="800" alt="daily_email" src="https://github.com/user-attachments/assets/36a54718-9b08-4231-b9b9-521c4c4ac84a" />
 
 
 ## Future Release
