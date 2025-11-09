@@ -17,7 +17,7 @@ services:
       - AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION=True
       # Email
       - AIRFLOW__EMAIL__EMAIL_BACKEND=airflow.utils.email.send_email_smtp
-      - AIRFLOW__SMTP__SMTP_HOST=smtp.gmail.com
+      - AIRFLOW__SMTP__SMTP_HOST=sandbox.smtp.mailtrap.io
       - AIRFLOW__SMTP__SMTP_PORT=587
       - AIRFLOW__SMTP__SMTP_USER=2551aaf494a9cd
       - AIRFLOW__SMTP__SMTP_PASSWORD=95893e31ee9985

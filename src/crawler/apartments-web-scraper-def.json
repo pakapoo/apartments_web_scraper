@@ -2,8 +2,8 @@
     "family": "apartments-web-scraper",
     "networkMode": "awsvpc",
     "requiresCompatibilities": ["FARGATE"],
-    "cpu": "512",
-    "memory": "1024",
+    "cpu": "1024",
+    "memory": "4096",
     "executionRoleArn": "arn:aws:iam::493504727387:role/ecsTaskExecutionRole",
     "taskRoleArn": "arn:aws:iam::493504727387:role/apartments-scraper-task-role",
     "containerDefinitions": [
